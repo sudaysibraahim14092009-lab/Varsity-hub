@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🎓 Varsity Survival Hub — South Africa's #1 Student App</title>
+<meta name="description" content="Everything SA students need: NSFAS guide, accommodation, textbooks, jobs, discounts & full info on all 26 South African universities."/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#f59e0b;--gold2:#d97706;--blue:#2563eb;--blue2:#1d4ed8;
+  --green:#16a34a;--green2:#15803d;--red:#dc2626;--red2:#b91c1c;
+  --purple:#7c3aed;--dark:#0a0f1e;--card:#131929;--card2:#1a2235;
+  --border:rgba(255,255,255,0.07);--text:#e8edf5;--muted:#64748b;
+}
+body{min-height:100vh;background:var(--dark);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;overflow-x:hidden;}
+a{color:var(--gold);text-decoration:none;}a:hover{text-decoration:underline;}
+
+/* ─── TOP NAV ─────────────────────────────────────────── */
+.nav{background:rgba(10,15,30,0.97);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:200;backdrop-filter:blur(12px);}
+.nav-logo{display:flex;align-items:center;gap:8px;}
+.nav-logo span{font-size:19px;font-weight:900;color:var(--gold);letter-spacing:-0.3px;}
+.nav-logo small{font-size:9px;color:var(--muted);display:block;line-height:1;letter-spacing:0.5px;}
+.hamburger{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;}
+.nav-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,15,30,0.99);z-index:300;padding:60px 20px 24px;overflow-y:auto;}
+.nav-menu.open{display:flex;flex-direction:column;gap:5px;}
+.nav-menu-close{position:absolute;top:16px;right:16px;background:none;border:none;color:#fff;font-size:26px;cursor:pointer;}
+.nav-item{padding:13px 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600;transition:all 0.2s;}
+.nav-item:hover,.nav-item.active{background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.4);color:var(--gold);}
+
+/* ─── SCREENS ─────────────────────────────────────────── */
+.screen{display:none;}
+.screen.active{display:block;}
+.container{max-width:540px;margin:0 auto;padding:16px 14px 100px;}
+
+/* ─── BOTTOM NAV ──────────────────────────────────────── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,15,30,0.97);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0 10px;z-index:200;backdrop-filter:blur(12px);}
+.bnav-btn{background:none;border:none;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;font-weight:700;padding:4px 6px;border-radius:8px;transition:all 0.2s;letter-spacing:0.3px;}
+.bnav-btn.active{color:var(--gold);}
+.bnav-btn span{font-size:19px;}
+
+/* ─── HERO ────────────────────────────────────────────── */
+.hero{text-align:center;padding:24px 12px 16px;}
+.hero-emoji{font-size:52px;margin-bottom:8px;}
+.hero h1{font-size:22px;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-0.3px;}
+.hero p{color:#94a3b8;font-size:13px;line-height:1.6;}
+
+/* ─── CARDS ───────────────────────────────────────────── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;}
+.card-title{font-size:14px;font-weight:800;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:0.2px;}
+
+/* ─── BUTTONS ─────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 18px;border:none;border-radius:11px;font-size:13.5px;font-weight:700;cursor:pointer;transition:all 0.2s;text-decoration:none;letter-spacing:0.1px;}
+.btn-block{display:flex;width:100%;margin-bottom:7px;}
+.btn-gold{background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;}
+.btn-blue{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;}
+.btn-green{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;}
+.btn-ghost{background:rgba(255,255,255,0.05);color:#e2e8f0;border:1px solid var(--border);}
+.btn-red{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;}
+.btn-wa{background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;}
+.btn-purple{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;}
+.btn:active{transform:scale(0.97);}
+
+/* ─── FORM ────────────────────────────────────────────── */
+label{display:block;color:#94a3b8;font-size:11px;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.6px;}
+input,select,textarea{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:#f1f5f9;font-size:13.5px;margin-bottom:11px;outline:none;transition:border 0.2s;}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+select option{background:#1a2235;}
+textarea{height:85px;resize:none;}
+input::placeholder,textarea::placeholder{color:#475569;}
+
+/* ─── BADGES ──────────────────────────────────────────── */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;margin:2px;}
+.badge-gold{background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);}
+.badge-blue{background:rgba(37,99,235,0.12);color:#60a5fa;border:1px solid rgba(37,99,235,0.25);}
+.badge-green{background:rgba(22,163,74,0.12);color:#4ade80;border:1px solid rgba(22,163,74,0.25);}
+.badge-red{background:rgba(220,38,38,0.12);color:#f87171;border:1px solid rgba(220,38,38,0.25);}
+.badge-purple{background:rgba(124,58,237,0.12);color:#c4b5fd;border:1px solid rgba(124,58,237,0.25);}
+
+/* ─── TABS ────────────────────────────────────────────── */
+.tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;margin-bottom:13px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;padding:7px 13px;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;color:#94a3b8;transition:all 0.2s;letter-spacing:0.2px;}
+.tab.active{background:var(--gold);color:#000;border-color:var(--gold);}
+
+/* ─── SEARCH ──────────────────────────────────────────── */
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-wrap input{padding-left:38px;margin-bottom:0;}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#64748b;font-size:15px;}
+
+/* ─── LIST ITEMS ──────────────────────────────────────── */
+.list-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:9px;transition:border 0.2s;}
+.list-item:hover{border-color:rgba(245,158,11,0.25);}
+.item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;}
+.item-title{font-weight:700;font-size:14px;color:#f1f5f9;}
+.item-price{font-weight:900;color:var(--gold);font-size:15px;}
+.item-sub{color:#64748b;font-size:11.5px;margin-bottom:7px;}
+.item-body{color:#cbd5e1;font-size:13px;line-height:1.6;margin-bottom:9px;}
+
+/* ─── UNI ACCORDION ───────────────────────────────────── */
+.uni-item{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden;transition:all 0.2s;}
+.uni-item.open{border-color:rgba(245,158,11,0.35);background:var(--card2);}
+.uni-header{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;cursor:pointer;transition:background 0.2s;}
+.uni-header:hover{background:rgba(255,255,255,0.02);}
+.uni-name{font-weight:800;font-size:13.5px;letter-spacing:-0.1px;}
+.uni-city{font-size:10.5px;color:var(--muted);margin-top:2px;}
+.uni-arrow{color:var(--muted);transition:transform 0.3s;font-size:17px;}
+.uni-item.open .uni-arrow{transform:rotate(180deg);color:var(--gold);}
+.uni-body{display:none;padding:0 15px 16px;}
+.uni-item.open .uni-body{display:block;}
+
+/* uni body elements */
+.uni-link-row{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0;}
+.uni-link{display:inline-flex;align-items:center;gap:4px;background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.2);color:#60a5fa;border-radius:8px;padding:6px 11px;font-size:11.5px;font-weight:700;text-decoration:none;transition:all 0.2s;letter-spacing:0.1px;}
+.uni-link:hover{background:rgba(37,99,235,0.18);text-decoration:none;}
+.uni-link.green{background:rgba(22,163,74,0.08);border-color:rgba(22,163,74,0.2);color:#4ade80;}
+.uni-link.gold{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2);color:#f59e0b;}
+.uni-link.purple{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.2);color:#c4b5fd;}
+.uni-link.red{background:rgba(220,38,38,0.08);border-color:rgba(220,38,38,0.2);color:#f87171;}
+
+.uni-section{margin-top:14px;}
+.uni-section-title{font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.info-row{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.info-row:last-child{border-bottom:none;}
+.info-icon{font-size:15px;margin-top:1px;min-width:20px;}
+.info-text{flex:1;color:#cbd5e1;line-height:1.5;}
+.info-text b{color:#f1f5f9;}
+
+/* faculty grid */
+.faculty-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.faculty-pill{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:9px;padding:8px 10px;font-size:11.5px;font-weight:600;color:#94a3b8;line-height:1.4;}
+.faculty-pill strong{display:block;color:#e2e8f0;font-size:12px;margin-bottom:2px;}
+
+/* course tags */
+.course-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.course-tag{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);color:#c4b5fd;border-radius:7px;padding:3px 9px;font-size:10.5px;font-weight:600;}
+
+/* stats mini */
+.uni-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;}
+.uni-stat{background:rgba(255,255,255,0.04);border-radius:9px;padding:9px 6px;text-align:center;}
+.uni-stat-num{font-size:14px;font-weight:900;color:var(--gold);}
+.uni-stat-label{font-size:9.5px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.3px;}
+
+/* ─── TIP CARDS ───────────────────────────────────────── */
+.tip-card{border-left:3px solid var(--gold);background:rgba(245,158,11,0.04);border-radius:0 10px 10px 0;padding:12px 13px;margin-bottom:10px;}
+.tip-title{font-weight:800;font-size:13px;color:var(--gold);margin-bottom:4px;}
+.tip-body{font-size:12.5px;color:#cbd5e1;line-height:1.65;}
+.tip-card.blue{border-left-color:#2563eb;background:rgba(37,99,235,0.04);}
+.tip-card.blue .tip-title{color:#60a5fa;}
+.tip-card.green{border-left-color:#16a34a;background:rgba(22,163,74,0.04);}
+.tip-card.green .tip-title{color:#4ade80;}
+.tip-card.red{border-left-color:#dc2626;background:rgba(220,38,38,0.04);}
+.tip-card.red .tip-title{color:#f87171;}
+
+/* ─── STATS ───────────────────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;}
+.stat-num{font-size:23px;font-weight:900;color:var(--gold);}
+.stat-label{font-size:9.5px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;}
+
+/* ─── FEATURE GRID ────────────────────────────────────── */
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:15px 11px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.feature-card:hover,.feature-card:active{border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.07);}
+.feature-icon{font-size:28px;margin-bottom:7px;}
+.feature-name{font-size:12.5px;font-weight:800;color:#f1f5f9;}
+.feature-desc{font-size:10.5px;color:var(--muted);margin-top:3px;}
+
+/* ─── ALERTS ──────────────────────────────────────────── */
+.alert{border-radius:12px;padding:13px;margin-bottom:11px;display:flex;gap:9px;align-items:flex-start;}
+.alert-success{background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.25);}
+.alert-warning{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);}
+.alert-info{background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.25);}
+.alert-red{background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.25);}
+.alert p{font-size:12.5px;color:#cbd5e1;line-height:1.55;}
+.alert-icon{font-size:17px;margin-top:1px;}
+
+/* ─── MISC ────────────────────────────────────────────── */
+.divider{height:1px;background:var(--border);margin:14px 0;}
+.section-title{font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:11px;display:flex;align-items:center;gap:6px;}
+.success-banner{background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.3);border-radius:11px;padding:12px;text-align:center;color:#4ade80;font-weight:700;font-size:13px;display:none;margin-bottom:11px;}
+.province-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.province-pill{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;padding:6px 13px;font-size:11.5px;font-weight:700;cursor:pointer;color:#94a3b8;transition:all 0.2s;}
+.province-pill.active{background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.4);color:var(--gold);}
+.aps-score{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:14px;}
+.aps-result{font-size:32px;font-weight:900;color:var(--gold);text-align:center;}
+.aps-label{font-size:12px;color:var(--muted);text-align:center;margin-top:4px;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.contact-card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px;}
+.contact-card-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
+.contact-card-value{font-size:12px;color:#e2e8f0;font-weight:600;word-break:break-word;}
+
+/* new screens badges */
+.new-badge{display:inline-block;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle;letter-spacing:0.5px;}
+</style>
+</head>
+<body>
+
+<!-- ══ TOP NAV ═══════════════════════════════════════════════ -->
+<div class="nav">
+  <div class="nav-logo">
+    <span>🎓 Varsity Hub</span>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</div>
+
+<!-- ══ SLIDE MENU ════════════════════════════════════════════ -->
+<div class="nav-menu" id="navMenu">
+  <button class="nav-menu-close" onclick="toggleMenu()">✕</button>
+  <div style="margin-bottom:16px;">
+    <div style="font-size:20px;font-weight:900;color:var(--gold);">🎓 Varsity Survival Hub</div>
+    <div style="font-size:11px;color:#64748b;margin-top:3px;">South Africa's #1 student app</div>
+  </div>
+  <div class="nav-item" onclick="nav('home')">🏠 Home</div>
+  <div class="nav-item" onclick="nav('universities')">🏫 All 26 Universities</div>
+  <div class="nav-item" onclick="nav('nsfas')">💳 NSFAS Guide</div>
+  <div class="nav-item" onclick="nav('bursaries')">🏆 Bursaries <span class="new-badge">NEW</span></div>
+  <div class="nav-item" onclick="nav('accommodation')">🏠 Accommodation</div>
+  <div class="nav-item" onclick="nav('textbooks')">📚 Textbooks</div>
+  <div class="nav-item" onclick="nav('meals')">🍔 Meal Deals</div>
+  <div class="nav-item" onclick="nav('jobs')">💼 Campus Jobs</div>
+  <div class="nav-item" onclick="nav('discounts')">💰 Student Discounts</div>
+  <div class="nav-item" onclick="nav('aps')">📊 APS Calculator <span class="new-badge">NEW</span></div>
+  <div class="nav-item" onclick="nav('wellness')">🧠 Student Wellness <span class="new-badge">NEW</span></div>
+  <div style="margin-top:14px;padding:13px;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);border-radius:12px;">
+    <div style="font-size:11.5px;color:#94a3b8;">📲 Share with friends</div>
+    <button class="btn btn-wa btn-block" style="margin-top:8px;" onclick="shareApp()">Share on WhatsApp 🚀</button>
+  </div>
+</div>
+
+<!-- ══ BOTTOM NAV ═════════════════════════════════════════════ -->
+<div class="bottom-nav">
+  <button class="bnav-btn active" id="bn-home" onclick="nav('home')"><span>🏠</span>Home</button>
+  <button class="bnav-btn" id="bn-universities" onclick="nav('universities')"><span>🏫</span>Unis</button>
+  <button class="bnav-btn" id="bn-nsfas" onclick="nav('nsfas')"><span>💳</span>NSFAS</button>
+  <button class="bnav-btn" id="bn-textbooks" onclick="nav('textbooks')"><span>📚</span>Books</button>
+  <button class="bnav-btn" id="bn-jobs" onclick="nav('jobs')"><span>💼</span>Jobs</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  HOME                                                      -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-home" class="screen active">
+  <div class="container">
+    <div class="hero">
+      <div class="hero-emoji">🎓</div>
+      <h1>Varsity Survival Hub</h1>
+      <p>South Africa's #1 free student app. NSFAS, accommodation, textbooks, jobs & more — all in one place.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">26</div><div class="stat-label">Universities</div></div>
+      <div class="stat"><div class="stat-num">9</div><div class="stat-label">Provinces</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free</div></div>
+    </div>
+    <div class="alert alert-warning">
+      <div class="alert-icon">⚠️</div>
+      <p><b>NSFAS 2025 applications</b> are open. Apply NOW at <a href="https://my.nsfas.org.za" target="_blank">my.nsfas.org.za →</a></p>
+    </div>
+    <div class="section-title">What do you need?</div>
+    <div class="feature-grid">
+      <div class="feature-card" onclick="nav('nsfas')"><div class="feature-icon">💳</div><div class="feature-name">NSFAS Guide</div><div class="feature-desc">Apply, appeal, track</div></div>
+      <div class="feature-card" onclick="nav('bursaries')"><div class="feature-icon">🏆</div><div class="feature-name">Bursaries</div><div class="feature-desc">R50k+ available</div></div>
+      <div class="feature-card" onclick="nav('accommodation')"><div class="feature-icon">🏠</div><div class="feature-name">Accommodation</div><div class="feature-desc">Find a place to stay</div></div>
+      <div class="feature-card" onclick="nav('textbooks')"><div class="feature-icon">📚</div><div class="feature-name">Textbooks</div><div class="feature-desc">Buy &amp; sell books</div></div>
+      <div class="feature-card" onclick="nav('jobs')"><div class="feature-icon">💼</div><div class="feature-name">Campus Jobs</div><div class="feature-desc">Earn while you study</div></div>
+      <div class="feature-card" onclick="nav('aps')"><div class="feature-icon">📊</div><div class="feature-name">APS Calculator</div><div class="feature-desc">Check your score</div></div>
+    </div>
+    <div class="section-title">Find your university</div>
+    <div class="card">
+      <label>Select your province</label>
+      <select id="home-prov" onchange="homeFilterUni()"><option value="">— Choose province —</option></select>
+      <label>Select your university</label>
+      <select id="home-uni"><option value="">— Choose university —</option></select>
+      <button class="btn btn-gold btn-block" onclick="homeGoUni()">🎓 Go to My University →</button>
+    </div>
+    <div class="card">
+      <div class="card-title">📢 Quick Links</div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <a href="https://my.nsfas.org.za" target="_blank" class="btn btn-blue btn-block">💳 myNSFAS Portal</a>
+        <a href="https://www.studentroom.co.za" target="_blank" class="btn btn-ghost btn-block">🏠 StudentRoom.co.za — Accommodation</a>
+        <a href="https://www.pnet.co.za" target="_blank" class="btn btn-ghost btn-block">💼 PNet.co.za — Find a Job</a>
+        <a href="https://www.vanschaik.com" target="_blank" class="btn btn-ghost btn-block">📚 Van Schaik — Textbooks</a>
+      </div>
+    </div>
+    <div style="text-align:center;padding:8px 0;">
+      <p style="color:#475569;font-size:11.5px;">🔒 100% free &amp; safe. We never ask for money or banking details.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  UNIVERSITIES                                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-universities" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;">
+      <div class="hero-emoji">🏫</div>
+      <h1>All 26 SA Universities</h1>
+      <p>Full contact details, faculties, SRC, campus maps & more for every university.</p>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input placeholder="Search university, city, or province..." oninput="searchUnis(this.value)" id="uni-search"/>
+    </div>
+    <div class="province-pills" id="province-pills"></div>
+    <div id="uni-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  NSFAS                                                     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-nsfas" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;">
+      <div class="hero-emoji">💳</div>
+      <h1>NSFAS Guide</h1>
+      <p>Everything you need to apply, track and fix your NSFAS funding.</p>
+    </div>
+    <div class="alert alert-info">
+      <div class="alert-icon">ℹ️</div>
+      <p>Always use the <b>official NSFAS website only</b>. Never pay anyone to apply — it's always free. <a href="https://my.nsfas.org.za" target="_blank">my.nsfas.org.za →</a></p>
+    </div>
+    <div class="tabs" id="nsfas-tabs">
+      <div class="tab active" onclick="nsfasTab('apply',this)">How to Apply</div>
+      <div class="tab" onclick="nsfasTab('status',this)">Check Status</div>
+      <div class="tab" onclick="nsfasTab('allowance',this)">Allowances</div>
+      <div class="tab" onclick="nsfasTab('appeal',this)">Appeals</div>
+      <div class="tab" onclick="nsfasTab('problems',this)">Problems</div>
+      <div class="tab" onclick="nsfasTab('contacts',this)">Contacts</div>
+    </div>
+    <div id="nsfas-apply">
+      <div class="tip-card"><div class="tip-title">✅ Step 1 — Check if you qualify</div><div class="tip-body">• SA citizen with valid ID ✅<br>• Household income below <b>R350,000/year</b> ✅<br>• Studying at a public university or TVET college ✅<br>• Not already funded by another full bursary ✅</div></div>
+      <div class="tip-card"><div class="tip-title">🌐 Step 2 — Create your myNSFAS account</div><div class="tip-body">Go to <a href="https://my.nsfas.org.za" target="_blank">my.nsfas.org.za</a> → Click <b>"Register"</b> → Use your SA ID number → Use YOUR OWN email (not your parent's) → Create a strong password.</div></div>
+      <div class="tip-card"><div class="tip-title">📄 Step 3 — Documents needed</div><div class="tip-body">• Your SA ID / Smart Card ✅<br>• Parent/guardian SA ID copies ✅<br>• Latest 3 payslips OR unemployment affidavit ✅<br>• SARS tax certificate (if applicable) ✅<br>• Your bank account details ✅<br>• Proof of registration (after university accepts you) ✅</div></div>
+      <div class="tip-card"><div class="tip-title">📅 Step 4 — When to apply</div><div class="tip-body">Applications open every <b>September/October</b> for the following year. Apply the day applications open — late applications are almost never accepted.</div></div>
+      <div class="tip-card red"><div class="tip-title">⚠️ Common mistakes to avoid</div><div class="tip-body">• Wrong ID number ❌ • Incorrect bank details ❌<br>• Missing documents ❌ • Parent's email ❌<br>• Paying someone to apply ❌ (Always FREE!)</div></div>
+      <a href="https://my.nsfas.org.za" target="_blank" class="btn btn-gold btn-block" style="margin-top:8px;">💳 Apply Now at myNSFAS →</a>
+    </div>
+    <div id="nsfas-status" style="display:none">
+      <div class="tip-card"><div class="tip-title">🔍 How to check your status</div><div class="tip-body">1. Go to <a href="https://my.nsfas.org.za" target="_blank">my.nsfas.org.za</a><br>2. Log in with your ID + password<br>3. Click <b>"Track Funding Progress"</b></div></div>
+      <div class="tip-card"><div class="tip-title">📊 What each status means</div><div class="tip-body"><b style="color:#4ade80;">Submitted</b> — Application received ✅<br><b style="color:#f59e0b;">Under Review</b> — Being assessed ⏳<br><b style="color:#4ade80;">Approved</b> — You got funding! 🎉<br><b style="color:#60a5fa;">Awaiting Registration</b> — Register at varsity first<br><b style="color:#f87171;">Rejected</b> — Don't panic, you can appeal ❗</div></div>
+      <div class="tip-card blue"><div class="tip-title">📱 Check via WhatsApp</div><div class="tip-body">Send <b>"Hi"</b> to NSFAS on WhatsApp: <a href="https://wa.me/27820900046" target="_blank">082 090 0046</a></div></div>
+    </div>
+    <div id="nsfas-allowance" style="display:none">
+      <div class="tip-card green"><div class="tip-title">💰 2025 NSFAS Allowances</div><div class="tip-body"><b>Living allowance:</b> R1,500/month<br><b>Transport (far from campus):</b> R7,000/year<br><b>Transport (near campus):</b> R2,720/year<br><b>Meals:</b> R1,500/month (if no meal plan)<br><b>Accommodation:</b> Up to R45,000/year<br><b>Books &amp; learning materials:</b> R5,200/year</div></div>
+      <div class="tip-card"><div class="tip-title">📅 When does money arrive?</div><div class="tip-body">Usually in the <b>first 2 weeks</b> of each month. Download the myNSFAS app to access your NSFAS Wallet.</div></div>
+    </div>
+    <div id="nsfas-appeal" style="display:none">
+      <div class="alert alert-warning"><div class="alert-icon">⚠️</div><p>Many rejections are due to simple document errors. You CAN appeal!</p></div>
+      <div class="tip-card"><div class="tip-title">📝 How to appeal</div><div class="tip-body">1. Log in to <a href="https://my.nsfas.org.za" target="_blank">my.nsfas.org.za</a><br>2. Click <b>"Submit Appeal"</b><br>3. Select the reason and write a clear explanation<br>4. Upload supporting documents<br>5. Submit and note your reference number<br>6. Wait 4–6 weeks for a decision</div></div>
+    </div>
+    <div id="nsfas-problems" style="display:none">
+      <div class="tip-card"><div class="tip-title">💸 Money not received?</div><div class="tip-body">1. Check bank details on myNSFAS are correct<br>2. Confirm you are fully registered at university<br>3. Call NSFAS: <a href="tel:0800067327">0800 067 327</a> (free)<br>4. Visit your university's Financial Aid Office</div></div>
+      <div class="tip-card red"><div class="tip-title">🚨 NSFAS Scams</div><div class="tip-body">❌ Never pay anyone to apply — it's FREE<br>❌ Ignore WhatsApp messages promising "guaranteed NSFAS"<br>❌ Never share your myNSFAS password<br>✅ Only use <a href="https://my.nsfas.org.za" target="_blank">my.nsfas.org.za</a></div></div>
+    </div>
+    <div id="nsfas-contacts" style="display:none">
+      <div class="card">
+        <div class="card-title">📞 Official NSFAS Contacts</div>
+        <div class="info-row"><div class="info-icon">📞</div><div class="info-text"><b>Call Centre (FREE)</b><br><a href="tel:0800067327">0800 067 327</a> — Mon–Fri 8am–5pm</div></div>
+        <div class="info-row"><div class="info-icon">📱</div><div class="info-text"><b>WhatsApp</b><br><a href="https://wa.me/27820900046" target="_blank">082 090 0046</a></div></div>
+        <div class="info-row"><div class="info-icon">🌐</div><div class="info-text"><b>Portal</b><br><a href="https://my.nsfas.org.za" target="_blank">my.nsfas.org.za</a></div></div>
+        <div class="info-row"><div class="info-icon">📧</div><div class="info-text"><b>Email</b><br><a href="mailto:info@nsfas.org.za">info@nsfas.org.za</a></div></div>
+        <div class="info-row"><div class="info-icon">📍</div><div class="info-text"><b>Head Office</b><br>10 Brodie Road, Wynberg, Cape Town</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  BURSARIES (NEW)                                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-bursaries" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;">
+      <div class="hero-emoji">🏆</div>
+      <h1>SA Bursaries 2025</h1>
+      <p>Thousands of rands in free funding available. Apply before deadlines close!</p>
+    </div>
+    <div class="tabs" id="burs-tabs">
+      <div class="tab active" onclick="bursTab('govt',this)">Government</div>
+      <div class="tab" onclick="bursTab('corporate',this)">Corporate</div>
+      <div class="tab" onclick="bursTab('sector',this)">By Field</div>
+      <div class="tab" onclick="bursTab('tips',this)">Tips</div>
+    </div>
+    <div id="burs-govt"></div>
+    <div id="burs-corporate" style="display:none"></div>
+    <div id="burs-sector" style="display:none"></div>
+    <div id="burs-tips" style="display:none">
+      <div class="tip-card"><div class="tip-title">📝 Write a compelling motivation letter</div><div class="tip-body">Your motivation letter is your most important document. Be specific about your career goals, financial need, and why you deserve the bursary. 1–2 pages, professional, no spelling errors.</div></div>
+      <div class="tip-card green"><div class="tip-title">⏰ Apply early — every time</div><div class="tip-body">Most bursaries close before the end of the year for the following year. Set calendar reminders for August/September each year to check all bursary websites.</div></div>
+      <div class="tip-card blue"><div class="tip-title">📋 Keep these documents ready always</div><div class="tip-body">• Certified SA ID copy<br>• Certified parent/guardian IDs<br>• Latest 3 parent payslips / proof of income<br>• Grade 12 results or latest academic transcript<br>• Proof of registration / acceptance letter<br>• Bank statement (3 months)<br>• CV (1 page)</div></div>
+      <div class="tip-card"><div class="tip-title">🎯 Apply to 10+ bursaries at once</div><div class="tip-body">Don't rely on one application. Apply for every bursary you qualify for simultaneously. Most applications are free — the more you apply, the better your chances.</div></div>
+      <div class="tip-card red"><div class="tip-title">🚨 Bursary scam warning</div><div class="tip-body">❌ NEVER pay to apply for a bursary — all legitimate bursaries are FREE to apply<br>❌ Ignore Facebook/WhatsApp ads offering "easy bursaries for a fee"<br>✅ Only apply through official company or government websites</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  ACCOMMODATION                                             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-accommodation" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;">
+      <div class="hero-emoji">🏠</div>
+      <h1>Accommodation</h1>
+      <p>Find verified student accommodation near your campus.</p>
+    </div>
+    <div class="alert alert-warning"><div class="alert-icon">🔒</div><p><b>Safety first!</b> Always visit before paying. Never pay a deposit without a signed lease. If a deal sounds too good to be true — it's a scam.</p></div>
+    <div class="section-title">Search on trusted platforms</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px;">
+      <a href="https://www.studentroom.co.za" target="_blank" class="btn btn-blue btn-block">🏠 StudentRoom.co.za — SA Student Specialist</a>
+      <a href="https://www.privateproperty.co.za/to-rent" target="_blank" class="btn btn-ghost btn-block">🔍 Private Property — Verified Rentals</a>
+      <a href="https://www.property24.com/to-rent" target="_blank" class="btn btn-ghost btn-block">🏡 Property24 — All SA Properties</a>
+      <a href="https://www.gumtree.co.za/s-property-to-rent" target="_blank" class="btn btn-ghost btn-block">📋 Gumtree — Student Backrooms &amp; Flats</a>
+      <a href="https://www.accommodation.ac.za" target="_blank" class="btn btn-ghost btn-block">🎓 Accommodation.ac.za — University Focused</a>
+    </div>
+    <div class="section-title">Tips before you sign</div>
+    <div class="tip-card"><div class="tip-title">📋 Always sign a lease agreement</div><div class="tip-body">A proper lease must include: rental amount, deposit, notice period, what's included (water, electricity, WiFi) and landlord contact details.</div></div>
+    <div class="tip-card"><div class="tip-title">🔍 Visit the property first</div><div class="tip-body">Always inspect in person before paying. Check: safety of area, water pressure, electricity, locks, distance to campus transport.</div></div>
+    <div class="tip-card green"><div class="tip-title">💰 NSFAS accommodation allowance</div><div class="tip-body">NSFAS pays up to <b>R45,000/year (R3,750/month)</b>. Your university must approve your residence first — always confirm with your Financial Aid Office!</div></div>
+    <div class="tip-card red"><div class="tip-title">🚨 Red flags — walk away!</div><div class="tip-body">❌ Landlord can't meet in person<br>❌ Price is unrealistically cheap<br>❌ Wants payment before you view<br>❌ No lease agreement offered<br>❌ WhatsApp only — can't call</div></div>
+    <div class="card">
+      <div class="card-title">➕ Post Accommodation (Free)</div>
+      <label>Listing Title</label><input id="acc-title" placeholder="e.g. Room near UCT, R2,800/month"/>
+      <label>Nearest University</label><input id="acc-uni" placeholder="e.g. UCT, Stellenbosch, WITS"/>
+      <label>Monthly Rent</label><input id="acc-price" placeholder="e.g. R2,800"/>
+      <label>What's included</label><textarea id="acc-includes" placeholder="WiFi, water & electricity included..."></textarea>
+      <label>Your WhatsApp number</label><input id="acc-contact" placeholder="e.g. 071 234 5678"/>
+      <div class="success-banner" id="acc-success">✅ Your listing has been posted!</div>
+      <button class="btn btn-gold btn-block" onclick="postAcc()">Post Listing Free →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TEXTBOOKS                                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-textbooks" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;"><div class="hero-emoji">📚</div><h1>Textbook Exchange</h1><p>Buy cheap from other students. Sell yours when done.</p></div>
+    <div class="tabs">
+      <div class="tab active" onclick="bookTab('browse',this)">Browse Books</div>
+      <div class="tab" onclick="bookTab('sell',this)">Sell a Book</div>
+      <div class="tab" onclick="bookTab('wanted',this)">Wanted</div>
+      <div class="tab" onclick="bookTab('online',this)">Online Stores</div>
+    </div>
+    <div id="book-browse">
+      <div class="search-wrap"><span class="search-icon">🔍</span><input placeholder="Search by title, module code or university..." oninput="filterBooks(this.value)"/></div>
+      <div id="book-list"></div>
+    </div>
+    <div id="book-sell" style="display:none">
+      <div class="card">
+        <div class="card-title">📚 List Your Textbook</div>
+        <label>Book Title *</label><input id="bt-title" placeholder="Full book title"/>
+        <label>Author(s)</label><input id="bt-author" placeholder="e.g. Kotler & Armstrong"/>
+        <label>Module Code</label><input id="bt-module" placeholder="e.g. MKT101, FAC1502"/>
+        <label>University</label><input id="bt-uni" placeholder="e.g. UNISA, UCT, WITS"/>
+        <label>Condition</label>
+        <select id="bt-cond"><option>Like new — no marks</option><option>Good — minimal highlights</option><option>Fair — some notes/highlights</option><option>Worn but complete</option></select>
+        <label>Selling Price (R) *</label><input id="bt-price" type="number" placeholder="Your selling price"/>
+        <label>Original retail price (R)</label><input id="bt-orig" type="number" placeholder="Original bookshop price"/>
+        <label>Your WhatsApp *</label><input id="bt-wa" placeholder="e.g. 071 234 5678"/>
+        <div class="success-banner" id="book-success">✅ Your book is listed! Buyers will WhatsApp you.</div>
+        <button class="btn btn-gold btn-block" onclick="listBook()">List Book Free →</button>
+      </div>
+    </div>
+    <div id="book-wanted" style="display:none">
+      <div class="card">
+        <div class="card-title">🔍 Post a Wanted Ad</div>
+        <label>Book / Module needed *</label><input id="bw-title" placeholder="Book title or module code"/>
+        <label>University</label><input id="bw-uni" placeholder="e.g. UNISA, UCT"/>
+        <label>Max price you'll pay</label><input id="bw-price" placeholder="e.g. R200"/>
+        <label>Your WhatsApp *</label><input id="bw-wa" placeholder="e.g. 071 234 5678"/>
+        <div class="success-banner" id="wanted-success">✅ Wanted ad posted! Sellers will contact you.</div>
+        <button class="btn btn-blue btn-block" onclick="postWanted()">Post Wanted Ad →</button>
+      </div>
+    </div>
+    <div id="book-online" style="display:none">
+      <div class="card"><div class="card-title">🛒 Buy Textbooks Online</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <a href="https://www.loot.co.za" target="_blank" class="btn btn-ghost btn-block">📚 Loot.co.za — SA's cheapest new books</a>
+          <a href="https://www.takealot.com/books" target="_blank" class="btn btn-ghost btn-block">🛒 Takealot Books — Fast delivery</a>
+          <a href="https://www.vanschaik.com" target="_blank" class="btn btn-ghost btn-block">🎓 Van Schaik Bookstore — Uni textbooks</a>
+          <a href="https://www.bidorbuy.co.za" target="_blank" class="btn btn-ghost btn-block">💰 BidOrBuy — Second-hand books</a>
+          <a href="https://www.amazon.com/textbooks" target="_blank" class="btn btn-ghost btn-block">🌍 Amazon — Digital &amp; international</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  MEALS                                                     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-meals" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;"><div class="hero-emoji">🍔</div><h1>Meal Deals</h1><p>Eat well for less. Real deals for SA students.</p></div>
+    <div class="tabs">
+      <div class="tab active" onclick="mealTab('deals',this)">Deals</div>
+      <div class="tab" onclick="mealTab('budget',this)">Budget Tips</div>
+      <div class="tab" onclick="mealTab('apps',this)">Food Apps</div>
+    </div>
+    <div id="meal-deals">
+      <div class="list-item"><div class="item-header"><div class="item-title">🍕 Roman's Pizza</div><div class="item-price">30% OFF</div></div><div class="item-sub">Valid Mon–Thu with student card</div><span class="badge badge-green">Nationwide</span><div class="item-body">Show your valid student card and get 30% off any pizza. Only valid Monday to Thursday.</div><a href="https://www.romanspizza.co.za" target="_blank" class="btn btn-ghost" style="font-size:12px;padding:8px 13px;">View Menu →</a></div>
+      <div class="list-item"><div class="item-header"><div class="item-title">☕ Vida e Caffè</div><div class="item-price">10% OFF</div></div><div class="item-sub">All food &amp; beverages with student card</div><span class="badge badge-blue">Selected branches</span><div class="item-body">10% off all food and drinks when you show a valid student card.</div><a href="https://www.vida.co.za" target="_blank" class="btn btn-ghost" style="font-size:12px;padding:8px 13px;">Find Nearest →</a></div>
+      <div class="list-item"><div class="item-header"><div class="item-title">🛒 Woolworths Food</div><div class="item-price">15% OFF</div></div><div class="item-sub">Every Wednesday with WRewards student</div><span class="badge badge-green">Nationwide</span><div class="item-body">Register for a free WRewards student account and get 15% off food every Wednesday.</div><a href="https://www.woolworths.co.za/store/fragments/wrewards" target="_blank" class="btn btn-ghost" style="font-size:12px;padding:8px 13px;">Register WRewards →</a></div>
+      <div class="list-item"><div class="item-header"><div class="item-title">🍗 Nando's</div><div class="item-price">10% OFF</div></div><div class="item-sub">Show student card at till</div><span class="badge badge-green">Nationwide</span><div class="item-body">Get 10% off your meal when you show a valid student card at any Nando's branch.</div><a href="https://www.nandos.co.za" target="_blank" class="btn btn-ghost" style="font-size:12px;padding:8px 13px;">Find Nearest →</a></div>
+      <div class="list-item"><div class="item-header"><div class="item-title">💳 NSFAS Meal Allowance</div><div class="item-price">R1,500/mo</div></div><div class="item-sub">For NSFAS funded students</div><span class="badge badge-gold">Official NSFAS</span><div class="item-body">NSFAS pays R1,500/month meal allowance if your university doesn't provide meals. Confirm with your Financial Aid Office.</div><a href="https://my.nsfas.org.za" target="_blank" class="btn btn-gold" style="font-size:12px;padding:8px 13px;">Check myNSFAS →</a></div>
+    </div>
+    <div id="meal-budget" style="display:none">
+      <div class="tip-card"><div class="tip-title">🛒 Shop at Shoprite or Pick n Pay</div><div class="tip-body">R500 in groceries can feed you for 2 weeks if planned properly. Buy rice, beans, eggs, bread, frozen vegetables — cheap and nutritious.</div></div>
+      <div class="tip-card"><div class="tip-title">👨‍🍳 Cook together with flatmates</div><div class="tip-body">If 4 of you each put in R100 you have R400 for a week of food. Take turns cooking. This can reduce your food spend by up to 60%.</div></div>
+      <div class="tip-card green"><div class="tip-title">📅 Meal prep on Sundays</div><div class="tip-body">Cook big batches of rice, stew, or soup on Sunday. Portion into 5 containers for the week.</div></div>
+    </div>
+    <div id="meal-apps" style="display:none">
+      <div class="list-item"><div class="item-title">📱 Mr D Food</div><div class="item-body">Often has R30–R50 off promo codes for new users.</div><a href="https://www.mrdfood.com" target="_blank" class="btn btn-blue" style="font-size:12px;padding:8px 13px;">Open Mr D →</a></div>
+      <div class="list-item"><div class="item-title">🛵 Uber Eats</div><div class="item-body">First order discount for new users. Join Uber One for free delivery.</div><a href="https://www.ubereats.com" target="_blank" class="btn btn-blue" style="font-size:12px;padding:8px 13px;">Open Uber Eats →</a></div>
+      <div class="list-item"><div class="item-title">🥗 Checkers Sixty60</div><div class="item-body">Grocery delivery in 60 minutes from Checkers.</div><a href="https://sixty60.co.za" target="_blank" class="btn btn-blue" style="font-size:12px;padding:8px 13px;">Open Sixty60 →</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  JOBS                                                      -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-jobs" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;"><div class="hero-emoji">💼</div><h1>Campus Jobs</h1><p>Find part-time work that fits your student schedule.</p></div>
+    <div class="tabs">
+      <div class="tab active" onclick="jobTab('listings',this)">Job Listings</div>
+      <div class="tab" onclick="jobTab('platforms',this)">Job Platforms</div>
+      <div class="tab" onclick="jobTab('post',this)">Post a Job</div>
+      <div class="tab" onclick="jobTab('tips',this)">CV &amp; Tips</div>
+    </div>
+    <div id="job-listings">
+      <div class="search-wrap"><span class="search-icon">🔍</span><input placeholder="Search jobs by title or type..." oninput="filterJobs(this.value)"/></div>
+      <div id="job-list"></div>
+    </div>
+    <div id="job-platforms" style="display:none">
+      <div class="card"><div class="card-title">🌐 Best Job Sites for Students</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <a href="https://www.pnet.co.za" target="_blank" class="btn btn-blue btn-block">💼 PNet.co.za — SA's top job site</a>
+          <a href="https://www.indeed.co.za" target="_blank" class="btn btn-ghost btn-block">🔍 Indeed.co.za — Thousands of jobs</a>
+          <a href="https://www.careers24.com" target="_blank" class="btn btn-ghost btn-block">📋 Careers24 — Entry level jobs</a>
+          <a href="https://www.gumtree.co.za/jobs" target="_blank" class="btn btn-ghost btn-block">📢 Gumtree — Part time &amp; casual</a>
+          <a href="https://www.linkedin.com/jobs" target="_blank" class="btn btn-ghost btn-block">🔗 LinkedIn — Professional network</a>
+          <a href="https://www.studentjob.co.za" target="_blank" class="btn btn-ghost btn-block">🎓 StudentJob.co.za — SA student specific</a>
+        </div>
+      </div>
+    </div>
+    <div id="job-post" style="display:none">
+      <div class="card">
+        <div class="card-title">➕ Post a Job (Free)</div>
+        <label>Job Title *</label><input id="jt-title" placeholder="e.g. Part-time Waiter"/>
+        <label>Company / Business *</label><input id="jt-company" placeholder="e.g. Spur Steak Ranches"/>
+        <label>Location *</label><input id="jt-location" placeholder="e.g. Near UCT, Rondebosch"/>
+        <label>Pay *</label><input id="jt-pay" placeholder="e.g. R25/hour + tips"/>
+        <label>Hours</label><input id="jt-hours" placeholder="e.g. Weekends only, 8am–5pm"/>
+        <label>Job type</label>
+        <select id="jt-type"><option>Part-time</option><option>Full-time</option><option>Once-off / Event</option><option>Remote</option><option>Internship</option></select>
+        <label>Requirements</label><textarea id="jt-req" placeholder="What experience or skills do you need?"></textarea>
+        <label>WhatsApp contact *</label><input id="jt-wa" placeholder="e.g. 071 234 5678"/>
+        <div class="success-banner" id="job-success">✅ Job posted! Students will contact you on WhatsApp.</div>
+        <button class="btn btn-gold btn-block" onclick="postJob()">Post Job Free →</button>
+      </div>
+    </div>
+    <div id="job-tips" style="display:none">
+      <div class="tip-card"><div class="tip-title">📄 Keep your CV to 1 page</div><div class="tip-body">As a student, ONE PAGE maximum. Focus on: your skills, volunteering, school achievements and what you can offer.</div></div>
+      <div class="tip-card red"><div class="tip-title">⚠️ Job scam warning</div><div class="tip-body">❌ Never pay to apply for a job<br>❌ Ignore "earn R5,000 from home" ads<br>✅ Legit jobs are ALWAYS free to apply</div></div>
+      <a href="https://www.pnet.co.za" target="_blank" class="btn btn-blue btn-block">🔍 Search Real Jobs on PNet →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  DISCOUNTS                                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-discounts" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;"><div class="hero-emoji">💰</div><h1>Student Discounts</h1><p>Save money everywhere with your student card.</p></div>
+    <div class="tabs">
+      <div class="tab active" onclick="discTab('tech',this)">Tech 💻</div>
+      <div class="tab" onclick="discTab('transport',this)">Transport 🚌</div>
+      <div class="tab" onclick="discTab('lifestyle',this)">Lifestyle 🎉</div>
+      <div class="tab" onclick="discTab('banking',this)">Banking 🏦</div>
+    </div>
+    <div id="disc-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  APS CALCULATOR (NEW)                                      -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-aps" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;">
+      <div class="hero-emoji">📊</div>
+      <h1>APS Calculator</h1>
+      <p>Calculate your Admission Point Score and see which SA universities you qualify for.</p>
+    </div>
+    <div class="alert alert-info"><div class="alert-icon">ℹ️</div><p>Enter your Grade 12 marks (in percentages). Your APS score determines which degrees you can apply for.</p></div>
+    <div class="card">
+      <div class="card-title">📝 Enter Your Grade 12 Marks</div>
+      <label>Home Language (e.g. IsiZulu, Afrikaans)</label><input id="aps-lang1" type="number" min="0" max="100" placeholder="e.g. 65" oninput="calcAPS()"/>
+      <label>First Additional Language (e.g. English)</label><input id="aps-lang2" type="number" min="0" max="100" placeholder="e.g. 60" oninput="calcAPS()"/>
+      <label>Mathematics or Mathematical Literacy</label><input id="aps-math" type="number" min="0" max="100" placeholder="e.g. 55" oninput="calcAPS()"/>
+      <label>Life Orientation (NOT counted at most unis)</label><input id="aps-lo" type="number" min="0" max="100" placeholder="e.g. 70 (not always counted)" oninput="calcAPS()"/>
+      <label>Subject 4 (e.g. Physical Sciences)</label><input id="aps-s4" type="number" min="0" max="100" placeholder="e.g. 50" oninput="calcAPS()"/>
+      <label>Subject 5 (e.g. Life Sciences / Accounting)</label><input id="aps-s5" type="number" min="0" max="100" placeholder="e.g. 55" oninput="calcAPS()"/>
+      <label>Subject 6 (e.g. Geography / History)</label><input id="aps-s6" type="number" min="0" max="100" placeholder="e.g. 60" oninput="calcAPS()"/>
+      <div class="aps-score" id="aps-result-box" style="display:none">
+        <div class="aps-result" id="aps-score-val">0</div>
+        <div class="aps-label">Your APS Score (excl. Life Orientation)</div>
+      </div>
+    </div>
+    <div id="aps-qual-list"></div>
+    <div class="card">
+      <div class="card-title">📋 APS Score Guide</div>
+      <div class="info-row"><div class="info-icon">🏆</div><div class="info-text"><b>30+ APS</b> — Excellent. Qualifies for most degrees including Medicine, Law, Engineering.</div></div>
+      <div class="info-row"><div class="info-icon">✅</div><div class="info-text"><b>25–29 APS</b> — Good. Qualifies for most Bachelor's degrees.</div></div>
+      <div class="info-row"><div class="info-icon">📝</div><div class="info-text"><b>20–24 APS</b> — Qualifies for many Diploma and some Degree programmes.</div></div>
+      <div class="info-row"><div class="info-icon">📚</div><div class="info-text"><b>15–19 APS</b> — Qualifies for Certificate and Higher Certificate programmes.</div></div>
+      <div class="info-row"><div class="info-icon">🔄</div><div class="info-text"><b>Below 15</b> — Consider a bridging programme or foundation year first.</div></div>
+    </div>
+    <div class="tip-card"><div class="tip-title">💡 Note on APS calculation</div><div class="tip-body">Most universities exclude Life Orientation when calculating your APS. They use your best 6 subjects. WITS, UCT, and UP have additional faculty-specific requirements — always check individual university websites for exact requirements.</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  WELLNESS (NEW)                                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="screen-wellness" class="screen">
+  <div class="container">
+    <div class="hero" style="padding-top:14px;">
+      <div class="hero-emoji">🧠</div>
+      <h1>Student Wellness</h1>
+      <p>Your mental health matters. Free resources for SA students.</p>
+    </div>
+    <div class="alert alert-red"><div class="alert-icon">🆘</div><p><b>In crisis right now?</b> Call SADAG 24/7: <a href="tel:0800456789"><b>0800 456 789</b></a> (FREE) or SMS <b>31393</b></p></div>
+    <div class="tabs">
+      <div class="tab active" onclick="wellTab('support',this)">Get Support</div>
+      <div class="tab" onclick="wellTab('campus',this)">Campus Services</div>
+      <div class="tab" onclick="wellTab('money',this)">Financial Stress</div>
+      <div class="tab" onclick="wellTab('tips',this)">Wellbeing Tips</div>
+    </div>
+    <div id="well-support">
+      <div class="card">
+        <div class="card-title">📞 Free SA Crisis Lines</div>
+        <div class="info-row"><div class="info-icon">🆘</div><div class="info-text"><b>SADAG Suicide Crisis Line</b><br><a href="tel:0800456789">0800 456 789</a> — 24/7 FREE</div></div>
+        <div class="info-row"><div class="info-icon">💬</div><div class="info-text"><b>SADAG SMS Line</b><br>SMS <b>31393</b> — 24/7 FREE</div></div>
+        <div class="info-row"><div class="info-icon">📱</div><div class="info-text"><b>Higher Health Student Helpline</b><br><a href="tel:0800360036">0800 36 36 36</a> — 24/7, all SA students</div></div>
+        <div class="info-row"><div class="info-icon">🤝</div><div class="info-text"><b>Lifeline South Africa</b><br><a href="tel:0861322322">0861 322 322</a> — Counselling</div></div>
+        <div class="info-row"><div class="info-icon">💛</div><div class="info-text"><b>SADAG Depression Line</b><br><a href="tel:0800209090">0800 20 50 26</a> — Mon–Sat 8am–8pm</div></div>
+        <div class="info-row"><div class="info-icon">🌐</div><div class="info-text"><b>SADAG Website</b><br><a href="https://www.sadag.org" target="_blank">www.sadag.org</a></div></div>
+      </div>
+    </div>
+    <div id="well-campus" style="display:none">
+      <div class="tip-card green"><div class="tip-title">🏫 Every university has free counselling</div><div class="tip-body">Every public university in SA has a Student Counselling and Wellness Centre. Services are FREE and confidential for registered students. Go to your university's website and search "Student Counselling" or "Student Wellness".</div></div>
+      <div class="tip-card"><div class="tip-title">🤝 Higher Health Programme</div><div class="tip-body">Higher Health operates on all 26 public university campuses. They offer counselling, HIV testing, mental health support, and sexual health services — all free for students. Call <a href="tel:0800360036">0800 36 36 36</a>.</div></div>
+      <div class="tip-card blue"><div class="tip-title">🔒 Counselling is confidential</div><div class="tip-body">Everything you share with a campus counsellor is private. They cannot tell your parents, your lecturers, or your friends. You are safe to speak openly.</div></div>
+    </div>
+    <div id="well-money" style="display:none">
+      <div class="tip-card"><div class="tip-title">😰 Financial stress is real — and common</div><div class="tip-body">More than 60% of SA students experience financial stress that affects their studies. You are not alone. There are resources to help.</div></div>
+      <div class="tip-card green"><div class="tip-title">🆘 Emergency help at your university</div><div class="tip-body">Most universities have emergency bursary funds for students facing sudden financial crises. Contact your university's Financial Aid Office immediately if you are struggling to eat, pay fees, or buy textbooks. Ask specifically about "emergency funding" or "hardship funds".</div></div>
+      <div class="tip-card blue"><div class="tip-title">💳 NSFAS not arriving?</div><div class="tip-body">If your NSFAS payment is late, contact your university's Financial Aid Office first — they can often arrange emergency support while the issue is resolved. Call NSFAS: <a href="tel:0800067327">0800 067 327</a></div></div>
+    </div>
+    <div id="well-tips" style="display:none">
+      <div class="tip-card"><div class="tip-title">😴 Sleep is not a luxury — it's medicine</div><div class="tip-body">Consistently getting 7–8 hours of sleep improves memory, grades and mood. Create a regular sleep schedule even during exam time.</div></div>
+      <div class="tip-card green"><div class="tip-title">🚶 Move your body every day</div><div class="tip-body">Even a 20-minute walk reduces anxiety and improves focus. Many university campuses have free gyms for registered students. Use them!</div></div>
+      <div class="tip-card blue"><div class="tip-title">📱 Take phone breaks</div><div class="tip-body">Social media comparison culture significantly increases anxiety and depression in students. Try a 1-hour phone-free period every evening.</div></div>
+      <div class="tip-card"><div class="tip-title">🤝 Talk to someone you trust</div><div class="tip-body">Bottling up emotions makes everything harder. Reach out to a friend, a family member, or a counsellor when things feel heavy. You don't have to manage everything alone.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+//  UNIVERSITY DATA — All 26 with full contacts, faculties, SRC, maps
+// ══════════════════════════════════════════════════════════════════════
+const UNIS = [
+  {
+    name:"University of the Witwatersrand",short:"WITS",city:"Johannesburg",province:"Gauteng",
+    web:"https://www.wits.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.wits.ac.za/fees/financial-aid",
+    acc:"https://www.wits.ac.za/student-affairs/accommodation",
+    apply:"https://www.wits.ac.za/applications",
+    map:"https://maps.google.com/?q=University+of+the+Witwatersrand+Johannesburg",
+    src:"https://www.wits.ac.za/students/student-representative-council",
+    about:"Public research university founded in 1922. One of Africa's top-ranked universities, known for medicine, engineering, law and business.",
+    students:"40,000+",fees:"R40,000–R100,000/year",founded:"1922",
+    phone:"+27 (0)11 717 1000",email:"study@wits.ac.za",
+    finaidPhone:"+27 (0)11 717 3050",finaidEmail:"finaid@wits.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["Medicine (MBBCh)","Pharmacy","Physiotherapy","Dentistry"]},
+      {name:"Engineering",courses:["Civil Engineering","Electrical Engineering","Chemical Engineering","Mining Engineering"]},
+      {name:"Commerce Law & Management",courses:["BCom Accounting","BCom Finance","LLB","Business Administration"]},
+      {name:"Science",courses:["BSc Computer Science","BSc Mathematics","BSc Physics","BSc Geology"]},
+      {name:"Humanities",courses:["BA Psychology","BA Social Work","BA Education","Journalism"]},
+    ],
+    srcEmail:"src@wits.ac.za",
+    accDetails:"On-campus residences available. Apply via the Wits Student Portal. Private accommodation: search Braamfontein & Parktown areas.",
+    nsfasNote:"NSFAS fully supported. Contact the Student Finance office on level 2 of the Student Enrolment Centre.",
+    aps:"35–42 (depending on faculty)",
+  },
+  {
+    name:"University of Pretoria",short:"UP",city:"Pretoria",province:"Gauteng",
+    web:"https://www.up.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.up.ac.za/student-financial-aid",
+    acc:"https://www.up.ac.za/student-accommodation",
+    apply:"https://www.up.ac.za/applications",
+    map:"https://maps.google.com/?q=University+of+Pretoria+Hatfield",
+    src:"https://www.up.ac.za/student-affairs/src",
+    about:"Comprehensive research university with 5 campuses. One of SA's largest with over 1,800 programmes offered.",
+    students:"55,000+",fees:"R35,000–R95,000/year",founded:"1908",
+    phone:"+27 (0)12 420 3111",email:"csc@up.ac.za",
+    finaidPhone:"+27 (0)12 420 3111",finaidEmail:"financialaid@up.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["Medicine","Veterinary Science","Pharmacy","Nursing"]},
+      {name:"Engineering Built Env & IT",courses:["BSc Computer Science","BSc IT","Civil Engineering","Architecture"]},
+      {name:"Economic & Management Sciences",courses:["BCom Accounting","BCom Economics","BCom Marketing"]},
+      {name:"Law",courses:["LLB","BProc","BCom Law"]},
+      {name:"Natural & Agricultural Sciences",courses:["BSc Agricultural Sciences","BSc Genetics","BSc Mathematics"]},
+      {name:"Education",courses:["BEd Foundation Phase","BEd Senior Phase","BEd FET"]},
+    ],
+    srcEmail:"src@up.ac.za",
+    accDetails:"Over 30 on-campus residences. Apply via Student Portal as early as possible — spaces fill up fast. Private: Hatfield, Arcadia, Sunnyside areas.",
+    nsfasNote:"NSFAS fully supported. Contact Student Financial Aid at: financialaid@up.ac.za",
+    aps:"30–40 (depending on faculty)",
+  },
+  {
+    name:"University of Johannesburg",short:"UJ",city:"Johannesburg",province:"Gauteng",
+    web:"https://www.uj.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.uj.ac.za/financial-aid",
+    acc:"https://www.uj.ac.za/current-students/accommodation",
+    apply:"https://www.uj.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+Johannesburg+Auckland+Park",
+    src:"https://www.uj.ac.za/students/src",
+    about:"Vibrant urban university with 4 campuses across Joburg: Auckland Park Kingsway, Doornfontein, Soweto & Auckland Park Bunting Road.",
+    students:"50,000+",fees:"R30,000–R85,000/year",founded:"2005",
+    phone:"+27 (0)11 559 4555",email:"info@uj.ac.za",
+    finaidPhone:"+27 (0)11 559 3999",finaidEmail:"studentfinance@uj.ac.za",
+    faculties:[
+      {name:"Art Design & Architecture",courses:["BA Fine Art","BCom Visual Communication","Architecture"]},
+      {name:"Engineering & Built Environment",courses:["BSc Civil Engineering","Electrical Engineering","Construction Management"]},
+      {name:"Management",courses:["BCom Accounting","BCom Financial Planning","BCom Marketing"]},
+      {name:"Humanities",courses:["BA Psychology","BA Communication","BA Social Work","BA Education"]},
+      {name:"Science",courses:["BSc Computer Science","BSc Biochemistry","BSc Mathematics"]},
+    ],
+    srcEmail:"src@uj.ac.za",
+    accDetails:"On-campus residences at all 4 campuses. Apply early via UJ Student Portal. Private: Auckland Park, Fordsburg, Brixton, Soweto.",
+    nsfasNote:"NSFAS fully supported. Contact Student Finance office at any campus.",
+    aps:"28–38 (depending on faculty)",
+  },
+  {
+    name:"Tshwane University of Technology",short:"TUT",city:"Pretoria (6 campuses)",province:"Gauteng",
+    web:"https://www.tut.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.tut.ac.za/financial-aid",
+    acc:"https://www.tut.ac.za/accommodation",
+    apply:"https://www.tut.ac.za/apply",
+    map:"https://maps.google.com/?q=Tshwane+University+of+Technology+Pretoria",
+    src:"https://www.tut.ac.za/student-affairs/src",
+    about:"One of SA's largest universities of technology. Campuses in Pretoria, Ga-Rankuwa, Mbombela, Polokwane, Soshanguve and eMalahleni.",
+    students:"60,000+",fees:"R25,000–R65,000/year",founded:"2004",
+    phone:"+27 (0)12 382 5911",email:"admissions@tut.ac.za",
+    finaidPhone:"+27 (0)12 382 5911",finaidEmail:"financialaid@tut.ac.za",
+    faculties:[
+      {name:"Engineering & Built Environment",courses:["N Dip Civil Engineering","B Tech Electrical Engineering","National Diploma Mechanical"]},
+      {name:"ICT",courses:["National Diploma IT","BTech Computer Systems","Diploma Software Development"]},
+      {name:"Economics & Finance",courses:["National Diploma Accounting","BTech Internal Auditing","Diploma Public Finance"]},
+      {name:"Science",courses:["National Diploma Biotechnology","Diploma Environmental Health"]},
+      {name:"Arts & Design",courses:["National Diploma Graphic Design","Diploma Photography","Performing Arts"]},
+    ],
+    srcEmail:"src@tut.ac.za",
+    accDetails:"On-campus residences available at Pretoria and Soshanguve campuses. Private: Arcadia, Pretoria CBD, Gezina areas.",
+    nsfasNote:"NSFAS fully supported. TUT has a dedicated NSFAS desk at every campus — visit during registration.",
+    aps:"22–30 (depending on programme)",
+  },
+  {
+    name:"Vaal University of Technology",short:"VUT",city:"Vanderbijlpark",province:"Gauteng",
+    web:"https://www.vut.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.vut.ac.za/financial-aid",
+    acc:"https://www.vut.ac.za/accommodation",
+    apply:"https://www.vut.ac.za/apply",
+    map:"https://maps.google.com/?q=Vaal+University+of+Technology+Vanderbijlpark",
+    src:"https://www.vut.ac.za/student-affairs/src",
+    about:"University of technology in the Vaal Triangle offering practical and career-focused programmes in the Vaal industrial hub.",
+    students:"22,000+",fees:"R22,000–R55,000/year",founded:"1966",
+    phone:"+27 (0)16 950 9000",email:"info@vut.ac.za",
+    finaidPhone:"+27 (0)16 950 9561",finaidEmail:"financialaid@vut.ac.za",
+    faculties:[
+      {name:"Engineering & Technology",courses:["Diploma Mechanical Engineering","Diploma Chemical Engineering","BSc Construction"]},
+      {name:"Management Sciences",courses:["Diploma Marketing","Diploma Human Resources","Diploma Logistics"]},
+      {name:"Applied Sciences",courses:["Diploma Environmental Health","Diploma Food Technology","Diploma Analytical Chemistry"]},
+    ],
+    srcEmail:"src@vut.ac.za",
+    accDetails:"On-campus residences in Vanderbijlpark. Private accommodation available in Vanderbijlpark and Vereeniging.",
+    nsfasNote:"NSFAS fully supported. Contact the VUT Student Finance office on the main campus.",
+    aps:"20–26 (depending on programme)",
+  },
+  {
+    name:"Sefako Makgatho Health Sciences University",short:"SMU",city:"Ga-Rankuwa, Pretoria",province:"Gauteng",
+    web:"https://www.smu.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.smu.ac.za/financial-aid",
+    acc:"https://www.smu.ac.za/accommodation",
+    apply:"https://www.smu.ac.za/apply",
+    map:"https://maps.google.com/?q=Sefako+Makgatho+Health+Sciences+University+Ga-Rankuwa",
+    src:"https://www.smu.ac.za/students/src",
+    about:"Dedicated health sciences university training doctors, dentists, pharmacists and nurses. Located at Ga-Rankuwa Hospital.",
+    students:"5,000+",fees:"R30,000–R90,000/year",founded:"2015",
+    phone:"+27 (0)12 521 4111",email:"info@smu.ac.za",
+    finaidPhone:"+27 (0)12 521 4111",finaidEmail:"financialaid@smu.ac.za",
+    faculties:[
+      {name:"Medicine & Health Sciences",courses:["MBChB (Medicine)","BChD (Dentistry)","BPharm (Pharmacy)","BCur (Nursing)","Dietetics"]},
+    ],
+    srcEmail:"src@smu.ac.za",
+    accDetails:"On-campus accommodation available for health science students. Contact the Residence Office.",
+    nsfasNote:"NSFAS fully supported. SMU is a specialised health sciences university — contact their Financial Aid office for programme-specific requirements.",
+    aps:"35+ for Medicine; varies by programme",
+  },
+  {
+    name:"University of South Africa",short:"UNISA",city:"Pretoria (Distance Learning)",province:"Gauteng",
+    web:"https://www.unisa.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.unisa.ac.za/financial-aid",
+    acc:"N/A",
+    apply:"https://my.unisa.ac.za",
+    map:"https://maps.google.com/?q=UNISA+Pretoria+Main+Campus",
+    src:"https://www.unisa.ac.za/sites/corporate/default/Student-Affairs/SRC",
+    about:"Africa's largest distance learning university. Study entirely online — no need to relocate. 400,000+ students across Africa and beyond.",
+    students:"400,000+",fees:"R8,000–R30,000/year",founded:"1873",
+    phone:"012 429 3111",email:"infoservices@unisa.ac.za",
+    finaidPhone:"012 441 5609",finaidEmail:"chabawf@unisa.ac.za",
+    faculties:[
+      {name:"Economic & Management Sciences",courses:["BCom Accounting (CTA)","BCom Financial Management","BCom Human Resources","BSc Logistics"]},
+      {name:"Law",courses:["LLB","BCom Law","BProc"]},
+      {name:"Education",courses:["BEd Foundation Phase","PGCE","ACE Education Management"]},
+      {name:"Science Engineering & Technology",courses:["BSc Computer Science","BSc IT","BSc Mathematics"]},
+      {name:"Humanities",courses:["BA Psychology","BA Social Work","BA Communication","BA Philosophy"]},
+      {name:"Agriculture & Environmental Sciences",courses:["BSc Agriculture","BSc Environmental Management"]},
+    ],
+    srcEmail:"src@unisa.ac.za",
+    accDetails:"Distance learning — study from home. No campus accommodation. Regional offices in major cities for exam centres.",
+    nsfasNote:"NSFAS fully supported for UNISA students. Contact: infoservices@unisa.ac.za or 012 429 3111. Student Funding: letsomp@unisa.ac.za | 012 441 5600",
+    aps:"Varies by programme — check UNISA website",
+  },
+  {
+    name:"University of Cape Town",short:"UCT",city:"Cape Town",province:"Western Cape",
+    web:"https://www.uct.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.uct.ac.za/uct/students/financial-aid",
+    acc:"https://www.uct.ac.za/uct/students/accommodation",
+    apply:"https://www.uct.ac.za/uct/apply",
+    map:"https://maps.google.com/?q=University+of+Cape+Town+Rondebosch",
+    src:"https://www.uct.ac.za/main/students/src",
+    about:"Africa's top-ranked university, located on the slopes of Devil's Peak. World-class research, teaching and social justice commitment.",
+    students:"29,000+",fees:"R45,000–R120,000/year",founded:"1829",
+    phone:"021 650 9111",email:"registrar@uct.ac.za",
+    finaidPhone:"021 650 3545",finaidEmail:"financial.aid@uct.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["MBChB Medicine","BPharm","BDS Dentistry","BSc Physiotherapy","BSc Occupational Therapy"]},
+      {name:"Engineering & Built Environment",courses:["BSc Civil Engineering","BSc Electrical Engineering","BSc Chemical Engineering","Architecture"]},
+      {name:"Commerce",courses:["BCom Accounting","BCom Finance","BBusSc","BCom Economics","BCom Marketing"]},
+      {name:"Law",courses:["LLB","BCom Law","BA Law"]},
+      {name:"Science",courses:["BSc Computer Science","BSc Mathematics","BSc Astronomy","BSc Oceanography"]},
+      {name:"Humanities",courses:["BA Psychology","BA Social Work","BA Film","BA Theatre"]},
+    ],
+    srcEmail:"src@uct.ac.za",
+    accDetails:"Large network of on-campus residences in Rondebosch and Observatory. Apply via UCT Student Housing Portal. Private: Rondebosch, Observatory, Newlands.",
+    nsfasNote:"NSFAS fully supported. UCT also offers its own bursary: UCT Funding Office at financial.aid@uct.ac.za.",
+    aps:"36–44 (depending on faculty). Medicine: 40+ required.",
+  },
+  {
+    name:"Stellenbosch University",short:"SU",city:"Stellenbosch",province:"Western Cape",
+    web:"https://www.sun.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.sun.ac.za/english/financial-aid",
+    acc:"https://www.sun.ac.za/english/student-affairs/accommodation",
+    apply:"https://www.sun.ac.za/english/apply",
+    map:"https://maps.google.com/?q=Stellenbosch+University",
+    src:"https://www.sun.ac.za/english/students/src",
+    about:"Prestigious research university in the Cape Winelands. Strong in medicine, engineering, agriculture and business. Tygerberg medical campus.",
+    students:"32,000+",fees:"R40,000–R110,000/year",founded:"1918",
+    phone:"+27 21 808 9111",email:"info@sun.ac.za",
+    finaidPhone:"+27 21 808 3602",finaidEmail:"financialaid@sun.ac.za",
+    faculties:[
+      {name:"Medicine & Health Sciences",courses:["MBChB","BPharm","BSc Nursing","Dietetics","Physiotherapy"]},
+      {name:"Engineering",courses:["BEng Mechanical","BEng Civil","BEng Electrical","BEng Chemical","BEng Industrial"]},
+      {name:"AgriSciences",courses:["BSc Agriculture","BSc Food Science","BSc Conservation Ecology"]},
+      {name:"Economic & Management Sciences",courses:["BCom Accounting","BCom Financial Management","MComm"]},
+      {name:"Law",courses:["LLB","MComm Law","BProc"]},
+      {name:"Arts & Social Sciences",courses:["BA Psychology","BA Sociology","BA Music"]},
+    ],
+    srcEmail:"src@sun.ac.za",
+    accDetails:"Over 60 campus residences ('koshuise'). Extremely competitive — apply before October for next year. Private: Stellenbosch CBD, Cloetesville.",
+    nsfasNote:"NSFAS fully supported. SU also has the Stellenbosch University Merit Bursary and the SU Staff Bursary Fund.",
+    aps:"32–42 (depends on faculty)",
+  },
+  {
+    name:"University of the Western Cape",short:"UWC",city:"Bellville, Cape Town",province:"Western Cape",
+    web:"https://www.uwc.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.uwc.ac.za/students/student-funding",
+    acc:"https://www.uwc.ac.za/students/accommodation",
+    apply:"https://www.uwc.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+the+Western+Cape+Bellville",
+    src:"https://www.uwc.ac.za/students/src",
+    about:"Historically significant university known for social justice, community development and access to education. Strong in dentistry, pharmacy and law.",
+    students:"23,000+",fees:"R28,000–R75,000/year",founded:"1960",
+    phone:"+27 21 959 2911",email:"study@uwc.ac.za",
+    finaidPhone:"+27 21 959 2694",finaidEmail:"financialaid@uwc.ac.za",
+    faculties:[
+      {name:"Community & Health Sciences",courses:["BCur Nursing","Social Work","BSc Human Ecology","Physiotherapy"]},
+      {name:"Dentistry",courses:["BChD Dentistry","Oral Hygiene","Dental Technology"]},
+      {name:"Arts",courses:["BA Psychology","BA History","BA Language","BA Development Studies"]},
+      {name:"Natural Sciences",courses:["BSc Computer Science","BSc Biochemistry","BSc Biotechnology","BSc Statistics"]},
+      {name:"Law",courses:["LLB","BA Law","MPhil in Law"]},
+      {name:"Economic & Management Sciences",courses:["BCom Accounting","BCom Economics","BAdmin Public Administration"]},
+    ],
+    srcEmail:"src@uwc.ac.za",
+    accDetails:"On-campus residences in Bellville. Apply via UWC Student Portal. Private: Bellville, Parow, Goodwood areas.",
+    nsfasNote:"NSFAS fully supported. UWC has a strong commitment to access — Financial Aid Office actively assists students.",
+    aps:"28–36 (depends on faculty)",
+  },
+  {
+    name:"Cape Peninsula University of Technology",short:"CPUT",city:"Cape Town (6 campuses)",province:"Western Cape",
+    web:"https://www.cput.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.cput.ac.za/study/fees/financial-aid",
+    acc:"https://www.cput.ac.za/study/accommodation",
+    apply:"https://www.cput.ac.za/study/apply-online",
+    map:"https://maps.google.com/?q=Cape+Peninsula+University+of+Technology+Cape+Town",
+    src:"https://www.cput.ac.za/life/students/src",
+    about:"Technology-focused university with 6 campuses: Bellville, Cape Town, Granger Bay, Mowbray, Simon's Town and Wellington.",
+    students:"35,000+",fees:"R22,000–R60,000/year",founded:"2005",
+    phone:"+27 21 959 6767",email:"info@cput.ac.za",
+    finaidPhone:"+27 21 959 6767",finaidEmail:"financialaid@cput.ac.za",
+    faculties:[
+      {name:"Engineering & Built Environment",courses:["Diploma Civil Engineering","Diploma Electrical Engineering","Diploma Construction Management"]},
+      {name:"Informatics & Design",courses:["Diploma IT","Diploma Graphic Design","Diploma Photography","Web Development"]},
+      {name:"Business & Management Sciences",courses:["Diploma Accounting","Diploma Marketing","Diploma Tourism"]},
+      {name:"Applied Sciences",courses:["Diploma Food Technology","Diploma Environmental Management","Diploma Clothing Technology"]},
+    ],
+    srcEmail:"src@cput.ac.za",
+    accDetails:"Limited on-campus residences. Private: Bellville, Mowbray, Rondebosch, Cape Town CBD.",
+    nsfasNote:"NSFAS fully supported at all 6 campuses. Visit the Financial Aid Office at your specific campus.",
+    aps:"22–30 (depends on programme)",
+  },
+  {
+    name:"University of KwaZulu-Natal",short:"UKZN",city:"Durban & Pietermaritzburg",province:"KwaZulu-Natal",
+    web:"https://www.ukzn.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://registrar.ukzn.ac.za/financial-aid",
+    acc:"https://saa.ukzn.ac.za/accommodation",
+    apply:"https://www.ukzn.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+KwaZulu-Natal+Durban",
+    src:"https://www.ukzn.ac.za/students/src",
+    about:"Major research university with 5 campuses: Howard College, Westville, Edgewood, Medical School (Durban) and Pietermaritzburg.",
+    students:"47,000+",fees:"R30,000–R85,000/year",founded:"2004",
+    phone:"031 260 1111 (Durban) | 033 260 5111 (PMB)",email:"enquiries@ukzn.ac.za",
+    finaidPhone:"031 260 1111",finaidEmail:"undergrad@ukzn.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["MBChB Medicine","BPharm","BSc Physiotherapy","BDentistry","BCur Nursing"]},
+      {name:"Engineering",courses:["BSc Civil Engineering","BSc Electrical Engineering","BSc Chemical Engineering","BSc Computer Engineering"]},
+      {name:"Management Studies",courses:["BCom Accounting","BCom Economics","BCom Supply Chain","BCom Marketing"]},
+      {name:"Humanities",courses:["BA Psychology","BA Criminology","BA Education","BSocSci Social Work"]},
+      {name:"Science & Agriculture",courses:["BSc Computer Science","BSc Genetics","BSc Biochemistry","BSc Agriculture"]},
+    ],
+    srcEmail:"src@ukzn.ac.za",
+    accDetails:"On-campus residences at all 5 campuses. Apply via UKZN Student Portal. Private: Glenwood, Westville, Musgrave (Durban); Pietermaritzburg CBD (PMB).",
+    nsfasNote:"NSFAS fully supported. Contact UKZN Financial Aid at undergrad@ukzn.ac.za.",
+    aps:"30–38 (depends on faculty)",
+  },
+  {
+    name:"Durban University of Technology",short:"DUT",city:"Durban",province:"KwaZulu-Natal",
+    web:"https://www.dut.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.dut.ac.za/financial-aid",
+    acc:"https://www.dut.ac.za/accommodation",
+    apply:"https://www.dut.ac.za/apply",
+    map:"https://maps.google.com/?q=Durban+University+of+Technology",
+    src:"https://www.dut.ac.za/students/src",
+    about:"Technology-focused university with campuses in central Durban, Steve Biko and Riverside. Strong in engineering, hospitality, health sciences and arts.",
+    students:"28,000+",fees:"R22,000–R58,000/year",founded:"2002",
+    phone:"+27 31 373 2000",email:"info@dut.ac.za",
+    finaidPhone:"+27 31 373 2000",finaidEmail:"financialaid@dut.ac.za",
+    faculties:[
+      {name:"Engineering & Built Environment",courses:["Diploma Mechanical Engineering","BTech Civil","Diploma Electrical"]},
+      {name:"Accounting & Informatics",courses:["Diploma IT","Diploma Accounting","BTech Internal Auditing","Diploma Cost Accounting"]},
+      {name:"Management Sciences",courses:["Diploma Tourism","Diploma Hospitality","Diploma Marketing","Diploma HR"]},
+      {name:"Health Sciences",courses:["Diploma Dental Technology","Diploma Radiography","BTech Biomedical Technology"]},
+    ],
+    srcEmail:"src@dut.ac.za",
+    accDetails:"On-campus residences in Durban CBD. Private: Greyville, Musgrave, Umbilo areas near Durban campuses.",
+    nsfasNote:"NSFAS fully supported. DUT Financial Aid office located at Steve Biko Campus.",
+    aps:"22–28 (depends on programme)",
+  },
+  {
+    name:"Mangosuthu University of Technology",short:"MUT",city:"Umlazi, Durban",province:"KwaZulu-Natal",
+    web:"https://www.mut.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.mut.ac.za/financial-aid",
+    acc:"https://www.mut.ac.za/accommodation",
+    apply:"https://www.mut.ac.za/apply",
+    map:"https://maps.google.com/?q=Mangosuthu+University+of+Technology+Umlazi",
+    src:"https://www.mut.ac.za/student-affairs/src",
+    about:"University of technology in Umlazi township, named after Prince Mangosuthu Buthelezi. Serves the Greater Durban South community.",
+    students:"13,000+",fees:"R20,000–R50,000/year",founded:"1979",
+    phone:"+27 31 907 7111",email:"info@mut.ac.za",
+    finaidPhone:"+27 31 907 7111",finaidEmail:"financialaid@mut.ac.za",
+    faculties:[
+      {name:"Engineering",courses:["Diploma Electrical Engineering","Diploma Chemical Engineering","Diploma Civil Engineering"]},
+      {name:"Management Sciences",courses:["Diploma Public Management","Diploma Logistics","Diploma Marketing"]},
+      {name:"Natural Sciences",courses:["Diploma Environmental Health","Diploma Analytical Chemistry","Diploma Biotechnology"]},
+    ],
+    srcEmail:"src@mut.ac.za",
+    accDetails:"On-campus residences in Umlazi. Private accommodation available in surrounding Umlazi and Amanzimtoti areas.",
+    nsfasNote:"NSFAS fully supported. Contact the MUT Financial Aid office at the main administration building.",
+    aps:"20–26 (depends on programme)",
+  },
+  {
+    name:"Nelson Mandela University",short:"NMU",city:"Gqeberha (Port Elizabeth)",province:"Eastern Cape",
+    web:"https://www.mandela.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.mandela.ac.za/financial-aid",
+    acc:"https://www.mandela.ac.za/accommodation",
+    apply:"https://www.mandela.ac.za/apply",
+    map:"https://maps.google.com/?q=Nelson+Mandela+University+Port+Elizabeth",
+    src:"https://www.mandela.ac.za/students/src",
+    about:"Named after Nelson Mandela. 7 campuses across Gqeberha, George and Missionvale. Known for law, engineering and health sciences.",
+    students:"28,000+",fees:"R28,000–R78,000/year",founded:"2005",
+    phone:"041 504 1111",email:"info@mandela.ac.za",
+    finaidPhone:"041 504 1111",finaidEmail:"financialaid@mandela.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["BSc Physiotherapy","BSc Optometry","BCur Nursing","Environmental Health"]},
+      {name:"Engineering Built Env & IT",courses:["BEng Civil","BEng Electrical","Diploma Construction","Diploma IT"]},
+      {name:"Business & Economic Sciences",courses:["BCom Accounting","BCom Marketing","BCom Economics","LLB"]},
+      {name:"Arts",courses:["BA Psychology","BA Social Work","BA Education","BA Fine Arts"]},
+      {name:"Science",courses:["BSc Computer Science","BSc Mathematics","BSc Biochemistry"]},
+    ],
+    srcEmail:"src@mandela.ac.za",
+    accDetails:"On-campus residences at South and North campuses in Gqeberha. Private: Summerstrand, Humewood, Newton Park.",
+    nsfasNote:"NSFAS fully supported. Contact NMU Student Finance at financialaid@mandela.ac.za.",
+    aps:"26–36 (depends on faculty)",
+  },
+  {
+    name:"University of Fort Hare",short:"UFH",city:"Alice (main), East London, Bhisho",province:"Eastern Cape",
+    web:"https://www.ufh.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.ufh.ac.za/financial-aid",
+    acc:"https://www.ufh.ac.za/accommodation",
+    apply:"https://www.ufh.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+Fort+Hare+Alice",
+    src:"https://www.ufh.ac.za/students/src",
+    about:"Historic university where Nelson Mandela, Oliver Tambo and many African leaders studied. Founded 1916 in Alice, Eastern Cape.",
+    students:"13,000+",fees:"R22,000–R60,000/year",founded:"1916",
+    phone:"Alice: +27 (0)40 602 2011 | E. London: +27 (0)43 704 7000",email:"registrar@ufh.ac.za",
+    finaidPhone:"+27 (0)40 602 2011",finaidEmail:"financialaid@ufh.ac.za",
+    faculties:[
+      {name:"Agriculture & Environmental Sciences",courses:["BSc Agriculture","BSc Wildlife Management","Diploma Agriculture"]},
+      {name:"Social Sciences & Humanities",courses:["BA Social Work","BA Psychology","BA Communication","BA Education"]},
+      {name:"Law",courses:["LLB","BCom Law"]},
+      {name:"Science & Technology",courses:["BSc Computer Science","BSc Mathematics","BSc Biology"]},
+      {name:"Management & Commerce",courses:["BCom Accounting","BCom Economics","BAdmin Public Administration"]},
+    ],
+    srcEmail:"src@ufh.ac.za",
+    accDetails:"On-campus residences in Alice, East London and Bhisho. Apply early — limited space. Private in Alice town.",
+    nsfasNote:"NSFAS fully supported. UFH is a historically disadvantaged institution with strong financial aid support.",
+    aps:"24–32 (depends on faculty)",
+  },
+  {
+    name:"Walter Sisulu University",short:"WSU",city:"Mthatha (main), East London, Butterworth, Queenstown",province:"Eastern Cape",
+    web:"https://www.wsu.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.wsu.ac.za/financial-aid",
+    acc:"https://www.wsu.ac.za/accommodation",
+    apply:"https://www.wsu.ac.za/apply",
+    map:"https://maps.google.com/?q=Walter+Sisulu+University+Mthatha",
+    src:"https://www.wsu.ac.za/students/src",
+    about:"Named after Walter Sisulu, a founding member of the ANC. Serves the OR Tambo, Amathole and Chris Hani districts of the Eastern Cape.",
+    students:"32,000+",fees:"R20,000–R55,000/year",founded:"2005",
+    phone:"Mthatha: 047 502 2844 | Butterworth: 047 401 6254 | East London: 043 708 5200",email:"registrar@wsu.ac.za",
+    finaidPhone:"047 502 2844",finaidEmail:"financialaid@wsu.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["BCur Nursing","BSc Radiography","BSc Environmental Health","Pharmacy"]},
+      {name:"Economic Sciences",courses:["BCom Accounting","BCom Economics","Diploma Accounting"]},
+      {name:"Education",courses:["BEd Foundation Phase","BEd Senior Phase","PGCE"]},
+      {name:"Law",courses:["LLB","BProc"]},
+      {name:"Natural Sciences",courses:["BSc Computer Science","BSc Mathematics","BSc Chemistry"]},
+    ],
+    srcEmail:"src@wsu.ac.za",
+    accDetails:"On-campus residences at all 4 campuses. Private accommodation in Mthatha, East London, Butterworth and Queenstown.",
+    nsfasNote:"NSFAS fully supported. WSU serves one of SA's most rural student populations — Financial Aid prioritises NSFAS students.",
+    aps:"22–30 (depends on faculty)",
+  },
+  {
+    name:"Rhodes University",short:"RU",city:"Makhanda (Grahamstown)",province:"Eastern Cape",
+    web:"https://www.ru.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.ru.ac.za/financial-aid",
+    acc:"https://www.ru.ac.za/accommodation",
+    apply:"https://www.ru.ac.za/apply",
+    map:"https://maps.google.com/?q=Rhodes+University+Grahamstown",
+    src:"https://www.ru.ac.za/students/src",
+    about:"Small, highly ranked liberal arts university. SA's top journalism school. Beautiful campus in Makhanda (Grahamstown). Known for close-knit community.",
+    students:"8,500+",fees:"R40,000–R95,000/year",founded:"1904",
+    phone:"+27 46 603 8111",email:"registrar@ru.ac.za",
+    finaidPhone:"+27 46 603 7054",finaidEmail:"financialaid@ru.ac.za",
+    faculties:[
+      {name:"Humanities",courses:["BA Journalism","BA Psychology","BA English","BA Drama","BA Music"]},
+      {name:"Science",courses:["BSc Computer Science","BSc Mathematics","BSc Pharmacy","BSc Biochemistry"]},
+      {name:"Commerce",courses:["BCom Accounting","BCom Economics","BCom Financial Management"]},
+      {name:"Law",courses:["LLB","BCom Law"]},
+      {name:"Education",courses:["PGCE Education","MEd"]},
+    ],
+    srcEmail:"src@ru.ac.za",
+    accDetails:"Large network of on-campus residences (30+ res). Most students live on campus. Private options in Grahamstown town centre.",
+    nsfasNote:"NSFAS fully supported. Rhodes is committed to funding deserving students — contact financialaid@ru.ac.za.",
+    aps:"28–36 (depends on faculty)",
+  },
+  {
+    name:"University of Limpopo",short:"UL",city:"Mankweng, Polokwane",province:"Limpopo",
+    web:"https://www.ul.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.ul.ac.za/financial-aid",
+    acc:"https://www.ul.ac.za/accommodation",
+    apply:"https://www.ul.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+Limpopo+Mankweng",
+    src:"https://www.ul.ac.za/students/src",
+    about:"Comprehensive university in the Capricorn District of Limpopo. Known for health sciences, agriculture and rural development focus.",
+    students:"18,000+",fees:"R22,000–R60,000/year",founded:"1959",
+    phone:"+27 (0)15 268 3332",email:"registrar@ul.ac.za",
+    finaidPhone:"+27 (0)15 268 3226",finaidEmail:"financialaid@ul.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["MBChB Medicine","BCur Nursing","BPharm","Social Work","Environmental Health"]},
+      {name:"Agriculture & Natural Sciences",courses:["BSc Agriculture","BSc Mathematics","BSc Computer Science"]},
+      {name:"Humanities",courses:["BA Education","BA Psychology","BA Communication","BA Social Work"]},
+      {name:"Management & Law",courses:["BCom Accounting","BAdmin Public Administration","LLB"]},
+    ],
+    srcEmail:"src@ul.ac.za",
+    accDetails:"On-campus residences in Mankweng. Private in Mankweng township and Polokwane city.",
+    nsfasNote:"NSFAS fully supported. UL Financial Aid: +27 (0)15 268 3226 / 2405.",
+    aps:"25–34 (depends on faculty)",
+  },
+  {
+    name:"University of Venda",short:"UNIVEN",city:"Thohoyandou",province:"Limpopo",
+    web:"https://www.univen.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.univen.ac.za/financial-aid",
+    acc:"https://www.univen.ac.za/accommodation",
+    apply:"https://www.univen.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+Venda+Thohoyandou",
+    src:"https://www.univen.ac.za/students/src",
+    about:"Serves the Vhembe District of Limpopo with strong focus on local community development and indigenous knowledge systems.",
+    students:"16,000+",fees:"R18,000–R50,000/year",founded:"1982",
+    phone:"+27 15 962 8000",email:"communications@univen.ac.za",
+    finaidPhone:"+27 15 962 8000",finaidEmail:"financialaid@univen.ac.za",
+    faculties:[
+      {name:"Agriculture",courses:["BSc Agriculture","BSc Food Science","BSc Forestry","Diploma Agriculture"]},
+      {name:"Science Engineering & Agriculture",courses:["BSc Computer Science","BSc Mathematics","BSc Environmental Science"]},
+      {name:"Health Sciences",courses:["BCur Nursing","Environmental Health","Social Work"]},
+      {name:"Humanities Social Sciences & Education",courses:["BA Psychology","BA Education","BEd Foundation Phase"]},
+      {name:"Management & Law",courses:["BCom Accounting","BAdmin Public Administration","LLB"]},
+    ],
+    srcEmail:"src@univen.ac.za",
+    accDetails:"On-campus residences in Thohoyandou. Private in Thohoyandou and surrounding Vhembe District.",
+    nsfasNote:"NSFAS fully supported. Communications: +27 15 962 8000 / communications@univen.ac.za.",
+    aps:"22–30 (depends on faculty)",
+  },
+  {
+    name:"University of Mpumalanga",short:"UMP",city:"Mbombela (Nelspruit)",province:"Mpumalanga",
+    web:"https://www.ump.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.ump.ac.za/financial-aid",
+    acc:"https://www.ump.ac.za/accommodation",
+    apply:"https://www.ump.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+Mpumalanga+Mbombela",
+    src:"https://www.ump.ac.za/student-affairs/src",
+    about:"SA's newest comprehensive university, established in 2014 in Mbombela (Nelspruit). Growing rapidly with a focus on agriculture, tourism and education.",
+    students:"7,000+",fees:"R18,000–R45,000/year",founded:"2014",
+    phone:"+27 13 002 0000",email:"info@ump.ac.za",
+    finaidPhone:"+27 13 002 0000",finaidEmail:"financialaid@ump.ac.za",
+    faculties:[
+      {name:"Agriculture & Land Reform",courses:["BSc Agriculture","Diploma Agriculture","BSc Wildlife Management"]},
+      {name:"Education",courses:["BEd Foundation Phase","BEd Senior Phase","BEd FET"]},
+      {name:"Business Sciences",courses:["BCom Tourism","BCom Marketing","BCom Economics"]},
+      {name:"Natural Sciences",courses:["BSc Environmental Management","BSc Mathematics"]},
+    ],
+    srcEmail:"src@ump.ac.za",
+    accDetails:"On-campus residences at Mbombela campus. Private in Mbombela and Hazyview areas.",
+    nsfasNote:"NSFAS fully supported. Being a new university, UMP has a responsive Financial Aid office — contact info@ump.ac.za.",
+    aps:"22–28 (depends on programme)",
+  },
+  {
+    name:"North-West University",short:"NWU",city:"Mahikeng / Potchefstroom / Vanderbijlpark",province:"North West",
+    web:"https://www.nwu.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.nwu.ac.za/financial-aid",
+    acc:"https://www.nwu.ac.za/accommodation",
+    apply:"https://www.nwu.ac.za/apply",
+    map:"https://maps.google.com/?q=North-West+University+Potchefstroom",
+    src:"https://www.nwu.ac.za/student-affairs/src",
+    about:"Multi-campus university with SA's largest student population. 3 campuses: Potchefstroom, Mahikeng and Vanderbijlpark. Strong in education, engineering and pharmacy.",
+    students:"65,000+",fees:"R25,000–R70,000/year",founded:"2004",
+    phone:"Institutional: +27 18 299 4897 | Mahikeng: +27 18 389 2111 | Potch: +27 18 299 1111",email:"info@nwu.ac.za",
+    finaidPhone:"+27 18 299 1111",finaidEmail:"financialaid@nwu.ac.za",
+    faculties:[
+      {name:"Engineering",courses:["BEng Electrical","BEng Mechanical","BEng Chemical","BEng Computer"]},
+      {name:"Pharmacy",courses:["BPharm","BClinPharm","PharmD"]},
+      {name:"Education",courses:["BEd Foundation Phase","BEd Senior Phase","PGCE","BEd FET"]},
+      {name:"Economic Sciences",courses:["BCom Accounting","BCom Economics","BCom Financial Management","BCom HR"]},
+      {name:"Natural Sciences",courses:["BSc Computer Science","BSc Mathematics","BSc Physics","BSc Chemistry"]},
+    ],
+    srcEmail:"src@nwu.ac.za",
+    accDetails:"Large residence networks at all 3 campuses. Toll-free info: 0800 623 698. Private in Potchefstroom town, Mahikeng and Vanderbijlpark.",
+    nsfasNote:"NSFAS fully supported at all 3 campuses. NWU also offers the NWU Bursary for top achievers.",
+    aps:"26–36 (depends on faculty)",
+  },
+  {
+    name:"University of the Free State",short:"UFS",city:"Bloemfontein (main), QwaQwa, South Campus",province:"Free State",
+    web:"https://www.ufs.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.ufs.ac.za/financial-aid",
+    acc:"https://www.ufs.ac.za/accommodation",
+    apply:"https://www.ufs.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+the+Free+State+Bloemfontein",
+    src:"https://www.ufs.ac.za/students/src",
+    about:"Comprehensive research university in the heart of SA. 3 campuses. Known for health sciences, law, and transformation leadership.",
+    students:"40,000+",fees:"R28,000–R80,000/year",founded:"1904",
+    phone:"+27 (0)51 401 9111",email:"info@ufs.ac.za",
+    finaidPhone:"+27 (0)51 401 2856",finaidEmail:"financialaid@ufs.ac.za",
+    faculties:[
+      {name:"Health Sciences",courses:["MBChB Medicine","BPharm","BSc Physiotherapy","BCur Nursing","BSc Dietetics"]},
+      {name:"Engineering & Built Environment",courses:["BEng Chemical","BEng Civil","BEng Electrical","Architecture"]},
+      {name:"Economic & Management Sciences",courses:["BCom Accounting","BCom Economics","BCom Investment Management","LLM"]},
+      {name:"Humanities",courses:["BA Psychology","BA Social Work","BA Communication","BA History","BA Education"]},
+      {name:"Natural & Agricultural Sciences",courses:["BSc Computer Science","BSc Mathematics","BSc Agriculture","BSc Physics"]},
+      {name:"Law",courses:["LLB","BCom Law","BProc"]},
+    ],
+    srcEmail:"src@ufs.ac.za",
+    accDetails:"Extensive on-campus residences in Bloemfontein. Apply via UFS Student Portal. Private in Fichardt Park, Universitas areas.",
+    nsfasNote:"NSFAS fully supported. UFS Financial Aid: +27 (0)51 401 2856 / financialaid@ufs.ac.za.",
+    aps:"28–38 (depends on faculty)",
+  },
+  {
+    name:"Central University of Technology",short:"CUT",city:"Bloemfontein (main), Welkom",province:"Free State",
+    web:"https://www.cut.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.cut.ac.za/financial-aid",
+    acc:"https://www.cut.ac.za/accommodation",
+    apply:"https://www.cut.ac.za/apply",
+    map:"https://maps.google.com/?q=Central+University+of+Technology+Bloemfontein",
+    src:"https://www.cut.ac.za/student-affairs/src",
+    about:"Technology-focused university in the Free State offering practical, career-oriented programmes. Campuses in Bloemfontein and Welkom.",
+    students:"15,000+",fees:"R20,000–R55,000/year",founded:"1981",
+    phone:"+27 51 507 3000",email:"info@cut.ac.za",
+    finaidPhone:"+27 51 507 3000",finaidEmail:"financialaid@cut.ac.za",
+    faculties:[
+      {name:"Engineering & IT",courses:["Diploma Electrical Engineering","Diploma Civil Engineering","Diploma IT","BTech Computer Systems"]},
+      {name:"Management Sciences",courses:["Diploma Accounting","Diploma Marketing","Diploma Public Management","Diploma HR"]},
+      {name:"Health & Environmental Sciences",courses:["Diploma Environmental Health","Diploma Clinical Technology"]},
+    ],
+    srcEmail:"src@cut.ac.za",
+    accDetails:"On-campus residences in Bloemfontein. Private in Bloemfontein city and surrounding areas.",
+    nsfasNote:"NSFAS fully supported. Contact CUT Financial Aid at info@cut.ac.za or +27 51 507 3000.",
+    aps:"20–26 (depends on programme)",
+  },
+  {
+    name:"Sol Plaatje University",short:"SPU",city:"Kimberley",province:"Northern Cape",
+    web:"https://www.spu.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.spu.ac.za/financial-aid",
+    acc:"https://www.spu.ac.za/accommodation",
+    apply:"https://www.spu.ac.za/apply",
+    map:"https://maps.google.com/?q=Sol+Plaatje+University+Kimberley",
+    src:"https://www.spu.ac.za/student-affairs/src",
+    about:"Named after Sol Plaatje, founding member of the ANC and first Secretary-General. Serves the Northern Cape. Second newest university in SA (est. 2014).",
+    students:"3,500+",fees:"R18,000–R48,000/year",founded:"2014",
+    phone:"+27 53 807 8900",email:"info@spu.ac.za",
+    finaidPhone:"+27 53 807 8900",finaidEmail:"financialaid@spu.ac.za",
+    faculties:[
+      {name:"Natural & Applied Sciences",courses:["BSc Environmental Management","BSc Mathematics","BSc Computer Science"]},
+      {name:"Economic & Management Sciences",courses:["BCom Accounting","BCom Tourism","BCom Supply Chain"]},
+      {name:"Education",courses:["BEd Foundation Phase","BEd Senior Phase"]},
+      {name:"Humanities",courses:["BA Heritage Studies","BA Psychology","BA Social Work"]},
+    ],
+    srcEmail:"src@spu.ac.za",
+    accDetails:"On-campus residences in Kimberley. Small and growing — contact Accommodation Office at info@spu.ac.za.",
+    nsfasNote:"NSFAS fully supported. As a smaller university, SPU offers personalised Financial Aid support. Contact: +27 53 807 8900.",
+    aps:"22–28 (depends on programme)",
+  },
+  {
+    name:"University of Zululand",short:"UNIZULU",city:"KwaDlangezwa, Richards Bay",province:"KwaZulu-Natal",
+    web:"https://www.unizulu.ac.za",nsfas:"https://my.nsfas.org.za",
+    finaid:"https://www.unizulu.ac.za/financial-aid",
+    acc:"https://www.unizulu.ac.za/accommodation",
+    apply:"https://www.unizulu.ac.za/apply",
+    map:"https://maps.google.com/?q=University+of+Zululand+KwaDlangezwa",
+    src:"https://www.unizulu.ac.za/student-affairs/src",
+    about:"Serves northern KZN communities in the Empangeni/Richards Bay area. Strong in education, arts and social sciences. Two campuses.",
+    students:"17,000+",fees:"R20,000–R55,000/year",founded:"1960",
+    phone:"Main: 035 902 6000 | Richards Bay: 035 902 6006",email:"registrar@unizulu.ac.za",
+    finaidPhone:"035 902 6000",finaidEmail:"financialaid@unizulu.ac.za",
+    faculties:[
+      {name:"Arts",courses:["BA Psychology","BA Social Work","BA Criminology","BA Communication","BA Education"]},
+      {name:"Commerce Administration & Tourism",courses:["BCom Accounting","BCom Tourism Management","BAdmin Public Administration"]},
+      {name:"Science Agriculture & Engineering",courses:["BSc Computer Science","BSc Mathematics","BSc Agriculture","BSc Biology"]},
+      {name:"Education",courses:["BEd Foundation Phase","BEd Senior Phase","BEd FET","PGCE"]},
+    ],
+    srcEmail:"src@unizulu.ac.za",
+    accDetails:"On-campus residences at KwaDlangezwa and Richards Bay campuses. Private in Empangeni and Richards Bay.",
+    nsfasNote:"NSFAS fully supported. UNIZULU Financial Aid: 035 902 6000 / financialaid@unizulu.ac.za.",
+    aps:"22–30 (depends on faculty)",
+  },
+];
+
+// ─── Jobs Data ──────────────────────────────────────────────────────────
+const JOBS_DATA = [
+  {title:"Student Tutor",company:"Campus Tutoring Centre",location:"Various campuses nationwide",pay:"R80–R150/hour",hours:"Flexible",type:"Academic",wa:"0800000000",desc:"Tutor first-year students in your strong subject. Great for education students and high achievers."},
+  {title:"Waiter / Waitress",company:"Spur Steak Ranches",location:"Near WITS, Johannesburg",pay:"R25/hour + tips",hours:"Weekends only",type:"Food & Bev",wa:"0712345678",desc:"Weekend waiter position. Tips can double your earnings. Must be friendly and reliable."},
+  {title:"Brand Ambassador",company:"Red Bull South Africa",location:"Nationwide campus events",pay:"R150–R300/event",hours:"Events only",type:"Promotions",wa:"0823456789",desc:"Represent Red Bull at campus events. Fun, social work with great extras."},
+  {title:"Social Media Manager",company:"Small Business (Remote)",location:"Remote — work anywhere",pay:"R1,500–R3,000/month",hours:"5–8 hrs/week",type:"Digital",wa:"0834567890",desc:"Manage Instagram and Facebook for a small SA business. Must know Canva and content creation."},
+  {title:"Uber Eats / Mr D Delivery",company:"Uber Eats / Mr D",location:"Any city in SA",pay:"R15–R35/delivery",hours:"100% flexible",type:"Delivery",wa:"",desc:"Earn on your own schedule. Use a bicycle, scooter or car. Sign up directly on the app."},
+  {title:"Library Assistant",company:"University Library",location:"On campus",pay:"R22–R30/hour",hours:"Part time — 20hrs/week",type:"Campus",wa:"0845678901",desc:"Help students find resources and manage library operations. Quiet, stable income."},
+  {title:"Call Centre Agent",company:"Concentrix SA",location:"Johannesburg CBD",pay:"R5,000–R7,000/month",hours:"Part time shifts available",type:"Call Centre",wa:"0856789012",desc:"Handle customer queries for SA brands. Training provided. Good for communication students."},
+  {title:"Campus Photographer",company:"Freelance",location:"Your campus",pay:"R300–R1,000/event",hours:"Weekends",type:"Creative",wa:"0867890123",desc:"Photograph campus events, societies and graduations. Build your portfolio and earn."},
+];
+
+// ─── Books Data ─────────────────────────────────────────────────────────
+const BOOKS_DATA = [
+  {title:"Principles of Marketing — 5th Ed",author:"Kotler & Armstrong",module:"MKT101",uni:"UNISA / UJ",cond:"Good — some highlights",price:150,orig:850,wa:"0711111111"},
+  {title:"Financial Accounting GAAP — 9th Ed",author:"Loftus et al.",module:"FAC1502",uni:"UNISA",cond:"Like new — no marks",price:280,orig:1100,wa:"0722222222"},
+  {title:"Introduction to Law — 6th Ed",author:"Kleyn & Viljoen",module:"INR101",uni:"WITS / UJ",cond:"Fair — notes inside",price:120,orig:780,wa:"0733333333"},
+  {title:"Human Anatomy & Physiology — 10th Ed",author:"Marieb & Hoehn",module:"ANA101",uni:"UP / UKZN",cond:"Like new",price:420,orig:1800,wa:"0744444444"},
+  {title:"Organisational Behaviour — 17th Ed",author:"Robbins & Judge",module:"MGT201",uni:"Various",cond:"Good condition",price:200,orig:950,wa:"0755555555"},
+  {title:"Cost & Management Accounting",author:"Drury",module:"MAC2602",uni:"UNISA / UFS",cond:"Well used but complete",price:100,orig:720,wa:"0766666666"},
+];
+
+// ─── Discounts Data ─────────────────────────────────────────────────────
+const DISCOUNTS = {
+  tech:[
+    {name:"Apple Education Store 🍎",disc:"Up to 10% off MacBooks & iPads",how:"Visit apple.com/za/education — verify with student email",link:"https://www.apple.com/za/education-store/",badge:"badge-blue"},
+    {name:"Microsoft Office 365 🖥️",disc:"FREE for students at most universities",how:"Get free Office via your university student email — ask IT dept",link:"https://www.microsoft.com/en-za/education",badge:"badge-green"},
+    {name:"Spotify Student 🎵",disc:"50% off Premium — R34.99/month",how:"Verify at spotify.com/za/student with your student email",link:"https://www.spotify.com/za/student/",badge:"badge-gold"},
+    {name:"YouTube Premium Student 📺",disc:"Student pricing available",how:"Verify with university email on YouTube Premium settings",link:"https://www.youtube.com/premium/student",badge:"badge-red"},
+    {name:"Canva Pro 🎨",disc:"FREE for students!",how:"Sign up at canva.com/education with student email",link:"https://www.canva.com/education/",badge:"badge-purple"},
+  ],
+  transport:[
+    {name:"Gautrain Student Card 🚆",disc:"Up to 50% off peak fares",how:"Apply at any Gautrain station with student card + ID",link:"https://www.gautrain.co.za",badge:"badge-blue"},
+    {name:"Golden Arrow (Cape Town) 🚌",disc:"Monthly student pass discount",how:"Apply with valid student card at Golden Arrow offices",link:"https://www.gabs.co.za",badge:"badge-green"},
+    {name:"Uber First Ride 🚗",disc:"Discount codes on first rides",how:"Download Uber app — check promotions section for codes",link:"https://www.uber.com/za",badge:"badge-gold"},
+    {name:"Intercape Bus 🚌",disc:"10% student discount intercity",how:"Show student card when booking at the ticket office",link:"https://www.intercape.co.za",badge:"badge-blue"},
+  ],
+  lifestyle:[
+    {name:"Ster-Kinekor Movies 🎬",disc:"Student Tuesday — R45/ticket",how:"Show student card at any Ster-Kinekor box office every Tuesday",link:"https://www.sterkinekor.com",badge:"badge-gold"},
+    {name:"Planet Fitness 💪",disc:"Student membership R199/month",how:"Sign up with student card at any Planet Fitness branch",link:"https://www.planetfitness.co.za",badge:"badge-green"},
+    {name:"ISIC Card 🌍",disc:"Worldwide student discounts",how:"Apply at isic.co.za — valid in 130+ countries",link:"https://www.isic.co.za",badge:"badge-purple"},
+    {name:"Edgars / Jet 👗",disc:"Student account exclusive deals",how:"Apply for student account at any Edgars store",link:"https://www.edgars.co.za",badge:"badge-blue"},
+  ],
+  banking:[
+    {name:"FNB Student Account 🏦",disc:"Free banking + eBucks rewards",how:"Open online at fnb.co.za/students with student card + ID",link:"https://www.fnb.co.za/students",badge:"badge-gold"},
+    {name:"Capitec Bank 💳",disc:"Low fees — R7.00/month only",how:"Visit any Capitec branch with ID. Lowest fees in SA.",link:"https://www.capitecbank.co.za",badge:"badge-blue"},
+    {name:"ABSA Student Account 🏧",disc:"Free account + student benefits",how:"Apply online at absa.co.za or any branch",link:"https://www.absa.co.za/students",badge:"badge-green"},
+    {name:"Standard Bank Student 🏦",disc:"MyMo free account for students",how:"Download MyMo app or visit Standard Bank branch",link:"https://www.standardbank.co.za/students",badge:"badge-red"},
+  ],
+};
+
+// ─── Bursaries Data ─────────────────────────────────────────────────────
+const BURSARIES = {
+  govt:[
+    {name:"NSFAS — National Student Financial Aid Scheme",amount:"Up to R150,000/year (fees + allowances)",field:"All fields — income based",deadline:"September–November each year",link:"https://my.nsfas.org.za",desc:"SA's largest student funding scheme. Covers tuition, books, accommodation, meals and transport. For students with household income below R350,000/year."},
+    {name:"Funza Lushaka Bursary",amount:"Full bursary (tuition + allowance)",field:"Teaching / Education (all phases)",deadline:"Varies — check annually",link:"https://www.funzalushaka.doe.gov.za",desc:"Government bursary for students who want to become teachers. Covers all costs. Requires you to teach in a public school for a set period after graduation."},
+    {name:"NSFAS Disability Fund",amount:"Additional disability allowance",field:"All fields — for students with disabilities",deadline:"With your NSFAS application",link:"https://my.nsfas.org.za",desc:"Additional support for students registered with a disability. Includes assistive devices, specialised accommodation and extra allowances."},
+    {name:"ETDP SETA Bursary",amount:"Up to R60,000/year",field:"Education, Training & Development",deadline:"August–October",link:"https://www.etdpseta.org.za",desc:"SETA bursary for students in education, training and development fields."},
+  ],
+  corporate:[
+    {name:"Eskom Bursary",amount:"Full tuition + allowance",field:"Engineering, Science, Finance",deadline:"September each year",link:"https://www.eskom.co.za/careers",desc:"One of SA's most prestigious bursaries. Full tuition, accommodation, book and living allowance. Must study in an Eskom-relevant field."},
+    {name:"Sasol Bursary",amount:"Full tuition + monthly stipend",field:"Chemical, Mechanical, Electrical Engineering",deadline:"August–October",link:"https://www.sasol.com/careers",desc:"Covers full tuition, accommodation and monthly living allowance. One of the best-paying bursaries in SA. Must commit to working at Sasol."},
+    {name:"Anglo American Bursary",amount:"Full fees + monthly allowance",field:"Mining, Engineering, Geology, Finance",deadline:"August–September",link:"https://www.angloamerican.com/careers",desc:"Prestigious mining company bursary for students in mining and engineering fields."},
+    {name:"Transnet Bursary",amount:"Up to R120,000/year",field:"Engineering, ICT, Logistics, Finance",deadline:"August–October",link:"https://www.transnet.net/careers",desc:"Transnet offers bursaries for students in logistics, engineering and related fields. Work-back period applies."},
+    {name:"Standard Bank Bursary",amount:"Full fees + stipend",field:"Finance, Accounting, IT, Engineering",deadline:"September–October",link:"https://www.standardbank.co.za",desc:"Standard Bank bursary for high-achieving students in financial and technical fields."},
+    {name:"FNB Bursary",amount:"Full tuition + allowances",field:"Finance, Accounting, IT, Engineering",deadline:"August–October",link:"https://www.fnb.co.za/careers",desc:"FNB offers merit-based bursaries. Candidates are expected to intern and potentially work at FNB."},
+    {name:"Vodacom Bursary",amount:"Full tuition + monthly allowance",field:"ICT, Engineering, Mathematics",deadline:"August–October",link:"https://www.vodacom.co.za/careers",desc:"Vodacom bursary for students in ICT and engineering. Work-back agreement after completion."},
+    {name:"MTN Bursary",amount:"Full fees + allowance",field:"Engineering, ICT, Finance",deadline:"August–October",link:"https://www.mtn.co.za/careers",desc:"MTN offers competitive bursaries for students in technology and finance programmes."},
+  ],
+  sector:[
+    {name:"MERSETA Bursary (Manufacturing)",amount:"Up to R80,000/year",field:"Manufacturing, Engineering, Retail",deadline:"September",link:"https://www.merseta.org.za",desc:"SETA bursary for students in the manufacturing and engineering sectors."},
+    {name:"HWSETA Bursary (Health)",amount:"Up to R70,000/year",field:"Nursing, Social Work, Health Sciences",deadline:"July–September",link:"https://www.hwseta.org.za",desc:"Health & Welfare SETA bursary for health and social work students."},
+    {name:"FASSET Bursary (Finance)",amount:"Up to R60,000/year",field:"Accounting, Finance, Auditing",deadline:"August–September",link:"https://www.fasset.org.za",desc:"Finance and Accounting Services SETA bursary for CA and accounting students."},
+    {name:"AGRISETA Bursary (Agriculture)",amount:"Up to R60,000/year",field:"Agriculture, Agronomy, Food Science",deadline:"July–September",link:"https://www.agriseta.co.za",desc:"Agricultural SETA bursary for students in agricultural and related fields."},
+    {name:"MICT SETA ICT Bursary",amount:"Up to R60,000/year",field:"IT, ICT, Computer Science",deadline:"August–October",link:"https://www.mictseta.org.za",desc:"Media, Information and Communication Technologies SETA bursary for ICT students."},
+  ],
+};
+
+// ══════════════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════════════
+let currentProv = 'all';
+
+// ══════════════════════════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════════════════════════
+function nav(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  const bn=document.getElementById('bn-'+id);
+  if(bn) bn.classList.add('active');
+  document.getElementById('navMenu').classList.remove('open');
+  window.scrollTo(0,0);
+  if(id==='universities') renderUnis();
+  if(id==='jobs') renderJobs();
+  if(id==='discounts') renderDiscounts('tech');
+  if(id==='textbooks') renderBooks();
+  if(id==='bursaries') renderBursaries('govt');
+}
+
+function toggleMenu(){
+  document.getElementById('navMenu').classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  HOME
+// ══════════════════════════════════════════════════════════════════════
+function initHomeProvince(){
+  const provinces=[...new Set(UNIS.map(u=>u.province))].sort();
+  const sel=document.getElementById('home-prov');
+  provinces.forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;sel.appendChild(o);});
+}
+function homeFilterUni(){
+  const prov=document.getElementById('home-prov').value;
+  const sel=document.getElementById('home-uni');
+  sel.innerHTML='<option value="">— Choose university —</option>';
+  UNIS.filter(u=>!prov||u.province===prov).forEach(u=>{
+    const o=document.createElement('option');o.value=u.short;o.textContent=u.name+' ('+u.short+')';sel.appendChild(o);
+  });
+}
+function homeGoUni(){
+  const s=document.getElementById('home-uni').value;
+  if(!s){alert('Please select your university first!');return;}
+  nav('universities');
+  setTimeout(()=>{
+    const el=document.getElementById('uni-'+s);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});toggleUni(s);}
+  },300);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  UNIVERSITIES
+// ══════════════════════════════════════════════════════════════════════
+function initProvincePills(){
+  const container=document.getElementById('province-pills');
+  const provinces=['All',...new Set(UNIS.map(u=>u.province))].sort();
+  provinces.forEach((p,i)=>{
+    const btn=document.createElement('div');
+    btn.className='province-pill'+(i===0?' active':'');
+    btn.textContent=p==='All'?'🌍 All':p;
+    btn.onclick=()=>filterProvince(p==='All'?'all':p,btn);
+    container.appendChild(btn);
+  });
+}
+
+function filterProvince(prov,btn){
+  currentProv=prov;
+  document.querySelectorAll('.province-pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  renderUnis();
+}
+
+function searchUnis(val){
+  const s=val.toLowerCase();
+  document.querySelectorAll('.uni-item').forEach(el=>{
+    el.style.display=(!s||el.dataset.name.includes(s))?'block':'none';
+  });
+}
+
+function renderUnis(){
+  const container=document.getElementById('uni-list');
+  container.innerHTML='';
+  const filtered=UNIS.filter(u=>currentProv==='all'||u.province===currentProv);
+  const grouped={};
+  filtered.forEach(u=>{if(!grouped[u.province])grouped[u.province]=[];grouped[u.province].push(u);});
+  Object.entries(grouped).forEach(([prov,unis])=>{
+    const h=document.createElement('div');
+    h.className='section-title';h.style.marginTop='14px';
+    h.innerHTML='📍 '+prov+' <span style="color:#475569;font-weight:500;">('+unis.length+' universities)</span>';
+    container.appendChild(h);
+    unis.forEach(u=>container.appendChild(buildUniCard(u)));
+  });
+}
+
+function buildUniCard(u){
+  const div=document.createElement('div');
+  div.className='uni-item';
+  div.id='uni-'+u.short;
+  div.dataset.name=(u.name+' '+u.short+' '+u.city+' '+u.province).toLowerCase();
+
+  const facultiesHTML=u.faculties.map(f=>`
+    <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px;">
+      <div style="font-size:12px;font-weight:800;color:#e2e8f0;margin-bottom:5px;">📚 ${f.name}</div>
+      <div class="course-tags">${f.courses.map(c=>`<span class="course-tag">${c}</span>`).join('')}</div>
+    </div>`).join('');
+
+  div.innerHTML=`
+    <div class="uni-header" onclick="toggleUni('${u.short}')">
+      <div>
+        <div class="uni-name">${u.name}</div>
+        <div class="uni-city">📍 ${u.city} &nbsp;|&nbsp; <span class="badge badge-blue" style="font-size:9.5px;">${u.short}</span> <span class="badge badge-gold" style="font-size:9.5px;">Est. ${u.founded}</span></div>
+      </div>
+      <div class="uni-arrow">▼</div>
+    </div>
+    <div class="uni-body">
+      <p style="color:#94a3b8;font-size:12.5px;line-height:1.65;margin-bottom:12px;">${u.about}</p>
+
+      <div class="uni-stats">
+        <div class="uni-stat"><div class="uni-stat-num">${u.students}</div><div class="uni-stat-label">Students</div></div>
+        <div class="uni-stat"><div class="uni-stat-num" style="font-size:11px;">${u.fees}</div><div class="uni-stat-label">Annual Fees</div></div>
+        <div class="uni-stat"><div class="uni-stat-num" style="font-size:11px;">${u.aps}</div><div class="uni-stat-label">APS Req.</div></div>
+      </div>
+
+      <!-- CONTACT SECTION -->
+      <div class="uni-section">
+        <div class="uni-section-title">📞 Contacts</div>
+        <div class="contact-grid">
+          <div class="contact-card"><div class="contact-card-label">Main Phone</div><div class="contact-card-value"><a href="tel:${u.phone.replace(/[^0-9+]/g,'')}">${u.phone}</a></div></div>
+          <div class="contact-card"><div class="contact-card-label">General Email</div><div class="contact-card-value"><a href="mailto:${u.email}">${u.email}</a></div></div>
+          <div class="contact-card"><div class="contact-card-label">Financial Aid Phone</div><div class="contact-card-value"><a href="tel:${u.finaidPhone.replace(/[^0-9+]/g,'')}">${u.finaidPhone}</a></div></div>
+          <div class="contact-card"><div class="contact-card-label">Financial Aid Email</div><div class="contact-card-value"><a href="mailto:${u.finaidEmail}">${u.finaidEmail}</a></div></div>
+        </div>
+      </div>
+
+      <!-- QUICK LINKS -->
+      <div class="uni-section">
+        <div class="uni-section-title">🔗 Quick Links</div>
+        <div class="uni-link-row">
+          <a href="${u.web}" target="_blank" class="uni-link">🌐 Website</a>
+          <a href="${u.apply}" target="_blank" class="uni-link gold">📋 Apply</a>
+          <a href="${u.nsfas}" target="_blank" class="uni-link green">💳 NSFAS</a>
+          <a href="${u.finaid}" target="_blank" class="uni-link">💰 Financial Aid</a>
+          ${u.acc!=='N/A'?`<a href="${u.acc}" target="_blank" class="uni-link">🏠 Accommodation</a>`:''}
+          <a href="${u.map}" target="_blank" class="uni-link red">📍 Maps / Directions</a>
+          <a href="${u.src}" target="_blank" class="uni-link purple">🤝 SRC (Student Council)</a>
+        </div>
+      </div>
+
+      <!-- FACULTIES -->
+      <div class="uni-section">
+        <div class="uni-section-title">🎓 Faculties & Courses</div>
+        ${facultiesHTML}
+      </div>
+
+      <!-- ACCOMMODATION NOTE -->
+      <div class="uni-section">
+        <div class="uni-section-title">🏠 Accommodation</div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:10px;font-size:12.5px;color:#cbd5e1;line-height:1.6;">${u.accDetails}</div>
+        <div class="uni-link-row" style="margin-top:8px;">
+          <a href="https://www.studentroom.co.za" target="_blank" class="uni-link green">StudentRoom.co.za</a>
+          <a href="https://www.gumtree.co.za/s-property-to-rent" target="_blank" class="uni-link">Gumtree Rentals</a>
+          <a href="https://www.privateproperty.co.za/to-rent" target="_blank" class="uni-link">PrivateProperty</a>
+        </div>
+      </div>
+
+      <!-- NSFAS NOTE -->
+      <div class="uni-section">
+        <div class="uni-section-title">💳 NSFAS at ${u.short}</div>
+        <div style="background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.15);border-radius:10px;padding:10px;font-size:12.5px;color:#cbd5e1;line-height:1.6;">${u.nsfasNote}</div>
+      </div>
+
+      <!-- SRC NOTE -->
+      <div class="uni-section">
+        <div class="uni-section-title">🤝 Student Representative Council (SRC)</div>
+        <div style="background:rgba(124,58,237,0.04);border:1px solid rgba(124,58,237,0.15);border-radius:10px;padding:10px;font-size:12.5px;color:#cbd5e1;line-height:1.6;">
+          The SRC represents all students at ${u.short}. They can help with student issues, escalate complaints to management, and connect you to support services. SRC contact: <a href="mailto:${u.srcEmail}">${u.srcEmail}</a>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;">
+        <a href="${u.apply}" target="_blank" class="btn btn-gold" style="flex:1;font-size:12.5px;padding:10px;">Apply to ${u.short} →</a>
+        <a href="${u.nsfas}" target="_blank" class="btn btn-blue" style="flex:1;font-size:12.5px;padding:10px;">Apply NSFAS →</a>
+      </div>
+      <div style="margin-top:7px;">
+        <a href="${u.map}" target="_blank" class="btn btn-ghost btn-block" style="font-size:12.5px;padding:10px;">📍 Get Directions to ${u.short} Campus →</a>
+      </div>
+    </div>`;
+  return div;
+}
+
+function toggleUni(id){
+  const el=document.getElementById('uni-'+id);
+  if(!el)return;
+  const wasOpen=el.classList.contains('open');
+  document.querySelectorAll('.uni-item').forEach(u=>u.classList.remove('open'));
+  if(!wasOpen)el.classList.add('open');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  NSFAS TABS
+// ══════════════════════════════════════════════════════════════════════
+function nsfasTab(id,btn){
+  ['apply','status','allowance','appeal','problems','contacts'].forEach(t=>{
+    const el=document.getElementById('nsfas-'+t);if(el)el.style.display=t===id?'block':'none';
+  });
+  document.querySelectorAll('#nsfas-tabs .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  BURSARIES
+// ══════════════════════════════════════════════════════════════════════
+function bursTab(id,btn){
+  ['govt','corporate','sector','tips'].forEach(t=>{
+    const el=document.getElementById('burs-'+t);if(el)el.style.display=t===id?'block':'none';
+  });
+  document.querySelectorAll('#burs-tabs .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  if(id!=='tips')renderBursaries(id);
+}
+
+function renderBursaries(cat){
+  const el=document.getElementById('burs-'+cat);
+  if(!el)return;
+  el.innerHTML=(BURSARIES[cat]||[]).map(b=>`
+    <div class="list-item">
+      <div class="item-header">
+        <div class="item-title">🏆 ${b.name}</div>
+        <div class="item-price" style="font-size:12px;text-align:right;max-width:110px;">${b.amount}</div>
+      </div>
+      <span class="badge badge-blue">${b.field}</span>
+      <span class="badge badge-gold">Deadline: ${b.deadline}</span>
+      <div class="item-body" style="margin-top:8px;">${b.desc}</div>
+      <a href="${b.link}" target="_blank" class="btn btn-gold" style="font-size:12.5px;padding:9px 14px;">Apply / Learn More →</a>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  TEXTBOOKS
+// ══════════════════════════════════════════════════════════════════════
+function bookTab(id,btn){
+  ['browse','sell','wanted','online'].forEach(t=>{const el=document.getElementById('book-'+t);if(el)el.style.display=t===id?'block':'none';});
+  document.querySelectorAll('#screen-textbooks .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+function renderBooks(filter=''){
+  const list=document.getElementById('book-list');
+  if(!list)return;
+  const f=filter.toLowerCase();
+  const filtered=BOOKS_DATA.filter(b=>!f||b.title.toLowerCase().includes(f)||b.module.toLowerCase().includes(f)||b.uni.toLowerCase().includes(f)||b.author.toLowerCase().includes(f));
+  list.innerHTML=filtered.map(b=>`
+    <div class="list-item">
+      <div class="item-header"><div class="item-title">📚 ${b.title}</div><div class="item-price">R${b.price}</div></div>
+      <div class="item-sub">${b.author} | ${b.module} | ${b.uni}</div>
+      <span class="badge badge-green">${b.cond}</span>
+      <span class="badge badge-red" style="text-decoration:line-through;opacity:0.5;">Was R${b.orig}</span>
+      <span class="badge badge-gold">Save R${b.orig-b.price}!</span>
+      <div style="margin-top:9px;">
+        <a href="https://wa.me/27${b.wa.replace(/\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent('Hi! I saw your textbook on Varsity Survival Hub. I\'m interested in: '+b.title)}" target="_blank" class="btn btn-wa" style="font-size:12.5px;padding:9px 14px;">💬 WhatsApp Seller</a>
+      </div>
+    </div>`).join('');
+}
+function filterBooks(v){renderBooks(v);}
+function listBook(){
+  const t=document.getElementById('bt-title').value,p=document.getElementById('bt-price').value,w=document.getElementById('bt-wa').value;
+  if(!t||!p||!w){alert('Please fill in title, price and WhatsApp number!');return;}
+  BOOKS_DATA.unshift({title:t,author:document.getElementById('bt-author').value||'',module:document.getElementById('bt-module').value||'General',uni:document.getElementById('bt-uni').value||'Any',cond:document.getElementById('bt-cond').value,price:parseInt(p),orig:parseInt(document.getElementById('bt-orig').value)||parseInt(p)*3,wa:w});
+  document.getElementById('book-success').style.display='block';renderBooks();
+}
+function postWanted(){
+  const t=document.getElementById('bw-title').value,w=document.getElementById('bw-wa').value;
+  if(!t||!w){alert('Please fill in book needed and your WhatsApp!');return;}
+  document.getElementById('wanted-success').style.display='block';
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  MEALS
+// ══════════════════════════════════════════════════════════════════════
+function mealTab(id,btn){
+  ['deals','budget','apps'].forEach(t=>{const el=document.getElementById('meal-'+t);if(el)el.style.display=t===id?'block':'none';});
+  document.querySelectorAll('#screen-meals .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  JOBS
+// ══════════════════════════════════════════════════════════════════════
+function jobTab(id,btn){
+  ['listings','platforms','post','tips'].forEach(t=>{const el=document.getElementById('job-'+t);if(el)el.style.display=t===id?'block':'none';});
+  document.querySelectorAll('#screen-jobs .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+function renderJobs(filter=''){
+  const list=document.getElementById('job-list');if(!list)return;
+  const f=filter.toLowerCase();
+  const filtered=JOBS_DATA.filter(j=>!f||j.title.toLowerCase().includes(f)||j.type.toLowerCase().includes(f)||j.location.toLowerCase().includes(f));
+  list.innerHTML=filtered.map(j=>`
+    <div class="list-item">
+      <div class="item-header"><div class="item-title">💼 ${j.title}</div><div class="item-price" style="font-size:12px;">${j.pay}</div></div>
+      <div class="item-sub">${j.company} | ${j.location}</div>
+      <span class="badge badge-gold">${j.pay}</span><span class="badge badge-blue">${j.hours}</span><span class="badge badge-purple">${j.type}</span>
+      <div class="item-body" style="margin-top:7px;">${j.desc}</div>
+      ${j.wa?`<a href="https://wa.me/27${j.wa.replace(/\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent('Hi! I saw your job on Varsity Survival Hub: '+j.title+'. I\'d like to apply!')}" target="_blank" class="btn btn-wa" style="font-size:12.5px;padding:9px 14px;">💬 Apply on WhatsApp</a>`:`<a href="https://www.uber.com/za/en/deliver/" target="_blank" class="btn btn-blue" style="font-size:12.5px;padding:9px 14px;">Apply Online →</a>`}
+    </div>`).join('');
+}
+function filterJobs(v){renderJobs(v);}
+function postJob(){
+  const t=document.getElementById('jt-title').value,w=document.getElementById('jt-wa').value;
+  if(!t||!w){alert('Please fill in job title and WhatsApp contact!');return;}
+  JOBS_DATA.unshift({title:t,company:document.getElementById('jt-company').value||'',location:document.getElementById('jt-location').value||'',pay:document.getElementById('jt-pay').value||'Negotiable',hours:document.getElementById('jt-hours').value||'Flexible',type:document.getElementById('jt-type').value,desc:document.getElementById('jt-req').value||'Contact for details.',wa:w});
+  document.getElementById('job-success').style.display='block';renderJobs();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  DISCOUNTS
+// ══════════════════════════════════════════════════════════════════════
+function discTab(id,btn){
+  document.querySelectorAll('#screen-discounts .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');renderDiscounts(id);
+}
+function renderDiscounts(cat){
+  const content=document.getElementById('disc-content');if(!content)return;
+  content.innerHTML=(DISCOUNTS[cat]||[]).map(d=>`
+    <div class="list-item">
+      <div class="item-title">${d.name}</div>
+      <span class="badge ${d.badge}">${d.disc}</span>
+      <div class="item-body" style="margin-top:7px;">${d.how}</div>
+      <a href="${d.link}" target="_blank" class="btn btn-blue" style="font-size:12.5px;padding:9px 14px;margin-top:4px;">Get Discount →</a>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  APS CALCULATOR
+// ══════════════════════════════════════════════════════════════════════
+function pctToAPS(p){
+  p=parseInt(p)||0;
+  if(p>=80)return 7;if(p>=70)return 6;if(p>=60)return 5;if(p>=50)return 4;if(p>=40)return 3;if(p>=30)return 2;return 1;
+}
+function calcAPS(){
+  const ids=['aps-lang1','aps-lang2','aps-math','aps-s4','aps-s5','aps-s6'];
+  const scores=ids.map(id=>{const v=document.getElementById(id).value;return v?pctToAPS(v):0;});
+  const total=scores.reduce((a,b)=>a+b,0);
+  const box=document.getElementById('aps-result-box');
+  const val=document.getElementById('aps-score-val');
+  if(scores.some(s=>s>0)){
+    box.style.display='block';val.textContent=total;
+    renderAPSQual(total);
+  }
+}
+function renderAPSQual(aps){
+  const list=document.getElementById('aps-qual-list');
+  const cats=[
+    {label:"✅ Likely to qualify for:",min:aps,courses:[]},
+  ];
+  let html='<div class="card"><div class="card-title">🎓 What you may qualify for</div>';
+  if(aps>=36) html+=`<div class="tip-card"><div class="tip-title">🏆 Excellent APS (${aps}) — Top programmes available</div><div class="tip-body">Medicine (select unis), LLB Law, BEng Engineering, BCom Accounting, BA Psychology, BSc Computer Science at most SA universities.</div></div>`;
+  else if(aps>=30) html+=`<div class="tip-card"><div class="tip-title">✅ Very Good APS (${aps}) — Most degrees open to you</div><div class="tip-body">LLB Law, BEng Engineering, BCom Accounting, BA degrees, BSc programmes, BEd Education at most SA universities including WITS, UP, UJ, UKZN, UFS.</div></div>`;
+  else if(aps>=25) html+=`<div class="tip-card"><div class="tip-title">📝 Good APS (${aps}) — Many degree programmes available</div><div class="tip-body">BCom degrees, BA degrees, BEd Education, BSc Mathematics, BAdmin Public Administration at universities like UKZN, UFS, UJ, NWU, UWC, UNISA.</div></div>`;
+  else if(aps>=20) html+=`<div class="tip-card"><div class="tip-title">📚 Fair APS (${aps}) — Diploma & some degree programmes</div><div class="tip-body">National Diploma programmes at TUT, DUT, CPUT, VUT, CUT, MUT. Also consider UNISA degrees (flexible entry requirements). Foundation year programmes also available.</div></div>`;
+  else html+=`<div class="tip-card red"><div class="tip-title">🔄 APS (${aps}) — Consider a bridging programme</div><div class="tip-body">Consider a foundation year or bridging programme to improve your APS. UNISA also offers flexible entry requirements. Many colleges offer National Certificates that can lead to university entry.</div></div>`;
+  html+=`<div class="tip-card blue"><div class="tip-title">💡 Improve your APS with UNISA</div><div class="tip-body">UNISA accepts mature age students with lower APS. You can also improve your matric results by rewriting subjects through the Department of Education's matric rewrite programme.</div></div>`;
+  html+='</div>';
+  list.innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  WELLNESS
+// ══════════════════════════════════════════════════════════════════════
+function wellTab(id,btn){
+  ['support','campus','money','tips'].forEach(t=>{const el=document.getElementById('well-'+t);if(el)el.style.display=t===id?'block':'none';});
+  document.querySelectorAll('#screen-wellness .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  ACCOMMODATION
+// ══════════════════════════════════════════════════════════════════════
+function postAcc(){
+  const t=document.getElementById('acc-title').value,c=document.getElementById('acc-contact').value;
+  if(!t||!c){alert('Please fill in the listing title and your WhatsApp number!');return;}
+  document.getElementById('acc-success').style.display='block';
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  SHARE
+// ══════════════════════════════════════════════════════════════════════
+function shareApp(){
+  const text=`🎓 VARSITY SURVIVAL HUB — SA's #1 Student App!\n\n✅ All 26 Universities — Full Contact Info, Faculties & Courses\n✅ NSFAS Applications & Step-by-Step Guides\n✅ R50k+ Bursaries — Apply Now\n✅ Accommodation Finder\n✅ Textbook Buy & Sell\n✅ Campus Jobs Board\n✅ APS Calculator\n✅ Student Wellness & Crisis Lines\n✅ Meal Deals & Student Discounts\n\n100% FREE. Share with every student! 🚀`;
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════════════
+initHomeProvince();
+initProvincePills();
+renderBooks();
+renderJobs();
+renderDiscounts('tech');
+renderBursaries('govt');
+</script>
+</body>
+</html>
