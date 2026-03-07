@@ -1,0 +1,24 @@
+{
+  "name": "Varsity Survival Hub",
+  "short_name": "Varsity Hub",
+  "description": "South Africa's #1 free student app. NSFAS, bursaries, accommodation, textbooks, jobs & more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0f1e",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/og-image.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
