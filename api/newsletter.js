@@ -1,3 +1,5 @@
+const { Resend } = require('resend');
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -10,28 +12,20 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(
-      `https://emailoctopus.com/api/1.6/lists/${process.env.EMAILOCTOPUS_LIST_ID}/contacts`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          api_key: process.env.EMAILOCTOPUS_API_KEY,
-          email_address: email,
-          fields: { FirstName: firstName || '' },
-          status: 'subscribed',
-        }),
-      }
-    );
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(400).json({ error: data.error?.message || 'Signup failed' });
-    }
+    await resend.emails.send({
+      from: 'Varsity Hub <onboarding@resend.dev>',
+      to: email,
+      subject: '🎓 Welcome to Varsity Survival Hub!',
+      html: `<h2>Hey ${firstName || 'Student'}! 👋</h2>
+             <p>You're now subscribed to Varsity Survival Hub.</p>
+             <p>We'll keep you updated on NSFAS, bursaries, and student news!</p>
+             <p>🚀 <strong>The Varsity Hub Team</strong></p>`,
+    });
 
     return res.status(200).json({ success: true });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
-      }
+}
