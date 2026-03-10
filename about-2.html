@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>About & Contact — Varsity Survival Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--white:#FFFFFF;--ink:#0A0A0A;--ink2:#3D3D3D;--ink3:#8A8A8A;--ink4:#C4C4C4;--gold:#F59E0B;--line:#EBEBEB;--surface:#F5F5F3;}
+html,body{background:var(--white);color:var(--ink);font-family:'Cabinet Grotesk',sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+.topnav{background:var(--white);border-bottom:1px solid var(--line);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--ink);}
+.nav-logo span{color:var(--gold);}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink2);padding:8px 14px;border-radius:50px;border:1.5px solid var(--line);}
+
+/* HERO */
+.hero{background:var(--ink);padding:40px 16px 36px;}
+.hero-eyebrow{display:inline-block;background:var(--gold);color:var(--ink);font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:50px;margin-bottom:14px;}
+.hero h1{font-family:'Fraunces',serif;font-size:28px;font-weight:700;line-height:1.2;color:var(--white);margin-bottom:10px;letter-spacing:-0.5px;}
+.hero p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.65;}
+
+/* CONTENT */
+.content{max-width:600px;margin:0 auto;padding:28px 16px 60px;}
+
+/* MISSION */
+.mission-box{background:rgba(245,158,11,0.06);border-left:3px solid var(--gold);padding:16px 18px;border-radius:0 12px 12px 0;margin-bottom:28px;}
+.mission-box p{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.65;}
+
+/* SECTIONS */
+.section{margin-bottom:32px;}
+.section-label{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--line);}
+.section p{font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:10px;}
+
+/* VALUES GRID */
+.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.value-card{background:var(--surface);border-radius:16px;padding:16px;}
+.value-icon{font-size:22px;margin-bottom:8px;}
+.value-title{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.value-desc{font-size:12px;color:var(--ink3);line-height:1.5;}
+
+/* TEAM CARD */
+.team-card{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:16px;padding:16px;margin-bottom:10px;}
+.team-ava{width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--white);font-family:'Fraunces',serif;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.team-name{font-size:15px;font-weight:800;color:var(--ink);}
+.team-role{font-size:12px;color:var(--ink3);margin-top:2px;}
+
+/* CONTACT */
+.contact-row{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:14px;padding:15px;margin-bottom:8px;}
+.contact-row:active{background:var(--line);}
+.contact-icon{width:40px;height:40px;border-radius:12px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
+.contact-label{font-size:13px;font-weight:800;color:var(--ink);}
+.contact-value{font-size:12px;color:var(--ink3);margin-top:2px;}
+.contact-arrow{margin-left:auto;color:var(--ink4);font-size:18px;}
+
+/* FORM */
+.form-section{margin-top:8px;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-weight:800;color:var(--ink3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font-size:14px;font-family:'Cabinet Grotesk',sans-serif;color:var(--ink);outline:none;transition:border 0.2s;box-sizing:border-box;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--ink);background:var(--white);}
+.form-group textarea{resize:vertical;min-height:110px;}
+.btn-send{width:100%;background:var(--ink);color:var(--white);border:none;border-radius:50px;padding:15px;font-size:15px;font-weight:800;font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;margin-top:4px;}
+.btn-send:active{opacity:0.85;}
+.success-msg{display:none;background:rgba(34,197,94,0.06);border:1.5px solid rgba(34,197,94,0.2);border-radius:12px;padding:14px;text-align:center;font-size:14px;font-weight:600;color:#15803d;margin-top:12px;}
+
+/* FOOTER */
+.main-footer{background:var(--ink);color:rgba(255,255,255,0.35);padding:28px 16px 40px;font-size:12px;line-height:2.2;margin-top:40px;}
+.mf-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;}
+.mf-logo span{color:var(--gold);}
+.mf-links{display:flex;flex-wrap:wrap;gap:0 14px;margin-bottom:12px;}
+.mf-links a{color:rgba(255,255,255,0.35);}
+.mf-copy{font-size:11px;color:rgba(255,255,255,0.18);}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-logo">Varsity<span>Hub</span></div>
+  <a href="index.html" class="nav-back">← Back</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">About & Contact</div>
+  <h1>Built for SA Students.</h1>
+  <p>By a South African student, for every student navigating university life.</p>
+</div>
+
+<div class="content">
+
+  <div class="mission-box">
+    <p>Varsity Survival Hub exists because South African students deserve free, reliable tools — covering NSFAS, bursaries, universities, past papers, and the issues that actually affect their future.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Our Mission</div>
+    <p>We bring everything a South African varsity student needs into one free app. No subscriptions, no paywalls on the tools that matter most.</p>
+    <p>No fluff. Just real, practical help for students navigating university life in South Africa.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What We Cover</div>
+    <div class="values-grid">
+      <div class="value-card"><div class="value-icon">💳</div><div class="value-title">NSFAS</div><div class="value-desc">Funding updates, deadlines & appeals</div></div>
+      <div class="value-card"><div class="value-icon">🏆</div><div class="value-title">Bursaries</div><div class="value-desc">Open applications & opportunities</div></div>
+      <div class="value-card"><div class="value-icon">🎓</div><div class="value-title">Universities</div><div class="value-desc">All 26 SA public universities</div></div>
+      <div class="value-card"><div class="value-icon">📰</div><div class="value-title">Student News</div><div class="value-desc">Campus & education news</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Who Built This</div>
+    <div class="team-card">
+      <div class="team-ava">S</div>
+      <div>
+        <div class="team-name">Sudays Ibraahim</div>
+        <div class="team-role">Founder & Developer · Grade 11, South Africa</div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--ink3);margin-top:10px;line-height:1.7;">Varsity Survival Hub was built entirely from an Android phone by a Grade 11 student who believes every South African student deserves better tools to survive and thrive at university.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Contact Us</div>
+    <a href="mailto:sudaysibraahim14092009@gmail.com" class="contact-row">
+      <div class="contact-icon">✉️</div>
+      <div><div class="contact-label">Email</div><div class="contact-value">sudaysibraahim14092009@gmail.com</div></div>
+      <div class="contact-arrow">›</div>
+    </a>
+    <a href="https://wa.me/27839779150" target="_blank" class="contact-row">
+      <div class="contact-icon">💬</div>
+      <div><div class="contact-label">WhatsApp</div><div class="contact-value">+27 83 977 9150</div></div>
+      <div class="contact-arrow">›</div>
+    </a>
+    <a href="tel:+27839779150" class="contact-row">
+      <div class="contact-icon">📞</div>
+      <div><div class="contact-label">Phone</div><div class="contact-value">083 977 9150</div></div>
+      <div class="contact-arrow">›</div>
+    </a>
+    <a href="https://instagram.com/sudayzs" target="_blank" class="contact-row">
+      <div class="contact-icon">📸</div>
+      <div><div class="contact-label">Instagram</div><div class="contact-value">@sudayzs</div></div>
+      <div class="contact-arrow">›</div>
+    </a>
+    <a href="https://tiktok.com/@varsitysurvivalhub" target="_blank" class="contact-row">
+      <div class="contact-icon">🎵</div>
+      <div><div class="contact-label">TikTok</div><div class="contact-value">@varsitysurvivalhub</div></div>
+      <div class="contact-arrow">›</div>
+    </a>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Send a Message</div>
+    <div class="form-section">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input type="text" id="contactName" placeholder="e.g. Thabo Nkosi"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Email</label>
+        <input type="email" id="contactEmail" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select id="contactSubject">
+          <option value="">Select a topic...</option>
+          <option>General enquiry</option>
+          <option>Report a bug</option>
+          <option>News tip or story idea</option>
+          <option>Partnership</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea id="contactMsg" placeholder="Tell us what's on your mind..."></textarea>
+      </div>
+      <button class="btn-send" onclick="sendMessage()">Send Message →</button>
+      <div class="success-msg" id="successMsg">✅ Message sent! We will get back to you soon.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="main-footer">
+  <div class="mf-logo">Varsity<span>Hub</span></div>
+  <div class="mf-links">
+    <a href="index.html">Home</a>
+    <a href="news.html">News</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="privacy.html">Terms</a>
+  </div>
+  <div class="mf-copy">© 2026 Varsity Survival Hub · South Africa · Built by Sudays Ibraahim</div>
+</div>
+
+<script>
+function sendMessage(){
+  const name=document.getElementById('contactName').value.trim();
+  const email=document.getElementById('contactEmail').value.trim();
+  const subject=document.getElementById('contactSubject').value;
+  const msg=document.getElementById('contactMsg').value.trim();
+  if(!name||!email||!subject||!msg){alert('Please fill in all fields before sending.');return;}
+  const body=encodeURIComponent('Name: '+name+'\nEmail: '+email+'\n\n'+msg);
+  window.location.href='mailto:sudaysibraahim14092009@gmail.com?subject='+encodeURIComponent('[VarsityHub] '+subject)+'&body='+body;
+  document.getElementById('successMsg').style.display='block';
+}
+</script>
+</body>
+</html>
