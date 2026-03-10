@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>VarsityNews — SA Student News</title>
+<meta name="description" content="South Africa's student news platform. NSFAS, bursaries, campus life and more."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--white:#FFFFFF;--ink:#0A0A0A;--ink2:#3D3D3D;--ink3:#8A8A8A;--ink4:#C4C4C4;--gold:#F59E0B;--line:#EBEBEB;--surface:#F5F5F3;--red:#e8000d;--blue:#2563eb;--green:#16a34a;}
+html,body{background:var(--white);color:var(--ink);font-family:'Cabinet Grotesk',sans-serif;font-size:15px;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+button{font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;border:none;background:none;padding:0;}
+
+/* TOPNAV */
+.topnav{background:var(--white);border-bottom:1px solid var(--line);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;}
+.nav-logo{display:flex;align-items:baseline;font-family:'Fraunces',serif;}
+.nav-logo-v{font-size:20px;font-weight:700;color:var(--ink);}
+.nav-logo-n{font-size:20px;font-weight:700;color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.btn-si{font-size:13px;font-weight:700;color:var(--ink2);padding:7px 12px;border-radius:50px;border:1.5px solid var(--line);}
+.btn-sub{background:var(--ink);color:var(--white);font-size:12.5px;font-weight:700;padding:8px 16px;border-radius:50px;}
+.user-ava{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--white);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+
+/* CATNAV */
+.catnav{background:var(--white);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;white-space:nowrap;position:sticky;top:56px;z-index:299;}
+.catnav::-webkit-scrollbar{display:none;}
+.catnav-inner{display:inline-flex;}
+.cn-btn{padding:12px 14px;font-size:11.5px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;color:var(--ink3);border-bottom:2px solid transparent;cursor:pointer;display:inline-block;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;}
+.cn-btn.active,.cn-btn:hover{color:var(--ink);border-bottom-color:var(--ink);}
+
+/* TICKER */
+.ticker{background:var(--ink);display:flex;overflow:hidden;align-items:stretch;}
+.t-lbl{background:var(--gold);padding:8px 12px;font-size:10px;font-weight:800;color:var(--ink);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;}
+.t-scroll{flex:1;overflow:hidden;display:flex;align-items:center;}
+.t-track{display:inline-flex;animation:tick 34s linear infinite;}
+.t-track span{padding:8px 30px;font-size:12px;color:rgba(255,255,255,0.7);font-weight:500;border-right:1px solid rgba(255,255,255,0.1);white-space:nowrap;}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* TRIAL BAR */
+.trial-bar{background:rgba(245,158,11,0.06);border-bottom:1px solid rgba(245,158,11,0.2);padding:9px 16px;display:none;align-items:center;justify-content:space-between;gap:10px;}
+.trial-bar.show{display:flex;}
+.tb-txt{font-size:12.5px;color:var(--ink2);}
+.tb-btn{background:var(--ink);color:var(--white);font-size:11.5px;font-weight:800;padding:7px 14px;border-radius:50px;white-space:nowrap;}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 120px);padding-bottom:80px;}
+.page.active{display:block;}
+.feed-wrap{max-width:600px;margin:0 auto;}
+
+/* HERO */
+.hero{background:var(--white);cursor:pointer;border-bottom:1px solid var(--line);}
+.hero:active{opacity:0.92;}
+.hero-img-wrap{width:100%;height:210px;background:var(--surface);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:64px;}
+.hero-img-wrap img{width:100%;height:210px;object-fit:cover;}
+.hero-body{padding:14px 16px 18px;}
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.t-ago{font-size:11.5px;color:var(--ink3);font-weight:600;}
+.hero-title{font-family:'Fraunces',serif;font-size:21px;font-weight:700;line-height:1.28;color:var(--ink);letter-spacing:-0.3px;margin-bottom:8px;}
+.hero-excerpt{font-size:13px;color:var(--ink3);line-height:1.65;margin-bottom:10px;}
+.art-source{font-size:11.5px;color:var(--gold);font-weight:700;}
+.art-source-date{font-size:11.5px;color:var(--ink4);}
+
+/* CAT PILLS */
+.cat-pill{display:inline-block;border:1.5px solid var(--ink);color:var(--ink);font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:50px;letter-spacing:0.5px;text-transform:uppercase;}
+.cat-pill.red{background:var(--red);border-color:var(--red);color:#fff;}
+.cat-pill.blue{background:var(--blue);border-color:var(--blue);color:#fff;}
+.cat-pill.green{background:var(--green);border-color:var(--green);color:#fff;}
+.cat-pill.gold{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+
+/* ARTICLE ROW */
+.art-row{background:var(--white);display:grid;grid-template-columns:1fr 86px;border-bottom:1px solid var(--line);cursor:pointer;transition:background 0.1s;}
+.art-row:active{background:var(--surface);}
+.art-body{padding:13px 0 13px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:4px;}
+.art-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.art-title{font-family:'Fraunces',serif;font-size:14.5px;font-weight:700;line-height:1.35;color:var(--ink);margin-bottom:4px;}
+.art-excerpt{font-size:12px;color:var(--ink3);line-height:1.55;margin-bottom:6px;}
+.art-meta{font-size:11px;color:var(--ink4);}
+.art-thumb{width:86px;height:86px;overflow:hidden;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:26px;border-left:1px solid var(--line);}
+.art-thumb img{width:86px;height:86px;object-fit:cover;}
+
+/* PAYWALL */
+.paywall{padding:36px 20px 40px;text-align:center;border-bottom:1px solid var(--line);background:var(--white);}
+.pw-h{font-family:'Fraunces',serif;font-size:20px;font-weight:700;line-height:1.3;margin-bottom:20px;color:var(--ink);}
+.pw-btn{width:100%;background:var(--ink);color:var(--white);font-size:14.5px;font-weight:700;padding:15px;border-radius:50px;border:none;margin-bottom:14px;font-family:'Cabinet Grotesk',sans-serif;}
+.pw-already{font-size:13px;color:var(--ink3);}
+.pw-already b{color:var(--ink);text-decoration:underline;cursor:pointer;}
+
+/* SKELETON */
+.skel{background:linear-gradient(90deg,var(--surface) 25%,var(--line) 50%,var(--surface) 75%);background-size:200%;animation:sh 1.4s infinite;border-radius:6px;}
+@keyframes sh{0%{background-position:200%;}100%{background-position:-200%;}}
+
+/* SEARCH */
+.search-pg{padding:16px;}
+.srch-bar-wrap{position:relative;margin-bottom:12px;}
+.srch-input{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px 13px 44px;font-size:14px;color:var(--ink);outline:none;font-family:'Cabinet Grotesk',sans-serif;transition:border 0.2s;box-sizing:border-box;}
+.srch-input:focus{border-color:var(--ink);background:var(--white);}
+.srch-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;}
+.srch-empty{text-align:center;padding:60px 20px;}
+.srch-empty svg{width:44px;height:44px;stroke:var(--ink4);stroke-width:1.5;fill:none;margin:0 auto 12px;display:block;}
+.srch-empty p{font-size:15px;font-weight:700;color:var(--ink4);}
+
+/* BOOKMARKS */
+.bm-pg{padding:20px 16px;}
+.bm-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1.5px solid var(--ink);}
+.bm-empty{text-align:center;padding:60px 20px;}
+.bm-empty svg{width:44px;height:44px;stroke:var(--ink4);stroke-width:1.5;fill:none;margin:0 auto 14px;display:block;}
+.bm-empty-h{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:6px;}
+.bm-empty-p{font-size:13px;color:var(--ink3);line-height:1.6;}
+.bm-auth-prompt{text-align:center;padding:40px 20px;}
+.bm-auth-h{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:20px;}
+.btn-pill{width:100%;background:var(--ink);color:var(--white);font-size:15px;font-weight:700;padding:15px;border-radius:50px;margin-bottom:14px;font-family:'Cabinet Grotesk',sans-serif;border:none;}
+.bm-signin-link{font-size:13.5px;color:var(--ink3);}
+.bm-signin-link b{color:var(--ink);text-decoration:underline;cursor:pointer;}
+
+/* PROFILE */
+.profile-pg{background:var(--surface);min-height:100%;}
+.profile-section-label{background:var(--surface);padding:14px 16px 6px;font-size:10.5px;font-weight:800;color:var(--ink3);letter-spacing:1.2px;text-transform:uppercase;}
+.profile-row{background:var(--white);display:flex;align-items:center;padding:15px 16px;border-bottom:1px solid var(--line);gap:14px;cursor:pointer;}
+.profile-row:active{background:var(--surface);}
+.pr-icon{width:24px;text-align:center;flex-shrink:0;}
+.pr-icon svg{width:20px;height:20px;stroke:var(--ink2);stroke-width:1.6;fill:none;}
+.pr-label{flex:1;font-size:14.5px;font-weight:700;color:var(--ink);}
+.pr-arrow{color:var(--ink4);font-size:18px;line-height:1;}
+.profile-signout-btn{width:100%;background:none;border:1.5px solid var(--line);border-radius:50px;padding:13px;font-size:14px;font-weight:700;color:var(--red);font-family:'Cabinet Grotesk',sans-serif;}
+.profile-loggedout{background:var(--white);padding:48px 20px 32px;text-align:center;}
+.plo-icon svg{width:56px;height:56px;stroke:var(--ink);stroke-width:1.2;fill:none;margin:0 auto 18px;display:block;}
+.plo-h{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.plo-p{font-size:13.5px;color:var(--ink3);line-height:1.65;margin-bottom:24px;}
+
+/* FULL ARTICLE */
+.full-view{display:none;background:var(--white);position:fixed;inset:0;z-index:400;overflow-y:auto;}
+.full-view.open{display:block;}
+.full-topbar{background:var(--white);border-bottom:1px solid var(--line);padding:0 14px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.full-back{font-size:24px;color:var(--ink);line-height:1;padding:4px 8px 4px 0;}
+.full-tb-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:700;}
+.full-tb-logo span{color:var(--gold);}
+.full-bm{font-size:20px;line-height:1;padding:4px 0 4px 8px;}
+.full-hero{width:100%;height:210px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden;}
+.full-hero img{width:100%;height:210px;object-fit:cover;}
+.full-body-wrap{padding:18px 16px 80px;}
+.full-cat-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.full-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;line-height:1.28;letter-spacing:-0.4px;margin-bottom:12px;}
+.full-byline{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:20px;}
+.full-src{color:var(--gold);font-weight:700;font-size:13px;}
+.full-dt{font-size:12px;color:var(--ink3);}
+.full-content{font-size:16px;line-height:1.85;color:var(--ink2);}
+.full-content p{margin-bottom:16px;}
+.full-content h3{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin:24px 0 8px;color:var(--ink);}
+.src-credit{margin-top:20px;padding:12px 14px;background:var(--surface);border-left:3px solid var(--gold);font-size:12px;color:var(--ink3);line-height:1.6;border-radius:0 8px 8px 0;}
+.src-credit a{color:var(--gold);font-weight:600;}
+.listen-bar{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.listen-bar svg{width:20px;height:20px;stroke:var(--ink2);stroke-width:2;fill:none;flex-shrink:0;}
+.listen-bar span{font-size:13px;font-weight:600;color:var(--ink2);}
+
+/* BOTTOM NAV */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--line);height:64px;display:flex;align-items:stretch;z-index:300;}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--ink4);background:none;border:none;padding:0;transition:color 0.15s;}
+.bn-item.active{color:var(--ink);}
+.bn-item svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.bn-item.active .fill-on-active{fill:var(--ink);stroke:var(--ink);}
+.bn-label{font-size:9.5px;font-weight:700;letter-spacing:0.2px;}
+.bn-discover{width:50px;height:50px;background:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-top:-12px;box-shadow:0 4px 14px rgba(0,0,0,0.18);}
+.bn-discover svg{stroke:#fff;width:22px;height:22px;}
+
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:600;display:none;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.sheet{background:var(--white);width:100%;max-width:540px;border-radius:22px 22px 0 0;padding:12px 22px 48px;position:relative;animation:slideUp 0.3s cubic-bezier(0.4,0,0.2,1);}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.sheet-handle{width:36px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 22px;}
+.sheet-x{position:absolute;top:14px;right:16px;font-size:22px;color:var(--ink3);}
+.sheet-logo{font-family:'Fraunces',serif;font-size:22px;font-weight:700;text-align:center;margin-bottom:2px;}
+.sheet-logo span{color:var(--gold);}
+.sheet-sub-tag{text-align:center;font-size:10px;color:var(--ink3);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:20px;}
+.sheet-h{font-family:'Fraunces',serif;font-size:20px;font-weight:700;text-align:center;margin-bottom:7px;}
+.sheet-p{font-size:13.5px;color:var(--ink3);text-align:center;margin-bottom:18px;line-height:1.6;}
+.trial-pill-box{background:rgba(245,158,11,0.06);border:1.5px solid rgba(245,158,11,0.3);border-radius:12px;padding:12px 16px;text-align:center;margin-bottom:20px;}
+.trial-pill-box b{font-size:13.5px;color:var(--ink);display:block;margin-bottom:2px;}
+.trial-pill-box small{font-size:12px;color:var(--ink3);}
+.oauth-g{width:100%;background:var(--white);border:1.5px solid var(--line);color:var(--ink);padding:14px;font-size:14px;font-weight:700;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;}
+.oauth-f{width:100%;background:#1877f2;border:none;color:#fff;padding:14px;font-size:14px;font-weight:700;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;}
+.sheet-or{font-size:12px;color:var(--ink4);text-align:center;margin:10px 0;}
+.sheet-terms{font-size:11.5px;color:var(--ink4);text-align:center;margin-top:14px;line-height:1.75;}
+.sheet-terms a{color:var(--gold);}
+.sub-plan{border:1.5px solid var(--line);border-radius:14px;padding:16px;margin-bottom:10px;position:relative;}
+.sub-plan.best{border-color:var(--ink);}
+.sub-badge{position:absolute;top:-10px;left:16px;background:var(--ink);color:var(--white);font-size:9.5px;font-weight:800;padding:3px 10px;border-radius:10px;letter-spacing:0.5px;text-transform:uppercase;}
+.sub-plan-row{display:flex;align-items:flex-start;justify-content:space-between;}
+.sub-plan-name{font-size:15px;font-weight:800;margin-bottom:3px;}
+.sub-plan-desc{font-size:12px;color:var(--ink3);}
+.sub-price{font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--ink);line-height:1;}
+.sub-price sub{font-size:12px;font-weight:400;color:var(--ink3);}
+.sub-features{margin-top:10px;font-size:12.5px;color:var(--ink2);line-height:1.9;}
+.sub-start{width:100%;background:var(--ink);color:var(--white);padding:15px;font-size:15px;font-weight:800;border-radius:50px;border:none;margin-top:10px;font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;}
+
+/* COOKIE */
+.cookie-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:700;display:none;}
+.cookie-overlay.show{display:block;}
+.cookie-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--line);border-radius:20px 20px 0 0;padding:22px 20px 44px;z-index:701;display:none;animation:slideUp 0.35s ease;}
+.cookie-sheet.show{display:block;}
+.ck-title{font-family:'Fraunces',serif;font-size:17px;font-weight:700;margin-bottom:8px;}
+.ck-body{font-size:13px;color:var(--ink3);line-height:1.7;margin-bottom:18px;}
+.ck-body a{color:var(--gold);font-weight:600;}
+.ck-btns{display:grid;grid-template-columns:3fr 2fr;gap:8px;}
+.ck-accept{background:var(--ink);color:var(--white);border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;}
+.ck-decline{background:none;border:1.5px solid var(--line);border-radius:12px;padding:13px;font-size:13px;font-weight:600;color:var(--ink3);font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;}
+
+/* FOOTER */
+.main-footer{background:var(--ink);color:rgba(255,255,255,0.35);padding:28px 16px 90px;font-size:12px;line-height:2.2;}
+.mf-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px;}
+.mf-logo span{color:var(--gold);}
+.mf-links{display:flex;flex-wrap:wrap;gap:0 14px;margin-bottom:14px;}
+.mf-links a{color:rgba(255,255,255,0.35);}
+.mf-copy{font-size:11px;color:rgba(255,255,255,0.18);}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="nav-logo"><span class="nav-logo-v">Varsity</span><span class="nav-logo-n">News</span></div>
+  <div class="nav-right" id="navGuest">
+    <button class="btn-si" onclick="openAuth()">Sign in</button>
+    <button class="btn-sub" onclick="openSub()">Subscribe</button>
+  </div>
+  <div class="nav-right" id="navUser" style="display:none;">
+    <div class="user-ava" id="userAva" onclick="showPage('profile')">S</div>
+  </div>
+</div>
+
+<div class="catnav">
+  <div class="catnav-inner">
+    <button class="cn-btn active" onclick="filterCat('all',this)">Top Stories</button>
+    <button class="cn-btn" onclick="filterCat('nsfas',this)">NSFAS</button>
+    <button class="cn-btn" onclick="filterCat('bursaries',this)">Bursaries</button>
+    <button class="cn-btn" onclick="filterCat('campus',this)">Campus</button>
+    <button class="cn-btn" onclick="filterCat('jobs',this)">Careers</button>
+    <button class="cn-btn" onclick="filterCat('tech',this)">Tech</button>
+    <button class="cn-btn" onclick="filterCat('politics',this)">Politics</button>
+  </div>
+</div>
+
+<div class="trial-bar" id="trialBar">
+  <div class="tb-txt">🎉 <b id="trialDaysLabel"></b> left on your free trial.</div>
+  <button class="tb-btn" onclick="openSub()">Subscribe — R29/mo</button>
+</div>
+
+<div class="ticker">
+  <div class="t-lbl">🔴 Live</div>
+  <div class="t-scroll"><div class="t-track">
+    <span>NSFAS 2025 applications open — apply at my.nsfas.org.za</span>
+    <span>Funza Lushaka bursary deadline: 30 April 2025</span>
+    <span>Student housing shortage hits 15 SA universities</span>
+    <span>UCT launches AI literacy course for all first-years</span>
+    <span>Standard Bank 2025 graduate programme now open</span>
+    <span>NSFAS 2025 applications open — apply at my.nsfas.org.za</span>
+    <span>Funza Lushaka bursary deadline: 30 April 2025</span>
+    <span>Student housing shortage hits 15 SA universities</span>
+    <span>UCT launches AI literacy course for all first-years</span>
+    <span>Standard Bank 2025 graduate programme now open</span>
+  </div></div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="feed-wrap">
+    <div class="hero" id="heroCard" onclick="openArticle(0)">
+      <div class="hero-img-wrap" id="heroImg">🎓</div>
+      <div class="hero-body">
+        <div class="hero-top">
+          <span class="cat-pill" id="heroCat">Education</span>
+          <span class="t-ago" id="heroTime">Just now</span>
+        </div>
+        <div class="hero-title" id="heroTitle">Loading latest student news...</div>
+        <div class="hero-excerpt" id="heroExcerpt">Fetching today's top stories for South African students.</div>
+        <span class="art-source" id="heroSrc">Varsity News</span>
+        <span class="art-source-date" id="heroDate"></span>
+      </div>
+    </div>
+    <div id="artList">
+      <div class="art-row"><div class="art-body"><div class="skel" style="height:9px;width:48px;margin-bottom:7px;"></div><div class="skel" style="height:13px;width:90%;margin-bottom:6px;"></div><div class="skel" style="height:11px;width:65%;"></div></div><div class="art-thumb skel"></div></div>
+      <div class="art-row"><div class="art-body"><div class="skel" style="height:9px;width:40px;margin-bottom:7px;"></div><div class="skel" style="height:13px;width:85%;margin-bottom:6px;"></div><div class="skel" style="height:11px;width:70%;"></div></div><div class="art-thumb skel"></div></div>
+      <div class="art-row"><div class="art-body"><div class="skel" style="height:9px;width:56px;margin-bottom:7px;"></div><div class="skel" style="height:13px;width:88%;margin-bottom:6px;"></div><div class="skel" style="height:11px;width:60%;"></div></div><div class="art-thumb skel"></div></div>
+    </div>
+    <div class="paywall" id="paywallBox" style="display:none;">
+      <div style="font-size:36px;margin-bottom:14px;">🔒</div>
+      <div class="pw-h">Sign up free to read more</div>
+      <button class="pw-btn" onclick="openAuth()">Sign up for FREE</button>
+      <div class="pw-already">Already signed up? <b onclick="openAuth()">Sign in</b></div>
+    </div>
+    <div class="main-footer">
+      <div class="mf-logo">Varsity<span>News</span></div>
+      <div class="mf-links">
+        <a href="index.html">← Varsity Hub</a>
+        <a href="about.html">About</a>
+        <a href="about.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="privacy.html">Terms</a>
+      </div>
+      <div class="mf-copy">© 2026 VarsityNews · Part of Varsity Survival Hub · South Africa</div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH PAGE -->
+<div class="page" id="page-search">
+  <div class="search-pg">
+    <div class="srch-bar-wrap">
+      <span class="srch-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#AAAAAA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <input class="srch-input" id="srchInput" placeholder="Search articles…" oninput="doSearch(this.value)" autocomplete="off"/>
+    </div>
+    <div id="srchResults">
+      <div class="srch-empty">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <p>Search for an article</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKMARKS PAGE -->
+<div class="page" id="page-bookmarks">
+  <div class="bm-pg">
+    <div class="bm-title">Bookmarks</div>
+    <div id="bmLoggedOut" class="bm-auth-prompt" style="display:none;">
+      <div class="bm-auth-h">Sign up free to save articles</div>
+      <button class="btn-pill" onclick="openAuth()">Sign up for FREE</button>
+      <div class="bm-signin-link">Already signed up? <b onclick="openAuth()">Sign in</b></div>
+    </div>
+    <div id="bmEmpty" style="display:none;">
+      <div class="bm-empty">
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        <div class="bm-empty-h">No bookmarks yet</div>
+        <div class="bm-empty-p">Tap 🔖 on any article to save it here.</div>
+      </div>
+    </div>
+    <div id="bmList"></div>
+  </div>
+</div>
+
+<!-- PROFILE PAGE -->
+<div class="page" id="page-profile">
+  <div id="profileOut">
+    <div class="profile-loggedout">
+      <div class="plo-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="plo-h">Sign in to VarsityNews</div>
+      <p class="plo-p">Bookmark articles, manage your subscription and personalise your feed.</p>
+      <div class="trial-pill-box" style="margin-bottom:20px;"><b>🎉 3-Day Free Trial</b><small>Full access — no card needed.</small></div>
+      <button class="oauth-g" onclick="signInGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div style="margin-top:10px;">
+        <button class="oauth-f" onclick="signInFacebook()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Continue with Facebook
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="profileIn" style="display:none;">
+    <div class="profile-pg">
+      <div class="profile-row" style="padding:18px 16px;">
+        <div class="user-ava" style="width:44px;height:44px;font-size:18px;flex-shrink:0;" id="profileAvaBig">S</div>
+        <div><div style="font-size:16px;font-weight:800;" id="profileName">Student</div><div style="font-size:12px;color:var(--ink3);" id="profileEmail">student@email.com</div></div>
+      </div>
+      <div class="profile-row" onclick="openSub()">
+        <div class="pr-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div>
+        <div class="pr-label">Subscribe to VarsityNews</div><div class="pr-arrow">›</div>
+      </div>
+      <div class="profile-section-label">MY ACCOUNT</div>
+      <div class="profile-row" onclick="showPage('bookmarks')">
+        <div class="pr-icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+        <div class="pr-label">My Bookmarks</div><div class="pr-arrow">›</div>
+      </div>
+      <div class="profile-row" onclick="window.location.href='index.html'">
+        <div class="pr-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/></svg></div>
+        <div class="pr-label">Back to Varsity Hub</div><div class="pr-arrow">›</div>
+      </div>
+      <div class="profile-section-label">SUPPORT</div>
+      <div class="profile-row" onclick="window.location.href='about.html'">
+        <div class="pr-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+        <div class="pr-label">About VarsityNews</div><div class="pr-arrow">›</div>
+      </div>
+      <div class="profile-row" onclick="window.location.href='about.html'">
+        <div class="pr-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8l10 7 10-7"/></svg></div>
+        <div class="pr-label">Contact Us</div><div class="pr-arrow">›</div>
+      </div>
+      <div class="profile-row" onclick="window.location.href='privacy.html'">
+        <div class="pr-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="pr-label">Privacy Policy</div><div class="pr-arrow">›</div>
+      </div>
+      <div style="padding:16px;"><button class="profile-signout-btn" onclick="signOut()">Sign Out</button></div>
+      <div style="padding:12px 16px 80px;text-align:center;font-size:11px;color:var(--ink4);">© 2026 VarsityNews · Part of Varsity Survival Hub</div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL ARTICLE VIEW -->
+<div class="full-view" id="fullView">
+  <div class="full-topbar">
+    <button class="full-back" onclick="closeArticle()">←</button>
+    <div class="full-tb-logo">Varsity<span>News</span></div>
+    <button class="full-bm" id="bmBtn" onclick="toggleBookmark()">🔖</button>
+  </div>
+  <div class="full-hero" id="fullHero">📰</div>
+  <div class="full-body-wrap">
+    <div class="full-cat-row"><span class="cat-pill" id="fullCat">News</span><span class="t-ago" id="fullAgo"></span></div>
+    <div class="full-title" id="fullTitle"></div>
+    <div class="full-byline">
+      <span class="full-src" id="fullSrc"></span>
+      <span style="color:var(--line)">·</span>
+      <span class="full-dt" id="fullDt"></span>
+    </div>
+    <div class="listen-bar">
+      <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
+      <span>Listen to this article</span>
+    </div>
+    <div class="full-content" id="fullContent"></div>
+    <div class="src-credit">Article summarised from <a id="fullSrcLink" href="#" target="_blank">original source</a>. All credit to the original publisher.</div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottomnav">
+  <button class="bn-item active" id="bn-home" onclick="showPage('home')">
+    <svg viewBox="0 0 24 24"><path class="fill-on-active" d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/></svg>
+    <span class="bn-label">Home</span>
+  </button>
+  <button class="bn-item" id="bn-search" onclick="showPage('search')">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <span class="bn-label">Search</span>
+  </button>
+  <button class="bn-item" id="bn-discover" onclick="showPage('home')">
+    <div class="bn-discover"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="white" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="white" stroke-width="1.8"/></svg></div>
+    <span class="bn-label">Discover</span>
+  </button>
+  <button class="bn-item" id="bn-bookmarks" onclick="showPage('bookmarks')">
+    <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+    <span class="bn-label">Saved</span>
+  </button>
+  <button class="bn-item" id="bn-profile" onclick="showPage('profile')">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="bn-label">Profile</span>
+  </button>
+</nav>
+
+<!-- AUTH SHEET -->
+<div class="overlay" id="authOverlay" onclick="bgClose(event,'authOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-x" onclick="closeAuth()">×</button>
+    <div class="sheet-logo">Varsity<span>News</span></div>
+    <div class="sheet-sub-tag">Trusted Student News. First.</div>
+    <div class="sheet-h">Start reading free</div>
+    <div class="sheet-p">First 3 days completely free — no card needed.</div>
+    <div class="trial-pill-box"><b>🎉 Free 3-Day Trial</b><small>Cancel before day 3 to pay nothing.</small></div>
+    <button class="oauth-g" onclick="signInGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <div class="sheet-or">or</div>
+    <button class="oauth-f" onclick="signInFacebook()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      Continue with Facebook
+    </button>
+    <div class="sheet-terms">By signing in you agree to our <a href="privacy.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</div>
+  </div>
+</div>
+
+<!-- SUBSCRIBE SHEET -->
+<div class="overlay" id="subOverlay" onclick="bgClose(event,'subOverlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-x" onclick="closeSub()">×</button>
+    <div class="sheet-logo">Varsity<span>News</span></div>
+    <div class="sheet-sub-tag">Choose your plan</div>
+    <div class="sub-plan best">
+      <div class="sub-badge">MOST POPULAR</div>
+      <div class="sub-plan-row">
+        <div><div class="sub-plan-name">Monthly</div><div class="sub-plan-desc">Full access, cancel anytime</div></div>
+        <div class="sub-price">R29<sub>/mo</sub></div>
+      </div>
+      <div class="sub-features">✅ Unlimited articles &nbsp; ✅ Bookmarks &nbsp; ✅ Early access</div>
+    </div>
+    <div class="sub-plan">
+      <div class="sub-plan-row">
+        <div><div class="sub-plan-name">Annual — Save 30%</div><div class="sub-plan-desc">Best value for students</div></div>
+        <div class="sub-price">R243<sub>/yr</sub></div>
+      </div>
+      <div class="sub-features">✅ Everything in Monthly &nbsp; ✅ Priority support</div>
+    </div>
+    <button class="sub-start" onclick="activateSub()">Start Free 3-Day Trial →</button>
+    <div class="sheet-terms">3 days free, then R29/month. Cancel anytime.</div>
+  </div>
+</div>
+
+<!-- COOKIE BAR -->
+<div class="cookie-overlay" id="ckOverlay"></div>
+<div class="cookie-sheet" id="ckSheet">
+  <div class="ck-title">🍪 We use cookies</div>
+  <div class="ck-body">We use cookies to personalise content and analyse traffic. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="ck-btns">
+    <button class="ck-accept" onclick="acceptCookies()">Accept All</button>
+    <button class="ck-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://nrvnuoewmjbjtuprqgqv.supabase.co';
+const SUPABASE_ANON='sb_publishable_IshzW_VFYoe34N9_mk3FkQ_Q4ZHAR29';
+let _sb=null;
+try{
+  _sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON,{auth:{flowType:'implicit',detectSessionInUrl:true,persistSession:true,autoRefreshToken:true,storage:window.localStorage}});
+  _sb.auth.onAuthStateChange((event,session)=>{
+    if(event==='SIGNED_IN'&&session?.user){onLogin(session.user);closeAuth();}
+    else if(event==='SIGNED_OUT')onLogout();
+    else if(event==='TOKEN_REFRESHED'&&session?.user)onLogin(session.user);
+  });
+  _sb.auth.getSession().then(({data:{session}})=>{if(session?.user)onLogin(session.user);});
+}catch(e){console.log('Supabase error:',e);}
+
+async function signInGoogle(){if(!_sb)return;await _sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://varsity-hub-alpha.vercel.app/news.html'}});}
+async function signInFacebook(){if(!_sb)return;await _sb.auth.signInWithOAuth({provider:'facebook',options:{redirectTo:'https://varsity-hub-alpha.vercel.app/news.html'}});}
+async function signOut(){if(_sb)await _sb.auth.signOut();onLogout();}
+
+function onLogin(user){
+  currentUser={id:user.id,name:user.user_metadata?.full_name||user.email.split('@')[0],email:user.email};
+  localStorage.setItem('vn_user',JSON.stringify(currentUser));
+  if(!localStorage.getItem('vn_trial'))localStorage.setItem('vn_trial',Date.now().toString());
+  updateAuthUI();
+}
+function onLogout(){currentUser=null;localStorage.removeItem('vn_user');updateAuthUI();}
+
+let currentUser=JSON.parse(localStorage.getItem('vn_user')||'null');
+let isSubscribed=localStorage.getItem('vn_subscribed')==='true';
+let currentCat='all',openArtIdx=0;
+let bookmarks=JSON.parse(localStorage.getItem('vn_bookmarks')||'[]');
+let allArticles=[];
+
+function trialDaysLeft(){const t=localStorage.getItem('vn_trial');if(!t)return 0;return Math.max(0,Math.ceil(3-(Date.now()-parseInt(t))/86400000));}
+function hasAccess(){return isSubscribed||(currentUser&&trialDaysLeft()>0);}
+
+function updateAuthUI(){
+  const guest=document.getElementById('navGuest'),uNav=document.getElementById('navUser'),ava=document.getElementById('userAva'),tBar=document.getElementById('trialBar'),pOut=document.getElementById('profileOut'),pIn=document.getElementById('profileIn');
+  if(currentUser){
+    guest.style.display='none';uNav.style.display='flex';
+    const init=(currentUser.name||'S')[0].toUpperCase();
+    ava.textContent=init;document.getElementById('profileAvaBig').textContent=init;
+    document.getElementById('profileName').textContent=currentUser.name;document.getElementById('profileEmail').textContent=currentUser.email;
+    pOut.style.display='none';pIn.style.display='block';
+    const days=trialDaysLeft();
+    if(days>0&&!isSubscribed){tBar.classList.add('show');document.getElementById('trialDaysLabel').textContent=days+' day'+(days!==1?'s':'');}
+    else tBar.classList.remove('show');
+  }else{guest.style.display='flex';uNav.style.display='none';tBar.classList.remove('show');pOut.style.display='block';pIn.style.display='none';}
+  renderFeed();renderBookmarks();
+}
+
+function openAuth(){document.getElementById('authOverlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeAuth(){document.getElementById('authOverlay').classList.remove('open');document.body.style.overflow='';}
+function openSub(){if(!currentUser){openAuth();return;}document.getElementById('subOverlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeSub(){document.getElementById('subOverlay').classList.remove('open');document.body.style.overflow='';}
+function bgClose(e,id){if(e.target===document.getElementById(id)){closeAuth();closeSub();}}
+function activateSub(){isSubscribed=true;localStorage.setItem('vn_subscribed','true');closeSub();updateAuthUI();alert('Subscription active! Full access unlocked.');}
+function acceptCookies(){localStorage.setItem('vn_cookies','accepted');document.getElementById('ckOverlay').classList.remove('show');document.getElementById('ckSheet').classList.remove('show');}
+function declineCookies(){localStorage.setItem('vn_cookies','declined');document.getElementById('ckOverlay').classList.remove('show');document.getElementById('ckSheet').classList.remove('show');}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id)?.classList.add('active');
+  document.getElementById('bn-'+id)?.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+const HOSTED=[
+  {id:'h1',cat:'nsfas',tag:'NSFAS',tagStyle:'red',title:'NSFAS 2025: Everything You Need to Know Before the Deadline',excerpt:'Applications are open but close sooner than most students expect. Who qualifies, documents needed, and the mistakes that get thousands rejected.',content:`<p>The National Student Financial Aid Scheme has opened applications for the 2025 academic year.</p><h3>Who Qualifies</h3><p>South African citizen with valid ID. Household income below R350,000/year. Enrolled at a public university or TVET college.</p><h3>Documents You Need</h3><p>SA ID, parent IDs, three payslips or unemployment affidavit, bank details, proof of registration.</p><h3>How to Apply</h3><p>Go to my.nsfas.org.za only. Create account with your ID number and your own email. Fill every field carefully.</p><h3>Common Rejection Reasons</h3><p>Wrong ID number. Incorrect bank details. Blurry uploads. Using a parent email. Never pay someone to apply — NSFAS is always free.</p>`,source:'Varsity News',sourceUrl:'#',date:'2 Mar 2025',ago:'3h ago',emoji:'💳'},
+  {id:'h2',cat:'bursaries',tag:'Bursaries',tagStyle:'gold',title:'10 SA Bursaries Still Open Right Now',excerpt:'Most students think bursary season ends in January. Several major funders still have open applications — some worth over R100,000.',content:`<p>Several major funders still have open applications well into the first quarter.</p><h3>Funza Lushaka Teaching Bursary</h3><p>Covers full tuition, accommodation, meals and personal allowance. Deadline: end of April. Apply at funzalushaka.dbe.gov.za.</p><h3>Sasol Bursary</h3><p>For engineering, science and technology students. Visit sasol.com/careers.</p>`,source:'Varsity News',sourceUrl:'#',date:'5 Mar 2025',ago:'1d ago',emoji:'🏆'},
+  {id:'h3',cat:'campus',tag:'Campus',tagStyle:'',title:'SA Student Housing Crisis: 60% of First-Years Cannot Get On-Campus Accommodation',excerpt:'A damning new report finds most South African first-year students are turned away from residences.',content:`<p>Over 60% of first-year students at public universities cannot secure on-campus accommodation.</p><h3>Worst Affected</h3><p>UJ has over 8,000 students on waiting lists. Walter Sisulu University and TUT also badly affected.</p><h3>What You Can Do</h3><p>Register on your university official housing waiting list immediately.</p>`,source:'Varsity News',sourceUrl:'#',date:'7 Mar 2025',ago:'2d ago',emoji:'🏠'},
+  {id:'h4',cat:'jobs',tag:'Careers',tagStyle:'green',title:'Graduate Jobs 2025: SA Companies Hiring Right Now',excerpt:'The South African graduate market is competitive but not closed. Several major employers have opened 2025 programmes.',content:`<p>2025 has seen an increase in graduate programme openings from major South African employers.</p><h3>Who Is Hiring</h3><p>Standard Bank, Deloitte, Discovery Health, Anglo American, Sasol, Eskom and government departments.</p>`,source:'Varsity News',sourceUrl:'#',date:'8 Mar 2025',ago:'5h ago',emoji:'💼'},
+  {id:'h5',cat:'tech',tag:'Tech',tagStyle:'blue',title:'How SA Students Are Using AI to Study Smarter',excerpt:'From UCT to UNISA, AI tools have become part of everyday student life.',content:`<p>AI tools have become standard study aids at South African universities.</p><h3>What Students Use AI For</h3><p>Summarising papers. Explaining difficult concepts. Checking essay structure. Generating practice questions.</p>`,source:'Varsity News',sourceUrl:'#',date:'8 Mar 2025',ago:'6h ago',emoji:'🤖'}
+];
+
+function getCatPillClass(s){if(s==='red')return 'cat-pill red';if(s==='blue')return 'cat-pill blue';if(s==='green')return 'cat-pill green';if(s==='gold')return 'cat-pill gold';return 'cat-pill';}
+function filtered(){if(currentCat==='all')return allArticles;return allArticles.filter(a=>a.cat===currentCat||(a.tag||'').toLowerCase().includes(currentCat));}
+function filterCat(cat,btn){currentCat=cat;document.querySelectorAll('.cn-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderFeed();}
+
+function renderFeed(){
+  const list=filtered(),access=hasAccess(),FREE_LIMIT=2;
+  if(list.length>0){
+    const h=list[0];
+    document.getElementById('heroCat').textContent=h.tag;document.getElementById('heroCat').className=getCatPillClass(h.tagStyle);
+    document.getElementById('heroTime').textContent=h.ago;document.getElementById('heroTitle').textContent=h.title;
+    document.getElementById('heroExcerpt').textContent=h.excerpt;document.getElementById('heroSrc').textContent=h.source;
+    document.getElementById('heroDate').textContent=' · '+h.date;
+    const imgEl=document.getElementById('heroImg');
+    if(h.image)imgEl.innerHTML=`<img src="${h.image}" alt="" onerror="this.parentElement.textContent='${h.emoji||'📰'}'">`;
+    else imgEl.textContent=h.emoji||'📰';
+  }
+  const rest=list.slice(1);
+  document.getElementById('artList').innerHTML=rest.map((a,i)=>{
+    const locked=!access&&i>=FREE_LIMIT;
+    const thumb=a.image?`<img src="${a.image}" alt="" onerror="this.parentElement.textContent='${a.emoji||'📰'}'">`:(a.emoji||'📰');
+    return `<div class="art-row${locked?' locked':''}" onclick="openArticle(${list.indexOf(a)})">
+      <div class="art-body"><div>
+        <div class="art-top-row"><span class="${getCatPillClass(a.tagStyle)}">${a.tag}</span><span class="t-ago">${a.ago}</span></div>
+        <div class="art-title">${a.title}</div>
+        <div class="art-excerpt">${a.excerpt}</div>
+      </div><div class="art-meta"><span class="art-source">${a.source}</span> · ${a.date}</div></div>
+      <div class="art-thumb">${thumb}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('paywallBox').style.display=(!access&&rest.length>FREE_LIMIT)?'block':'none';
+}
+
+function openArticle(idx){
+  const list=filtered(),a=list[idx];if(!a)return;
+  if(!hasAccess()){openAuth();return;}
+  openArtIdx=idx;
+  document.getElementById('fullCat').textContent=a.tag;document.getElementById('fullCat').className=getCatPillClass(a.tagStyle);
+  document.getElementById('fullAgo').textContent=a.ago;document.getElementById('fullTitle').textContent=a.title;
+  document.getElementById('fullSrc').textContent=a.source;document.getElementById('fullDt').textContent=a.date;
+  document.getElementById('fullSrcLink').href=a.sourceUrl||'#';document.getElementById('fullSrcLink').textContent=a.source;
+  document.getElementById('fullContent').innerHTML=a.content||'<p>Full article coming soon.</p>';
+  const heroEl=document.getElementById('fullHero');
+  if(a.image)heroEl.innerHTML=`<img src="${a.image}" alt="">`;else heroEl.textContent=a.emoji||'📰';
+  document.getElementById('bmBtn').textContent=bookmarks.includes(a.id)?'🔖✅':'🔖';
+  document.getElementById('fullView').classList.add('open');document.body.style.overflow='hidden';
+}
+function closeArticle(){document.getElementById('fullView').classList.remove('open');document.body.style.overflow='';}
+function toggleBookmark(){
+  if(!currentUser){openAuth();return;}
+  const list=filtered(),a=list[openArtIdx];if(!a)return;
+  const idx=bookmarks.indexOf(a.id);
+  if(idx===-1){bookmarks.push(a.id);document.getElementById('bmBtn').textContent='🔖✅';}
+  else{bookmarks.splice(idx,1);document.getElementById('bmBtn').textContent='🔖';}
+  localStorage.setItem('vn_bookmarks',JSON.stringify(bookmarks));renderBookmarks();
+}
+
+function renderBookmarks(){
+  const bmOut=document.getElementById('bmLoggedOut'),bmMpty=document.getElementById('bmEmpty'),bmLst=document.getElementById('bmList');
+  if(!currentUser){bmOut.style.display='block';bmMpty.style.display='none';bmLst.innerHTML='';return;}
+  bmOut.style.display='none';
+  const saved=allArticles.filter(a=>bookmarks.includes(a.id));
+  if(!saved.length){bmMpty.style.display='block';bmLst.innerHTML='';return;}
+  bmMpty.style.display='none';
+  bmLst.innerHTML=saved.map(a=>`<div class="art-row" onclick="openArticle(${allArticles.indexOf(a)})"><div class="art-body"><div><span class="${getCatPillClass(a.tagStyle)}">${a.tag}</span><div class="art-title">${a.title}</div></div><div class="art-meta"><span class="art-source">${a.source}</span> · ${a.date}</div></div><div class="art-thumb">${a.image?`<img src="${a.image}">`:(a.emoji||'📰')}</div></div>`).join('');
+}
+
+function doSearch(q){
+  const res=document.getElementById('srchResults');
+  if(!q.trim()){res.innerHTML=`<div class="srch-empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>Search for an article</p></div>`;return;}
+  const ql=q.toLowerCase(),found=allArticles.filter(a=>a.title.toLowerCase().includes(ql)||a.excerpt.toLowerCase().includes(ql)||a.tag.toLowerCase().includes(ql));
+  if(!found.length){res.innerHTML=`<div class="srch-empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><p>No results for "${q}"</p></div>`;return;}
+  res.innerHTML=`<div>${found.map(a=>`<div class="art-row" onclick="openArticle(${allArticles.indexOf(a)});showPage('home')"><div class="art-body"><div><span class="${getCatPillClass(a.tagStyle)}">${a.tag}</span><div class="art-title">${a.title}</div><div class="art-excerpt">${a.excerpt}</div></div><div class="art-meta"><span class="art-source">${a.source}</span> · ${a.date}</div></div><div class="art-thumb">${a.image?`<img src="${a.image}">`:(a.emoji||'📰')}</div></div>`).join('')}</div>`;
+}
+
+async function loadAPINews(){
+  try{
+    const r=await fetch('/api/news'),d=await r.json();
+    if(!d.articles?.length)return;
+    const mapped=d.articles.map((a,i)=>{
+      const t=(a.title+' '+(a.description||'')).toLowerCase();
+      let cat='all',tag='SA News',tagStyle='';
+      if(t.includes('nsfas')){cat='nsfas';tag='NSFAS';tagStyle='red';}
+      else if(t.includes('bursar')){cat='bursaries';tag='Bursaries';tagStyle='gold';}
+      else if(t.includes('job')||t.includes('employ')){cat='jobs';tag='Careers';tagStyle='green';}
+      else if(t.includes('campus')||t.includes('universit')){cat='campus';tag='Campus';tagStyle='';}
+      else if(t.includes('tech')||t.includes(' ai ')){cat='tech';tag='Tech';tagStyle='blue';}
+      const dt=a.publishedAt?new Date(a.publishedAt):new Date();
+      const diffH=Math.round((Date.now()-dt)/3600000);
+      const ago=diffH<24?diffH+'h ago':Math.round(diffH/24)+'d ago';
+      return{id:'api_'+i,cat,tag,tagStyle,title:a.title,excerpt:a.description||'',content:`<p>${(a.content||a.description||'').replace(/\n/g,'</p><p>')}</p>`,source:a.source,sourceUrl:a.url,date:dt.toLocaleDateString('en-ZA',{day:'numeric',month:'short',year:'numeric'}),ago,image:a.image,emoji:'📰'};
+    });
+    allArticles=[...HOSTED,...mapped];renderFeed();
+  }catch(e){console.log('API news unavailable',e);}
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  allArticles=[...HOSTED];
+  updateAuthUI();showPage('home');loadAPINews();
+  if(!localStorage.getItem('vn_cookies')){
+    setTimeout(()=>{document.getElementById('ckOverlay').classList.add('show');document.getElementById('ckSheet').classList.add('show');},1500);
+  }
+});
+</script>
+</body>
+</html>
