@@ -1,4 +1,4 @@
-const CACHE_NAME = 'scholrza-v1';
+const CACHE_NAME = 'scholrza-v3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -24,11 +24,17 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.url.includes('/api/')) return;
+  // NEVER cache API calls or HTML pages — always fetch fresh
+  if (event.request.url.includes('/api/') || 
+      event.request.url.includes('.html') ||
+      event.request.method !== 'GET') {
+    event.respondWith(fetch(event.request));
+    return;
+  }
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request).catch(() => caches.match('/index.html'));
-    })
+    caches.match(event.request).then(cached =>
+      cached || fetch(event.request).catch(() => caches.match('/index.html'))
+    )
   );
 });
 
