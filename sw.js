@@ -1,8 +1,10 @@
-const CACHE_NAME = 'varsity-hub-v1';
+const CACHE_NAME = 'scholrza-v1';
 const ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/icon-512.png',
+  '/og-image.png'
 ];
 
 self.addEventListener('install', event => {
@@ -22,12 +24,11 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Don't cache API calls
   if (event.request.url.includes('/api/')) return;
-
   event.respondWith(
     caches.match(event.request).then(cached => {
       return cached || fetch(event.request).catch(() => caches.match('/index.html'));
     })
   );
 });
+
