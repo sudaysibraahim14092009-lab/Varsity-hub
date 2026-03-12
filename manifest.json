@@ -1,0 +1,59 @@
+{
+  "name": "ScholrZA",
+  "short_name": "ScholrZA",
+  "description": "South Africa's #1 free student app. NSFAS, bursaries, accommodation, textbooks, jobs & more.",
+  "id": "scholrza",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#0a0f1e",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait",
+  "lang": "en-ZA",
+  "dir": "ltr",
+  "categories": ["education", "utilities", "lifestyle"],
+  "iarc_rating_id": "",
+  "icons": [
+    {
+      "src": "/og-image.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "ScholrZA - Home"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "ScholrZA - Mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "NSFAS Info",
+      "url": "/?tab=nsfas",
+      "description": "Quick access to NSFAS information"
+    },
+    {
+      "name": "Bursaries",
+      "url": "/?tab=bursaries",
+      "description": "Browse available bursaries"
+    }
+  ]
+}
