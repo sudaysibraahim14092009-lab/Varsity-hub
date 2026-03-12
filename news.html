@@ -13,7 +13,8 @@
 :root{--white:#FFFFFF;--ink:#0A0A0A;--ink2:#3D3D3D;--ink3:#8A8A8A;--ink4:#C4C4C4;--gold:#F59E0B;--line:#EBEBEB;--surface:#F5F5F3;--red:#e8000d;--blue:#2563eb;--green:#16a34a;}
 html,body{background:var(--white);color:var(--ink);font-family:'Cabinet Grotesk',sans-serif;font-size:15px;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 a{text-decoration:none;color:inherit;}
-button{font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;border:none;background:none;padd
+button{font-family:'Cabinet Grotesk',sans-serif;cursor:pointer;border:none;background:none;padding:0;}
+
 /* TOPNAV */
 .topnav{background:var(--white);border-bottom:1px solid var(--line);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;}
 .nav-logo{display:flex;align-items:baseline;font-family:'Fraunces',serif;}
@@ -802,26 +803,7 @@ function doSearch(q){
   res.innerHTML=`<div>${found.map(a=>`<div class="art-row" onclick="openArticle(${allArticles.indexOf(a)});showPage('home')"><div class="art-body"><div><span class="${getCatPillClass(a.tagStyle)}">${a.tag}</span><div class="art-title">${a.title}</div><div class="art-excerpt">${a.excerpt}</div></div><div class="art-meta"><span class="art-source">${a.source}</span> · ${a.date}</div></div><div class="art-thumb">${a.image?`<img src="${a.image}">`:MASTHEAD_SVG}</div></div>`).join('')}</div>`;
 }
 
-async function loadAPINews(){
-  try{
-    const r=await fetch('/api/news'),d=await r.json();
-    if(!d.articles?.length)return;
-    const mapped=d.articles.map((a,i)=>{
-      const t=(a.title+' '+(a.description||'')).toLowerCase();
-      let cat='all',tag='SA News',tagStyle='';
-      if(t.includes('nsfas')){cat='nsfas';tag='NSFAS';tagStyle='red';}
-      else if(t.includes('bursar')){cat='bursaries';tag='Bursaries';tagStyle='gold';}
-      else if(t.includes('job')||t.includes('employ')){cat='jobs';tag='Careers';tagStyle='green';}
-      else if(t.includes('campus')||t.includes('universit')){cat='campus';tag='Campus';tagStyle='';}
-      else if(t.includes('tech')||t.includes(' ai ')){cat='tech';tag='Tech';tagStyle='blue';}
-      const dt=a.publishedAt?new Date(a.publishedAt):new Date();
-      const diffH=Math.round((Date.now()-dt)/3600000);
-      const ago=diffH<24?diffH+'h ago':Math.round(diffH/24)+'d ago';
-      return{id:'api_'+i,cat,tag,tagStyle,title:a.title,excerpt:a.description||'',content:`<p>${(a.content||a.description||'').replace(/\n/g,'</p><p>')}</p>`,source:a.source,sourceUrl:a.url,date:dt.toLocaleDateString('en-ZA',{day:'numeric',month:'short',year:'numeric'}),ago,image:a.image,emoji:'📰'};
-    });
-    allArticles=[...HOSTED,...mapped];renderFeed();
-  }catch(e){console.log('API news unavailable',e);}
-}
+
 
 document.addEventListener('DOMContentLoaded',()=>{
   allArticles=[...HOSTED];
