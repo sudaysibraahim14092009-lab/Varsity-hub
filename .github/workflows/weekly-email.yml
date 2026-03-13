@@ -1,0 +1,45 @@
+name: Weekly Newsletter
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send newsletter
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          node -e "
+          async function run() {
+            const fetch = (await import('node-fetch')).default;
+            const subRes = await fetch(process.env.SUPABASE_URL + '/rest/v1/subscribers?select=email', {
+              headers: {
+                'apikey': process.env.SUPABASE_ANON_KEY,
+                'Authorization': 'Bearer ' + process.env.SUPABASE_ANON_KEY
+              }
+            });
+            const subscribers = await subRes.json();
+            for (const sub of subscribers) {
+              await fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: {
+                  'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  from: 'Scholrza <onboarding@resend.dev>',
+                  to: sub.email,
+                  subject: 'Weekly Update from Scholrza',
+                  html: '<h1>Weekly Update</h1><p>Check the latest bursaries on <a href=\"https://scholrza.pages.dev\">Scholrza</a>.</p>'
+                })
+              });
+            }
+            console.log('Sent to', subscribers.length, 'subscribers');
+          }
+          run();
+          "
