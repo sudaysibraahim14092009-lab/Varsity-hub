@@ -7,6 +7,9 @@ jobs:
   sign:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - name: Generate Keystore
         run: |
           keytool -genkeypair \
@@ -18,13 +21,6 @@ jobs:
             -storepass scholrza2024 \
             -keypass scholrza2024 \
             -dname "CN=ScholrZA, OU=App, O=ScholrZA, L=PortElizabeth, S=EC, C=ZA"
-
-      - name: Download unsigned APK
-        run: |
-          echo "Place your ScholrZA-unsigned.apk in the repo root"
-
-      - name: Checkout repo
-        uses: actions/checkout@v3
 
       - name: Sign APK
         run: |
@@ -39,7 +35,7 @@ jobs:
           cp ScholrZA-unsigned.apk ScholrZA-signed.apk
 
       - name: Upload signed APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ScholrZA-signed
           path: ScholrZA-signed.apk
