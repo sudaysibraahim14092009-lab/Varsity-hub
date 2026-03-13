@@ -1,0 +1,45 @@
+name: Sign APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Keystore
+        run: |
+          keytool -genkeypair \
+            -alias scholrza \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -keystore scholrza.keystore \
+            -storepass scholrza2024 \
+            -keypass scholrza2024 \
+            -dname "CN=ScholrZA, OU=App, O=ScholrZA, L=PortElizabeth, S=EC, C=ZA"
+
+      - name: Download unsigned APK
+        run: |
+          echo "Place your ScholrZA-unsigned.apk in the repo root"
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Sign APK
+        run: |
+          jarsigner -verbose \
+            -sigalg SHA256withRSA \
+            -digestalg SHA-256 \
+            -keystore scholrza.keystore \
+            -storepass scholrza2024 \
+            -keypass scholrza2024 \
+            ScholrZA-unsigned.apk scholrza
+          
+          cp ScholrZA-unsigned.apk ScholrZA-signed.apk
+
+      - name: Upload signed APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: ScholrZA-signed
+          path: ScholrZA-signed.apk
