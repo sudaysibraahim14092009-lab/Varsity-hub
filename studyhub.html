@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Hub — Tips, Guides & Exam Strategies | ScholrZA</title>
+  <meta name="description" content="Free study tips, subject guides, exam strategies and time management advice for South African Grade 10, 11 and 12 students. Ace your NSC exams with ScholrZA." />
+  <meta name="keywords" content="study tips South Africa, how to study for matric, NSC exam strategies, Grade 12 study guide, matric study tips, how to pass matric" />
+  <link rel="icon" href="/icon-64.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Cabinet+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:      #1a1a1a;
+      --white:    #ffffff;
+      --surface:  #f5f5f0;
+      --line:     #e8e8e3;
+      --gold:     #c9a84c;
+      --gold-lt:  #f5e9c8;
+      --muted:    #6b6b6b;
+      --green:    #2d7a4f;
+      --green-lt: #e6f4ec;
+      --blue:     #2a5f8f;
+      --blue-lt:  #e6f0f8;
+      --red:      #b94040;
+      --red-lt:   #faeaea;
+      --radius:   14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Cabinet Grotesk', sans-serif; background: var(--white); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+    /* ── NAV ── */
+    nav { position:sticky; top:0; z-index:200; height:56px; background:rgba(255,255,255,0.96); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
+    .nav-logo { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--ink); font-family:'Fraunces',serif; font-size:1.1rem; font-weight:600; }
+    .nav-logo img { width:26px; height:26px; }
+    .nav-logo em { color:var(--gold); font-style:italic; }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    .nav-home { font-size:0.79rem; color:var(--muted); text-decoration:none; padding:6px 12px; border-radius:20px; border:1px solid var(--line); transition:all .2s; }
+    .nav-home:hover { background:var(--surface); color:var(--ink); }
+    .hamburger { width:36px; height:36px; border:none; border-radius:10px; background:var(--white); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; cursor:pointer; transition:all .2s; }
+    .hamburger:hover { background:var(--surface); }
+    .hamburger span { display:block; width:16px; height:1.5px; background:var(--ink); border-radius:2px; transition:all .3s; }
+    .hamburger.open span:nth-child(1) { transform:translateY(5.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-5.5px) rotate(-45deg); }
+
+    /* ── DRAWER ── */
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:300; }
+    .overlay.open { display:block; }
+    .drawer { position:fixed; top:0; right:-270px; width:255px; height:100%; background:var(--white); z-index:400; border-left:1px solid var(--line); transition:right .28s cubic-bezier(.4,0,.2,1); overflow-y:auto; padding-bottom:24px; }
+    .drawer.open { right:0; }
+    .d-head { padding:18px 20px 14px; border-bottom:1px solid var(--line); font-family:'Fraunces',serif; font-size:1rem; font-weight:600; display:flex; justify-content:space-between; align-items:center; }
+    .d-head em { color:var(--gold); font-style:italic; }
+    .d-close { background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--muted); }
+    .d-sec { padding:12px 20px 4px; }
+    .d-lbl { font-size:0.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+    .drawer a { display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:9px; text-decoration:none; color:var(--ink); font-size:0.85rem; font-weight:500; transition:background .15s; }
+    .drawer a:hover { background:var(--surface); }
+    .drawer a.active { background:var(--gold-lt); color:#7a6020; font-weight:700; }
+
+    /* ── HERO ── */
+    .hero { background:var(--surface); border-bottom:1px solid var(--line); padding:42px 20px 34px; text-align:center; }
+    .badge { display:inline-block; background:var(--gold-lt); color:#7a6020; font-size:0.67rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:20px; margin-bottom:12px; }
+    .hero h1 { font-family:'Fraunces',serif; font-size:clamp(1.8rem,6vw,2.8rem); font-weight:400; line-height:1.15; margin-bottom:10px; }
+    .hero h1 em { color:var(--gold); font-style:italic; }
+    .hero p { color:var(--muted); font-size:0.93rem; max-width:440px; margin:0 auto 22px; line-height:1.6; }
+    .hero-tabs { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+    .hero-tab { padding:7px 16px; border-radius:20px; border:1.5px solid var(--line); background:var(--white); color:var(--muted); font-family:'Cabinet Grotesk',sans-serif; font-size:0.8rem; font-weight:600; cursor:pointer; transition:all .2s; text-decoration:none; }
+    .hero-tab:hover { border-color:var(--gold); color:var(--ink); }
+    .hero-tab.active { background:var(--ink); border-color:var(--ink); color:var(--white); }
+
+    /* ── MAIN ── */
+    .main { max-width:760px; margin:0 auto; padding:32px 16px 80px; }
+
+    /* ── SECTION HEADERS ── */
+    .section-head { margin-bottom:20px; }
+    .section-head h2 { font-family:'Fraunces',serif; font-size:1.4rem; font-weight:400; margin-bottom:5px; }
+    .section-head h2 em { color:var(--gold); font-style:italic; }
+    .section-head p { font-size:0.86rem; color:var(--muted); line-height:1.55; }
+
+    /* ── TIP CARDS ── */
+    .tip-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:44px; }
+    .tip-card { border:1.5px solid var(--line); border-radius:var(--radius); padding:16px; background:var(--white); transition:all .2s; }
+    .tip-card:hover { border-color:var(--gold); transform:translateY(-2px); box-shadow:0 4px 14px rgba(0,0,0,.07); }
+    .tip-num { font-family:'Fraunces',serif; font-size:1.8rem; font-weight:600; color:var(--gold); line-height:1; margin-bottom:8px; }
+    .tip-title { font-weight:700; font-size:0.88rem; margin-bottom:5px; }
+    .tip-body { font-size:0.8rem; color:var(--muted); line-height:1.55; }
+
+    /* ── SUBJECT GUIDES ── */
+    .subject-list { display:flex; flex-direction:column; gap:10px; margin-bottom:44px; }
+    .subject-card { border:1.5px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--white); }
+    .subject-card-head { padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:background .15s; user-select:none; }
+    .subject-card-head:hover { background:var(--surface); }
+    .subject-card-head.open { background:var(--surface); border-bottom:1px solid var(--line); }
+    .s-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.05rem; flex-shrink:0; }
+    .s-info { flex:1; }
+    .s-name { font-weight:700; font-size:0.88rem; }
+    .s-tag { font-size:0.7rem; color:var(--muted); margin-top:1px; }
+    .s-arrow { font-size:0.8rem; color:var(--muted); transition:transform .2s; }
+    .subject-card-head.open .s-arrow { transform:rotate(180deg); }
+    .subject-card-body { display:none; padding:14px 16px; }
+    .subject-card-body.open { display:block; }
+    .subject-card-body h4 { font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:8px; margin-top:12px; }
+    .subject-card-body h4:first-child { margin-top:0; }
+    .subject-card-body ul { padding-left:0; list-style:none; display:flex; flex-direction:column; gap:5px; }
+    .subject-card-body ul li { font-size:0.83rem; color:var(--ink); line-height:1.5; padding-left:16px; position:relative; }
+    .subject-card-body ul li::before { content:'→'; position:absolute; left:0; color:var(--gold); font-size:0.75rem; top:1px; }
+    .subject-card-body p { font-size:0.83rem; color:var(--ink); line-height:1.6; }
+
+    /* ── COLOUR TAGS ── */
+    .bg-green { background:var(--green-lt); }
+    .bg-blue { background:var(--blue-lt); }
+    .bg-red { background:var(--red-lt); }
+    .bg-gold { background:var(--gold-lt); }
+    .bg-surface { background:var(--surface); }
+
+    /* ── TIMETABLE BUILDER ── */
+    .timetable-box { border:1.5px solid var(--line); border-radius:var(--radius); padding:20px; margin-bottom:44px; background:var(--white); }
+    .timetable-box h3 { font-family:'Fraunces',serif; font-size:1.1rem; font-weight:400; margin-bottom:4px; }
+    .timetable-box h3 em { color:var(--gold); font-style:italic; }
+    .timetable-box .sub-text { font-size:0.82rem; color:var(--muted); margin-bottom:16px; line-height:1.5; }
+    .tt-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:14px; }
+    .tt-day { text-align:center; }
+    .tt-day-lbl { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:5px; }
+    .tt-slot { height:36px; border-radius:7px; border:1.5px dashed var(--line); font-size:0.62rem; display:flex; align-items:center; justify-content:center; color:var(--muted); cursor:pointer; transition:all .2s; margin-bottom:4px; text-align:center; padding:2px; }
+    .tt-slot.filled { border-style:solid; border-color:var(--gold); background:var(--gold-lt); color:#7a6020; font-weight:600; }
+    .tt-slot:hover { border-color:var(--gold); background:var(--gold-lt); color:#7a6020; }
+    .tt-note { font-size:0.76rem; color:var(--muted); line-height:1.5; background:var(--surface); border-radius:10px; padding:10px 12px; }
+
+    /* ── EXAM COUNTDOWN ── */
+    .countdown-box { border:1.5px solid var(--line); border-radius:var(--radius); padding:20px; margin-bottom:44px; background:var(--white); }
+    .countdown-box h3 { font-family:'Fraunces',serif; font-size:1.1rem; font-weight:400; margin-bottom:4px; }
+    .countdown-box h3 em { color:var(--gold); font-style:italic; }
+    .countdown-box .sub-text { font-size:0.82rem; color:var(--muted); margin-bottom:16px; }
+    .cd-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+    .cd-row label { font-size:0.82rem; font-weight:600; min-width:90px; }
+    .cd-row input { flex:1; min-width:140px; padding:8px 12px; border:1.5px solid var(--line); border-radius:9px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.85rem; outline:none; transition:border-color .2s; }
+    .cd-row input:focus { border-color:var(--gold); }
+    .cd-btn { padding:9px 20px; background:var(--ink); color:var(--white); border:none; border-radius:9px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
+    .cd-btn:hover { background:#333; }
+    .cd-result { display:none; background:var(--gold-lt); border:1px solid #e8d49a; border-radius:10px; padding:14px; text-align:center; }
+    .cd-result .big { font-family:'Fraunces',serif; font-size:2rem; font-weight:600; color:var(--ink); }
+    .cd-result .lbl { font-size:0.78rem; color:#7a6020; margin-top:2px; }
+    .cd-result .advice { font-size:0.8rem; color:#7a6020; margin-top:8px; line-height:1.5; }
+
+    /* ── CHECKLIST ── */
+    .checklist-box { border:1.5px solid var(--line); border-radius:var(--radius); padding:20px; margin-bottom:44px; }
+    .checklist-box h3 { font-family:'Fraunces',serif; font-size:1.1rem; font-weight:400; margin-bottom:4px; }
+    .checklist-box h3 em { color:var(--gold); font-style:italic; }
+    .checklist-box .sub-text { font-size:0.82rem; color:var(--muted); margin-bottom:14px; }
+    .check-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); cursor:pointer; }
+    .check-item:last-child { border-bottom:none; }
+    .check-item input[type="checkbox"] { margin-top:2px; width:16px; height:16px; accent-color:var(--gold); flex-shrink:0; cursor:pointer; }
+    .check-item label { font-size:0.84rem; line-height:1.45; cursor:pointer; }
+    .check-item.done label { text-decoration:line-through; color:var(--muted); }
+
+    /* ── STUDY METHODS ── */
+    .method-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-bottom:44px; }
+    .method-card { border:1.5px solid var(--line); border-radius:var(--radius); padding:16px; background:var(--white); transition:all .2s; }
+    .method-card:hover { border-color:var(--gold); box-shadow:0 4px 14px rgba(0,0,0,.07); }
+    .method-emoji { font-size:1.6rem; margin-bottom:8px; }
+    .method-name { font-weight:700; font-size:0.88rem; margin-bottom:4px; }
+    .method-desc { font-size:0.78rem; color:var(--muted); line-height:1.5; }
+    .method-tag { display:inline-block; font-size:0.64rem; font-weight:700; padding:2px 8px; border-radius:10px; margin-top:7px; }
+
+    /* ── PANEL SYSTEM ── */
+    .panel { display:none; }
+    .panel.active { display:block; }
+
+    /* ── FOOTER ── */
+    .foot { max-width:760px; margin:0 auto; padding:0 16px 44px; text-align:center; font-size:0.74rem; color:var(--muted); line-height:1.6; }
+
+    @media(max-width:440px) { .tip-grid { grid-template-columns:1fr 1fr; } .method-grid { grid-template-columns:1fr 1fr; } .tt-grid { grid-template-columns:repeat(7,1fr); gap:3px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/index.html" class="nav-logo"><img src="/icon-64.png" alt="ScholrZA" />Scholr<em>ZA</em></a>
+  <div class="nav-right">
+    <a href="/index.html" class="nav-home">← Home</a>
+    <button class="hamburger" id="hamBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="d-head">Scholr<em>ZA</em> <button class="d-close" id="dClose">✕</button></div>
+  <div class="d-sec">
+    <div class="d-lbl">Student Tools</div>
+    <a href="/index.html">🏠 Home</a>
+    <a href="/pastpapers.html">📄 Past Papers</a>
+    <a href="/studyhub.html" class="active">📚 Study Hub</a>
+    <a href="/progresstracker.html">📈 Progress Tracker</a>
+    <a href="/news.html">📰 SA News</a>
+  </div>
+  <div class="d-sec">
+    <div class="d-lbl">Campus Life</div>
+    <a href="/index.html#universities">🏫 26 Universities</a>
+    <a href="/index.html#accommodation">🏠 Accommodation</a>
+    <a href="/campusjobs.html">💼 Campus Jobs</a>
+    <a href="/index.html#aps">📊 APS Calculator</a>
+  </div>
+  <div class="d-sec">
+    <div class="d-lbl">Funding</div>
+    <a href="/index.html#nsfas">💳 NSFAS Guide</a>
+    <a href="/index.html#bursaries">🏆 Bursaries</a>
+  </div>
+  <div class="d-sec">
+    <div class="d-lbl">Info</div>
+    <a href="/about.html">ℹ️ About Us</a>
+    <a href="/privacy.html">🔒 Privacy Policy</a>
+  </div>
+</aside>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">📚 Free Study Resources</div>
+  <h1>Study <em>Hub</em></h1>
+  <p>Study tips, subject guides, exam strategies and tools — everything a South African student needs to pass. 100% free.</p>
+  <div class="hero-tabs">
+    <button class="hero-tab active" data-panel="tips">💡 Study Tips</button>
+    <button class="hero-tab" data-panel="subjects">📖 Subject Guides</button>
+    <button class="hero-tab" data-panel="methods">🧠 Study Methods</button>
+    <button class="hero-tab" data-panel="tools">🛠️ Tools</button>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- ═══════ PANEL: STUDY TIPS ═══════ -->
+  <div class="panel active" id="panel-tips">
+
+    <div class="section-head">
+      <h2>Top Study <em>Tips</em></h2>
+      <p>Proven strategies used by top matric students across South Africa.</p>
+    </div>
+
+    <div class="tip-grid">
+      <div class="tip-card">
+        <div class="tip-num">01</div>
+        <div class="tip-title">Use Past Papers Every Week</div>
+        <div class="tip-body">Doing past papers is the single best thing you can do. It shows you exactly how examiners ask questions and trains your brain to answer under pressure. Aim for at least one paper per subject per week in the final term.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">02</div>
+        <div class="tip-title">Study in 45-Minute Blocks</div>
+        <div class="tip-body">Your brain can only focus well for about 45 minutes at a time. Study for 45 minutes, take a 10-minute break, then repeat. This is called the Pomodoro method — it prevents burnout and improves retention significantly.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">03</div>
+        <div class="tip-title">Write Notes By Hand</div>
+        <div class="tip-body">Research shows handwriting notes forces your brain to process and summarise information, which leads to better memory than just reading or typing. Rewrite your notes in your own words after each chapter.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">04</div>
+        <div class="tip-title">Start With Your Weakest Subject</div>
+        <div class="tip-body">Study your most difficult subject first when your brain is freshest — usually in the morning. Leave easier subjects for later in the day. Most students do the opposite and run out of energy before tackling hard work.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">05</div>
+        <div class="tip-title">Teach What You Learn</div>
+        <div class="tip-body">If you can explain a concept to someone else clearly, you truly understand it. Try explaining chapters to a friend, a family member, or even yourself out loud. Teaching reveals exactly which parts you don't fully understand yet.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">06</div>
+        <div class="tip-title">Sleep Is Not Optional</div>
+        <div class="tip-body">Studying all night before an exam is one of the worst things you can do. Your brain consolidates memory during sleep — without it, you forget most of what you studied. Aim for 7–8 hours every night during exam period.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">07</div>
+        <div class="tip-title">Read the Memo Carefully</div>
+        <div class="tip-body">After doing a past paper, read every single line of the memorandum — including marks you got right. Memos show you the exact words and structure examiners want, which is different from just knowing the answer.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">08</div>
+        <div class="tip-title">Make a Weekly Study Plan</div>
+        <div class="tip-body">Don't just study whatever you feel like. Write a weekly plan on Sunday that allocates specific time to each subject. Students with a plan consistently score 10–15% higher than those who study randomly.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">09</div>
+        <div class="tip-title">Eliminate Phone Distractions</div>
+        <div class="tip-body">Put your phone in another room or use a free app like Forest to block social media while studying. Even having your phone on the table reduces focus by up to 20% — even if you never check it.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">10</div>
+        <div class="tip-title">Focus on Mark Allocation</div>
+        <div class="tip-body">In exams, look at how many marks a question is worth before answering. A 1-mark question needs one clear point. A 4-mark question needs four. Students lose marks by writing essays for 1-mark questions and one-liners for 8-mark questions.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">11</div>
+        <div class="tip-title">Use Mind Maps for Revision</div>
+        <div class="tip-body">Mind maps help you see how concepts connect to each other. Start with a central topic, then branch out to sub-topics and key facts. They're especially powerful for Life Sciences, History, Business Studies and Geography.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">12</div>
+        <div class="tip-title">Don't Skip Life Orientation</div>
+        <div class="tip-body">Many students neglect LO because it seems easy. But LO contributes to your total NSC result. Always complete all assessments and prepare properly — a strong LO mark can boost your overall average.</div>
+      </div>
+    </div>
+
+    <!-- Exam Day Tips -->
+    <div class="section-head">
+      <h2>Exam <em>Day</em> Strategies</h2>
+      <p>What to do before, during and after each exam.</p>
+    </div>
+    <div class="tip-grid">
+      <div class="tip-card">
+        <div class="tip-num">🌅</div>
+        <div class="tip-title">The Night Before</div>
+        <div class="tip-body">Pack your bag the night before. Put in your ID, pens, pencils, ruler, calculator and eraser. Do a light review of key formulas or definitions — no heavy studying. Sleep by 10pm. Lay out your clothes. Reduce all friction for the morning.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">🍳</div>
+        <div class="tip-title">Morning of the Exam</div>
+        <div class="tip-body">Eat a proper breakfast — not junk food. Protein and slow carbs (eggs, oats, peanut butter toast) give your brain steady energy. Arrive at the exam venue at least 20 minutes early. Don't discuss answers with friends outside — it creates anxiety.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">📋</div>
+        <div class="tip-title">First 5 Minutes of the Paper</div>
+        <div class="tip-body">When you get the paper, read through the entire thing before writing anything. Identify which questions you know well, which are medium, and which are hard. Plan your time based on marks. Start with questions you know well to build confidence.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">⏱️</div>
+        <div class="tip-title">Time Management in the Exam</div>
+        <div class="tip-body">A rough rule: 1 mark = 1–1.5 minutes. For a 150-mark paper in 3 hours, that's 72 seconds per mark. If a question is taking too long, write what you know and move on. Come back at the end — a partial answer scores more than a blank.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">✅</div>
+        <div class="tip-title">Check Your Work</div>
+        <div class="tip-body">Always leave 10–15 minutes at the end to check your work. Read each answer and check: Did you answer what was asked? Did you include units in Maths/Science? Did you check your calculations? Small errors cost marks unnecessarily.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">💭</div>
+        <div class="tip-title">After the Exam</div>
+        <div class="tip-body">Don't discuss the paper with friends immediately after — it's done and you can't change it. Comparing answers increases anxiety. Rest for the remainder of the day, then start preparing for your next paper. Forward focus wins.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════ PANEL: SUBJECT GUIDES ═══════ -->
+  <div class="panel" id="panel-subjects">
+
+    <div class="section-head">
+      <h2>Subject <em>Guides</em></h2>
+      <p>Specific tips and strategies for each major NSC subject. Click a subject to expand.</p>
+    </div>
+
+    <div class="subject-list">
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-blue">📐</div>
+          <div class="s-info"><div class="s-name">Mathematics</div><div class="s-tag">Paper 1 &amp; 2 — Algebra, Calculus, Geometry, Stats</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>How to Study Maths</h4>
+          <ul>
+            <li>Maths is learned by doing, not reading. Do at least 10 practice problems per topic before moving on.</li>
+            <li>Never skip steps when solving — examiners award method marks even if your final answer is wrong.</li>
+            <li>Learn all your formulae and when to apply them. Write them on a single sheet and review daily.</li>
+            <li>Focus on Algebra, Functions, and Calculus — they appear in every Paper 1 and carry the most marks.</li>
+          </ul>
+          <h4>Common Mistakes to Avoid</h4>
+          <ul>
+            <li>Not showing working — always write every step, even obvious ones.</li>
+            <li>Rushing through multiple choice — eliminate wrong answers systematically.</li>
+            <li>Forgetting to check if your answer is reasonable (e.g. negative length is impossible).</li>
+          </ul>
+          <h4>Top Resources</h4>
+          <ul>
+            <li>Past papers on ScholrZA Past Papers page — do every paper from 2018 onwards.</li>
+            <li>MindTheMath on YouTube — South African teacher, explains every NSC topic clearly.</li>
+            <li>Khan Academy — free, excellent for Algebra, Calculus and Trigonometry.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-red">⚗️</div>
+          <div class="s-info"><div class="s-name">Physical Sciences</div><div class="s-tag">Paper 1 (Physics) &amp; Paper 2 (Chemistry)</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>How to Study Physical Sciences</h4>
+          <ul>
+            <li>Paper 1 (Physics) and Paper 2 (Chemistry) require different approaches — study them separately.</li>
+            <li>The Data Sheet is given in the exam. Know what's on it so you don't waste time searching during the exam.</li>
+            <li>For Physics: Master Newton's Laws, Electricity, and Waves — these appear every year.</li>
+            <li>For Chemistry: Focus on Organic Chemistry, Electrochemistry, and Chemical Change.</li>
+          </ul>
+          <h4>Exam Strategy</h4>
+          <ul>
+            <li>Always write the formula first, then substitute values, then solve. This earns method marks.</li>
+            <li>Include units in every answer — marks are deducted for missing or incorrect units.</li>
+            <li>For 4+ mark questions, structure your answer with numbered points matching the mark allocation.</li>
+          </ul>
+          <h4>Top Resources</h4>
+          <ul>
+            <li>Stanmore Physics on YouTube — best SA-specific Physical Sciences channel.</li>
+            <li>Free DBE study guides downloadable from education.gov.za</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-green">🧬</div>
+          <div class="s-info"><div class="s-name">Life Sciences</div><div class="s-tag">Paper 1 &amp; 2 — Biology, Genetics, Evolution</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>How to Study Life Sciences</h4>
+          <ul>
+            <li>Life Sciences is content-heavy — you must memorise definitions, processes, and diagrams.</li>
+            <li>Make a glossary of key terms for each chapter. Examiners test definitions directly.</li>
+            <li>Draw and label all key diagrams (cell division, DNA replication, heart, kidney) until you can do them from memory.</li>
+            <li>Focus heavily on Genetics, DNA, and Evolution — they appear in almost every exam paper.</li>
+          </ul>
+          <h4>Exam Strategy</h4>
+          <ul>
+            <li>For "explain" or "describe" questions, use numbered points — one point per mark.</li>
+            <li>Use scientific terminology throughout — informal language loses marks.</li>
+            <li>For data interpretation questions, always refer back to the graph or table in your answer.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-gold">📝</div>
+          <div class="s-info"><div class="s-name">English Home Language</div><div class="s-tag">Paper 1 (Comprehension), 2 (Literature), 3 (Writing)</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>Paper 1 — Comprehension &amp; Language</h4>
+          <ul>
+            <li>Read the questions BEFORE reading the passage. This helps you know what to look for.</li>
+            <li>For comprehension, your answer must come from the text — don't use outside knowledge.</li>
+            <li>For "in your own words" questions, paraphrase the text — don't copy directly.</li>
+            <li>Language questions: study figures of speech, tone, mood, irony, and how to identify them.</li>
+          </ul>
+          <h4>Paper 2 — Literature</h4>
+          <ul>
+            <li>Know your prescribed texts deeply — themes, characters, language, context.</li>
+            <li>For essays, have a clear argument and back it up with evidence (quotes) from the text.</li>
+            <li>Contextual questions: always explain how the extract fits into the broader story.</li>
+          </ul>
+          <h4>Paper 3 — Writing</h4>
+          <ul>
+            <li>Plan your essay for 5 minutes before writing — a structured essay always scores higher.</li>
+            <li>Vary your sentence structure. Short sentences for impact. Longer ones for description.</li>
+            <li>Check spelling and grammar before handing in — language errors cost marks in Paper 3.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-surface">💰</div>
+          <div class="s-info"><div class="s-name">Accounting</div><div class="s-tag">Financial Statements, Ratios, Reconciliations</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>How to Study Accounting</h4>
+          <ul>
+            <li>Accounting is about understanding the flow of money — debits, credits, and why things balance.</li>
+            <li>Memorise all financial statement formats — Income Statement, Balance Sheet, Cash Flow Statement.</li>
+            <li>Ratios must be memorised. Write them on a card and test yourself daily in the weeks before exams.</li>
+            <li>Bank reconciliations: practise until you can complete one in under 15 minutes.</li>
+          </ul>
+          <h4>Exam Tips</h4>
+          <ul>
+            <li>Show all calculations — partial marks are given even when the final total is wrong.</li>
+            <li>Use rulers for financial statements — neat presentation helps you spot your own errors.</li>
+            <li>Read analysis questions carefully — they want specific financial reasoning, not general statements.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-blue">💼</div>
+          <div class="s-info"><div class="s-name">Business Studies</div><div class="s-tag">Management, Marketing, Entrepreneurship, Ethics</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>How to Study Business Studies</h4>
+          <ul>
+            <li>Business Studies is a memorisation-heavy subject — you must know definitions and concepts precisely.</li>
+            <li>Focus on: Business Environments, Business Functions, Forms of Ownership, and Ethics.</li>
+            <li>Scenario questions: always apply your answer to the scenario given — never answer in general terms.</li>
+          </ul>
+          <h4>Essay Questions</h4>
+          <ul>
+            <li>For 40-mark essays, write an introduction, at least 8 well-developed points, and a conclusion.</li>
+            <li>Bullet points are fine — but make each point a complete, meaningful sentence.</li>
+            <li>Use business terminology throughout — casual language will cost you marks.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-green">🌍</div>
+          <div class="s-info"><div class="s-name">Geography</div><div class="s-tag">Physical Geography &amp; Human Geography</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>How to Study Geography</h4>
+          <ul>
+            <li>Geography has two clear sections: Physical (weather, climate, rivers, coasts) and Human (development, settlement, population).</li>
+            <li>For map work: practise reading topographic maps, calculating gradients, and identifying landforms.</li>
+            <li>Climate graphs and data interpretation appear every year — practise these until they're automatic.</li>
+          </ul>
+          <h4>Exam Strategy</h4>
+          <ul>
+            <li>Always refer to the figure/map/graph in your answer when directed to do so.</li>
+            <li>Use geographical vocabulary — "drainage basin," "urban sprawl," "precipitation" etc.</li>
+            <li>For "suggest reasons" questions, you can use logic and reasoning — not just memorised facts.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-card-head" onclick="toggleSubject(this)">
+          <div class="s-icon bg-red">🏛️</div>
+          <div class="s-info"><div class="s-name">History</div><div class="s-tag">Source Analysis, Essay Questions, Historical Concepts</div></div>
+          <span class="s-arrow">▼</span>
+        </div>
+        <div class="subject-card-body">
+          <h4>How to Study History</h4>
+          <ul>
+            <li>History exams test source analysis AND essay writing — practise both separately.</li>
+            <li>For source analysis: identify the origin, purpose, and bias of each source. Quote directly from the source in your answers.</li>
+            <li>Know the key themes: Cold War, Civil Rights, South African History (Apartheid, liberation), and African History.</li>
+          </ul>
+          <h4>Essay Writing for History</h4>
+          <ul>
+            <li>Every history essay needs a clear argument (thesis) in the introduction.</li>
+            <li>Each paragraph = one point, supported by factual evidence.</li>
+            <li>Conclude by restating your argument in light of the evidence presented.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════ PANEL: STUDY METHODS ═══════ -->
+  <div class="panel" id="panel-methods">
+
+    <div class="section-head">
+      <h2>Proven Study <em>Methods</em></h2>
+      <p>Science-backed techniques that actually improve how much you remember.</p>
+    </div>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-emoji">🍅</div>
+        <div class="method-name">Pomodoro Technique</div>
+        <div class="method-desc">Study for 25–45 minutes with full focus, then take a 5–10 minute break. After 4 rounds, take a longer 20-minute break. This prevents burnout and keeps your brain sharp throughout the session.</div>
+        <span class="method-tag bg-green" style="color:var(--green)">Best for: All subjects</span>
+      </div>
+      <div class="method-card">
+        <div class="method-emoji">🔁</div>
+        <div class="method-name">Spaced Repetition</div>
+        <div class="method-desc">Instead of studying one topic intensively, revisit it across increasing intervals. Review today, then tomorrow, then in 3 days, then a week later. This technique exploits how memory works — each review strengthens the neural pathway.</div>
+        <span class="method-tag bg-blue" style="color:var(--blue)">Best for: Definitions, formulas, dates</span>
+      </div>
+      <div class="method-card">
+        <div class="method-emoji">🗂️</div>
+        <div class="method-name">Active Recall</div>
+        <div class="method-desc">Close your notes and try to recall what you just studied from memory. Write it down or say it out loud. Check what you missed. This is far more effective than re-reading notes passively — it forces your brain to strengthen the memory.</div>
+        <span class="method-tag bg-gold" style="color:#7a6020">Best for: Revision sessions</span>
+      </div>
+      <div class="method-card">
+        <div class="method-emoji">🗺️</div>
+        <div class="method-name">Mind Mapping</div>
+        <div class="method-desc">Start with a central concept in the middle of a page. Branch out to main ideas, then sub-ideas. Use colour and images. Mind maps show how ideas connect and are excellent for visual learners and subjects with lots of linked concepts.</div>
+        <span class="method-tag bg-green" style="color:var(--green)">Best for: Life Sciences, History, Business</span>
+      </div>
+      <div class="method-card">
+        <div class="method-emoji">🏫</div>
+        <div class="method-name">The Feynman Technique</div>
+        <div class="method-desc">Choose a concept. Explain it simply, as if teaching a child. When you can't explain something clearly, go back and study it again. Repeat until your explanation is simple and complete. This reveals exactly what you don't yet understand.</div>
+        <span class="method-tag bg-red" style="color:var(--red)">Best for: Maths, Sciences</span>
+      </div>
+      <div class="method-card">
+        <div class="method-emoji">📑</div>
+        <div class="method-name">Cornell Note-Taking</div>
+        <div class="method-desc">Divide your page into 3 sections: a narrow left column for key questions/keywords, a wide right column for notes, and a summary section at the bottom. After studying, cover the right side and use the keywords to test yourself.</div>
+        <span class="method-tag bg-blue" style="color:var(--blue)">Best for: English, Business, History</span>
+      </div>
+      <div class="method-card">
+        <div class="method-emoji">🃏</div>
+        <div class="method-name">Flashcards</div>
+        <div class="method-desc">Write a question or term on the front, and the answer or definition on the back. Test yourself daily. Sort them into "know it," "almost," and "don't know" piles. Focus your energy on the "don't know" pile until it disappears.</div>
+        <span class="method-tag bg-gold" style="color:#7a6020">Best for: Vocabulary, formulas, definitions</span>
+      </div>
+      <div class="method-card">
+        <div class="method-emoji">👥</div>
+        <div class="method-name">Study Groups</div>
+        <div class="method-desc">Study groups work when they are structured. Assign each person a topic to teach the others. Quiz each other. Share different approaches to problems. Limit groups to 3–5 people and set a clear agenda before each session.</div>
+        <span class="method-tag bg-green" style="color:var(--green)">Best for: All subjects</span>
+      </div>
+    </div>
+
+    <!-- Study schedule guide -->
+    <div class="section-head">
+      <h2>Building Your Study <em>Schedule</em></h2>
+      <p>How to plan your time from now until exam day.</p>
+    </div>
+    <div class="tip-grid">
+      <div class="tip-card">
+        <div class="tip-num">📅</div>
+        <div class="tip-title">8+ Weeks Before Exams</div>
+        <div class="tip-body">Focus on completing the content. Work through each chapter systematically. Make summarised notes as you go. Don't worry about speed — focus on understanding. Do one past paper per subject to see where your weaknesses are.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">📅</div>
+        <div class="tip-title">4–8 Weeks Before Exams</div>
+        <div class="tip-body">Start revising notes you made in the first phase. Use active recall and spaced repetition. Begin doing past papers regularly — at least one per subject per week under timed conditions. Identify recurring topics and master them.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">📅</div>
+        <div class="tip-title">1–4 Weeks Before Exams</div>
+        <div class="tip-body">Intense revision mode. Do 2–3 past papers per subject per week. Focus only on weak areas. Memorise all key formulas, definitions, and diagrams. Get 8 hours of sleep — this is critical for memory consolidation.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">📅</div>
+        <div class="tip-title">Final Week</div>
+        <div class="tip-body">Light revision only — you can't learn new content this late. Review your summary notes and key concepts. Get your stationery ready. Sleep well every night. Eat properly. Your job now is to rest and consolidate, not cram.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════ PANEL: TOOLS ═══════ -->
+  <div class="panel" id="panel-tools">
+
+    <div class="section-head">
+      <h2>Study <em>Tools</em></h2>
+      <p>Interactive tools to help you plan and track your study sessions.</p>
+    </div>
+
+    <!-- Exam Countdown -->
+    <div class="countdown-box">
+      <h3>📅 Exam <em>Countdown</em></h3>
+      <div class="sub-text">Enter your exam date to see how many days you have left and get a personalised study plan.</div>
+      <div class="cd-row">
+        <label>Subject name</label>
+        <input type="text" id="cdSubject" placeholder="e.g. Mathematics Paper 1" />
+      </div>
+      <div class="cd-row">
+        <label>Exam date</label>
+        <input type="date" id="cdDate" />
+      </div>
+      <button class="cd-btn" onclick="calcCountdown()">Calculate →</button>
+      <div class="cd-result" id="cdResult" style="margin-top:14px;">
+        <div class="big" id="cdDays">—</div>
+        <div class="lbl" id="cdLabel">days until your exam</div>
+        <div class="advice" id="cdAdvice"></div>
+      </div>
+    </div>
+
+    <!-- Pre-exam checklist -->
+    <div class="checklist-box">
+      <h3>✅ Exam <em>Checklist</em></h3>
+      <div class="sub-text">Tick off each item the night before and morning of your exam.</div>
+
+      <div class="check-item" id="ci1">
+        <input type="checkbox" id="c1" onchange="toggleCheck('ci1')" />
+        <label for="c1">ID document / learner ID packed in bag</label>
+      </div>
+      <div class="check-item" id="ci2">
+        <input type="checkbox" id="c2" onchange="toggleCheck('ci2')" />
+        <label for="c2">At least 2 blue or black pens packed</label>
+      </div>
+      <div class="check-item" id="ci3">
+        <input type="checkbox" id="c3" onchange="toggleCheck('ci3')" />
+        <label for="c3">Pencil, eraser, ruler and compass (if needed)</label>
+      </div>
+      <div class="check-item" id="ci4">
+        <input type="checkbox" id="c4" onchange="toggleCheck('ci4')" />
+        <label for="c4">Scientific calculator with fresh batteries</label>
+      </div>
+      <div class="check-item" id="ci5">
+        <input type="checkbox" id="c5" onchange="toggleCheck('ci5')" />
+        <label for="c5">Know the exam venue, room and start time</label>
+      </div>
+      <div class="check-item" id="ci6">
+        <input type="checkbox" id="c6" onchange="toggleCheck('ci6')" />
+        <label for="c6">Alarm set for the next morning</label>
+      </div>
+      <div class="check-item" id="ci7">
+        <input type="checkbox" id="c7" onchange="toggleCheck('ci7')" />
+        <label for="c7">Had a proper meal (not just snacks)</label>
+      </div>
+      <div class="check-item" id="ci8">
+        <input type="checkbox" id="c8" onchange="toggleCheck('ci8')" />
+        <label for="c8">Reviewed key formulas/definitions (light review only)</label>
+      </div>
+      <div class="check-item" id="ci9">
+        <input type="checkbox" id="c9" onchange="toggleCheck('ci9')" />
+        <label for="c9">Phone charged and alarm tested</label>
+      </div>
+      <div class="check-item" id="ci10">
+        <input type="checkbox" id="c10" onchange="toggleCheck('ci10')" />
+        <label for="c10">Planned to arrive at venue 20 minutes early</label>
+      </div>
+    </div>
+
+    <!-- Weekly timetable -->
+    <div class="timetable-box">
+      <h3>📆 Weekly Study <em>Timetable</em></h3>
+      <div class="sub-text">A suggested daily structure for a productive study week. Adapt the times to your schedule.</div>
+      <div class="tt-grid">
+        <div class="tt-day"><div class="tt-day-lbl">Mon</div>
+          <div class="tt-slot filled">Maths</div>
+          <div class="tt-slot filled">Phys Sci</div>
+          <div class="tt-slot">Rest</div>
+        </div>
+        <div class="tt-day"><div class="tt-day-lbl">Tue</div>
+          <div class="tt-slot filled">English</div>
+          <div class="tt-slot filled">Life Sci</div>
+          <div class="tt-slot">Rest</div>
+        </div>
+        <div class="tt-day"><div class="tt-day-lbl">Wed</div>
+          <div class="tt-slot filled">Maths</div>
+          <div class="tt-slot filled">Accnt'ng</div>
+          <div class="tt-slot">Rest</div>
+        </div>
+        <div class="tt-day"><div class="tt-day-lbl">Thu</div>
+          <div class="tt-slot filled">Hist/Geo</div>
+          <div class="tt-slot filled">Phys Sci</div>
+          <div class="tt-slot">Rest</div>
+        </div>
+        <div class="tt-day"><div class="tt-day-lbl">Fri</div>
+          <div class="tt-slot filled">Past Paper</div>
+          <div class="tt-slot filled">Memo Rev.</div>
+          <div class="tt-slot">Rest</div>
+        </div>
+        <div class="tt-day"><div class="tt-day-lbl">Sat</div>
+          <div class="tt-slot filled">Weak Sub.</div>
+          <div class="tt-slot">Rest</div>
+          <div class="tt-slot">Rest</div>
+        </div>
+        <div class="tt-day"><div class="tt-day-lbl">Sun</div>
+          <div class="tt-slot">Rest</div>
+          <div class="tt-slot">Plan week</div>
+          <div class="tt-slot">Rest</div>
+        </div>
+      </div>
+      <div class="tt-note">
+        💡 <strong>Tip:</strong> Each coloured block = 1 study session (45 min). Always take a 10-min break between sessions. Sunday should be mostly rest — a rested brain learns 40% faster on Monday.
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<div class="foot">© 2025 ScholrZA · Free study resources for South African students · Not affiliated with DBE or any university.</div>
+
+<script>
+  // Hamburger
+  const hamBtn = document.getElementById('hamBtn');
+  const drawer = document.getElementById('drawer');
+  const overlay = document.getElementById('overlay');
+  const dClose = document.getElementById('dClose');
+  const toggleDrawer = () => {
+    const open = drawer.classList.toggle('open');
+    overlay.classList.toggle('open', open);
+    hamBtn.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  hamBtn.addEventListener('click', toggleDrawer);
+  overlay.addEventListener('click', toggleDrawer);
+  dClose.addEventListener('click', toggleDrawer);
+
+  // Hero tabs
+  document.querySelectorAll('.hero-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.hero-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // Subject accordion
+  function toggleSubject(head) {
+    const body = head.nextElementSibling;
+    const isOpen = head.classList.contains('open');
+    // close all
+    document.querySelectorAll('.subject-card-head').forEach(h => h.classList.remove('open'));
+    document.querySelectorAll('.subject-card-body').forEach(b => b.classList.remove('open'));
+    if (!isOpen) {
+      head.classList.add('open');
+      body.classList.add('open');
+    }
+  }
+
+  // Exam countdown
+  function calcCountdown() {
+    const subj = document.getElementById('cdSubject').value || 'Your exam';
+    const dateVal = document.getElementById('cdDate').value;
+    if (!dateVal) { alert('Please enter your exam date.'); return; }
+    const today = new Date(); today.setHours(0,0,0,0);
+    const exam = new Date(dateVal); exam.setHours(0,0,0,0);
+    const diff = Math.round((exam - today) / (1000*60*60*24));
+    const result = document.getElementById('cdResult');
+    const daysEl = document.getElementById('cdDays');
+    const labelEl = document.getElementById('cdLabel');
+    const adviceEl = document.getElementById('cdAdvice');
+    result.style.display = 'block';
+    if (diff < 0) {
+      daysEl.textContent = 'Past';
+      labelEl.textContent = 'This exam date has passed.';
+      adviceEl.textContent = 'Enter a future date.';
+    } else if (diff === 0) {
+      daysEl.textContent = 'Today!';
+      labelEl.textContent = subj + ' is today';
+      adviceEl.textContent = 'Good luck! Eat breakfast, arrive early, read all instructions carefully.';
+    } else {
+      daysEl.textContent = diff;
+      labelEl.textContent = 'days until ' + subj;
+      let advice = '';
+      if (diff >= 56) advice = 'You have plenty of time. Focus on understanding content fully and building strong notes.';
+      else if (diff >= 28) advice = 'Good time to start intensive revision. Do past papers weekly and identify your weak areas.';
+      else if (diff >= 14) advice = 'Two weeks out — increase your past paper practice to 2–3 per week. Sleep 8 hours nightly.';
+      else if (diff >= 7) advice = 'Final week. Light revision only — review key formulas, definitions, and diagrams. Rest is crucial now.';
+      else advice = 'Almost there! Stay calm, eat well, sleep well, and trust your preparation.';
+      adviceEl.textContent = advice;
+    }
+  }
+
+  // Checklist
+  function toggleCheck(id) {
+    document.getElementById(id).classList.toggle('done', document.querySelector('#' + id + ' input').checked);
+  }
+</script>
+</body>
+</html>
