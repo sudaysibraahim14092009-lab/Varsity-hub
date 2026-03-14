@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progress Tracker — Track Your Marks | ScholrZA</title>
+  <meta name="description" content="Track your Grade 10, 11 or 12 marks per subject. Set goals, see your average, and know exactly where to improve. Free NSC progress tracker for South African students." />
+  <meta name="keywords" content="matric mark tracker, NSC progress tracker, Grade 12 marks, track school marks South Africa, improve matric results" />
+  <link rel="icon" href="/icon-64.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Cabinet+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:     #1a1a1a;
+      --white:   #ffffff;
+      --surface: #f5f5f0;
+      --line:    #e8e8e3;
+      --gold:    #c9a84c;
+      --gold-lt: #f5e9c8;
+      --muted:   #6b6b6b;
+      --green:   #2d7a4f;
+      --green-lt:#e6f4ec;
+      --red:     #b94040;
+      --red-lt:  #faeaea;
+      --blue:    #2a5f8f;
+      --blue-lt: #e6f0f8;
+      --radius:  14px;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Cabinet Grotesk',sans-serif; background:var(--surface); color:var(--ink); -webkit-font-smoothing:antialiased; }
+
+    /* NAV */
+    nav { position:sticky; top:0; z-index:200; height:56px; background:rgba(255,255,255,0.96); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
+    .nav-logo { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--ink); font-family:'Fraunces',serif; font-size:1.1rem; font-weight:600; }
+    .nav-logo img { width:26px; height:26px; }
+    .nav-logo em { color:var(--gold); font-style:italic; }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    .nav-home { font-size:0.79rem; color:var(--muted); text-decoration:none; padding:6px 12px; border-radius:20px; border:1px solid var(--line); background:var(--white); transition:all .2s; }
+    .nav-home:hover { background:var(--surface); color:var(--ink); }
+    .hamburger { width:36px; height:36px; border:none; border-radius:10px; background:var(--white); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; cursor:pointer; transition:all .2s; }
+    .hamburger:hover { background:var(--surface); }
+    .hamburger span { display:block; width:16px; height:1.5px; background:var(--ink); border-radius:2px; transition:all .3s; }
+    .hamburger.open span:nth-child(1) { transform:translateY(5.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-5.5px) rotate(-45deg); }
+
+    /* DRAWER */
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:300; }
+    .overlay.open { display:block; }
+    .drawer { position:fixed; top:0; right:-270px; width:255px; height:100%; background:var(--white); z-index:400; border-left:1px solid var(--line); transition:right .28s cubic-bezier(.4,0,.2,1); overflow-y:auto; padding-bottom:24px; }
+    .drawer.open { right:0; }
+    .d-head { padding:18px 20px 14px; border-bottom:1px solid var(--line); font-family:'Fraunces',serif; font-size:1rem; font-weight:600; display:flex; justify-content:space-between; align-items:center; }
+    .d-head em { color:var(--gold); font-style:italic; }
+    .d-close { background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--muted); }
+    .d-sec { padding:12px 20px 4px; }
+    .d-lbl { font-size:0.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+    .drawer a { display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:9px; text-decoration:none; color:var(--ink); font-size:0.85rem; font-weight:500; transition:background .15s; }
+    .drawer a:hover { background:var(--surface); }
+    .drawer a.active { background:var(--gold-lt); color:#7a6020; font-weight:700; }
+
+    /* HERO */
+    .hero { background:var(--white); border-bottom:1px solid var(--line); padding:38px 20px 30px; text-align:center; }
+    .badge { display:inline-block; background:var(--gold-lt); color:#7a6020; font-size:0.67rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:20px; margin-bottom:12px; }
+    .hero h1 { font-family:'Fraunces',serif; font-size:clamp(1.8rem,6vw,2.7rem); font-weight:400; line-height:1.15; margin-bottom:10px; }
+    .hero h1 em { color:var(--gold); font-style:italic; }
+    .hero p { color:var(--muted); font-size:0.92rem; max-width:420px; margin:0 auto; line-height:1.6; }
+
+    /* MAIN */
+    .main { max-width:760px; margin:0 auto; padding:24px 16px 80px; }
+
+    /* GRADE SELECTOR */
+    .grade-bar { background:var(--white); border:1.5px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .grade-bar label { font-size:0.82rem; font-weight:700; color:var(--muted); }
+    .grade-bar select { padding:7px 12px; border:1.5px solid var(--line); border-radius:9px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.85rem; background:var(--white); outline:none; cursor:pointer; transition:border-color .2s; }
+    .grade-bar select:focus { border-color:var(--gold); }
+    .grade-bar .term-lbl { font-size:0.82rem; font-weight:700; color:var(--muted); margin-left:8px; }
+
+    /* SUMMARY CARDS */
+    .summary-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px; }
+    .sum-card { background:var(--white); border:1.5px solid var(--line); border-radius:var(--radius); padding:14px 12px; text-align:center; }
+    .sum-card .val { font-family:'Fraunces',serif; font-size:1.6rem; font-weight:600; line-height:1; }
+    .sum-card .lbl { font-size:0.68rem; color:var(--muted); margin-top:3px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+    .sum-card.highlight { background:var(--gold-lt); border-color:#e8d49a; }
+    .sum-card.highlight .val { color:#7a6020; }
+
+    /* SUBJECT TABLE */
+    .table-box { background:var(--white); border:1.5px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-bottom:16px; }
+    .table-head { padding:14px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
+    .table-head h3 { font-family:'Fraunces',serif; font-size:1rem; font-weight:400; }
+    .table-head h3 em { color:var(--gold); font-style:italic; }
+    .add-btn { padding:7px 14px; background:var(--ink); color:var(--white); border:none; border-radius:9px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.8rem; font-weight:700; cursor:pointer; transition:background .2s; }
+    .add-btn:hover { background:#333; }
+
+    table { width:100%; border-collapse:collapse; }
+    thead th { padding:10px 12px; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); text-align:left; border-bottom:1px solid var(--line); background:var(--surface); }
+    thead th:last-child { text-align:center; }
+    tbody tr { border-bottom:1px solid var(--line); transition:background .15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:var(--surface); }
+    tbody td { padding:11px 12px; font-size:0.85rem; vertical-align:middle; }
+    tbody td:last-child { text-align:center; }
+
+    .subj-name { font-weight:700; font-size:0.86rem; }
+    .subj-type { font-size:0.7rem; color:var(--muted); margin-top:1px; }
+
+    /* mark input */
+    .mark-input { width:54px; padding:5px 8px; border:1.5px solid var(--line); border-radius:7px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.85rem; font-weight:600; text-align:center; outline:none; transition:border-color .2s; background:var(--white); }
+    .mark-input:focus { border-color:var(--gold); }
+
+    /* progress bar */
+    .bar-wrap { width:80px; height:7px; background:var(--line); border-radius:4px; overflow:hidden; display:inline-block; vertical-align:middle; margin-right:6px; }
+    .bar-fill { height:100%; border-radius:4px; transition:width .4s ease; }
+
+    .mark-pct { font-weight:700; font-size:0.83rem; display:inline-block; vertical-align:middle; min-width:34px; }
+
+    /* level badge */
+    .level { display:inline-block; font-size:0.64rem; font-weight:700; padding:2px 7px; border-radius:8px; }
+
+    /* goal input */
+    .goal-input { width:46px; padding:5px 6px; border:1.5px dashed var(--line); border-radius:7px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.82rem; text-align:center; outline:none; background:transparent; transition:border-color .2s; }
+    .goal-input:focus { border-color:var(--gold); border-style:solid; }
+
+    /* delete btn */
+    .del-btn { background:none; border:none; color:var(--muted); cursor:pointer; font-size:1rem; padding:2px 6px; border-radius:6px; transition:all .15s; }
+    .del-btn:hover { background:var(--red-lt); color:var(--red); }
+
+    /* CHART BOX */
+    .chart-box { background:var(--white); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px 16px; margin-bottom:16px; }
+    .chart-box h3 { font-family:'Fraunces',serif; font-size:1rem; font-weight:400; margin-bottom:14px; }
+    .chart-box h3 em { color:var(--gold); font-style:italic; }
+    .bar-chart { display:flex; align-items:flex-end; gap:8px; height:140px; padding-bottom:24px; position:relative; border-bottom:1.5px solid var(--line); }
+    .bar-chart-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+    .bar-chart-bar { width:100%; border-radius:6px 6px 0 0; transition:height .5s ease; min-height:4px; position:relative; cursor:pointer; }
+    .bar-chart-bar:hover::after { content:attr(data-tip); position:absolute; top:-28px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--white); font-size:0.65rem; padding:3px 7px; border-radius:6px; white-space:nowrap; font-family:'Cabinet Grotesk',sans-serif; }
+    .bar-chart-lbl { font-size:0.6rem; color:var(--muted); text-align:center; margin-top:5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; position:absolute; bottom:-20px; }
+    .chart-guide { display:flex; align-items:center; gap:14px; margin-top:12px; flex-wrap:wrap; }
+    .chart-guide-item { display:flex; align-items:center; gap:5px; font-size:0.72rem; color:var(--muted); }
+    .guide-dot { width:10px; height:10px; border-radius:3px; }
+
+    /* ADVICE BOX */
+    .advice-box { background:var(--white); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px 16px; margin-bottom:16px; }
+    .advice-box h3 { font-family:'Fraunces',serif; font-size:1rem; font-weight:400; margin-bottom:12px; }
+    .advice-box h3 em { color:var(--gold); font-style:italic; }
+    .advice-list { display:flex; flex-direction:column; gap:8px; }
+    .advice-item { padding:10px 13px; border-radius:10px; font-size:0.82rem; line-height:1.5; display:flex; gap:9px; align-items:flex-start; }
+    .advice-item svg { flex-shrink:0; margin-top:1px; }
+
+    /* ADD SUBJECT MODAL */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:500; align-items:center; justify-content:center; padding:20px; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--white); border-radius:var(--radius); padding:22px; width:100%; max-width:340px; }
+    .modal h3 { font-family:'Fraunces',serif; font-size:1.1rem; font-weight:400; margin-bottom:14px; }
+    .modal h3 em { color:var(--gold); font-style:italic; }
+    .modal-field { margin-bottom:12px; }
+    .modal-field label { display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; }
+    .modal-field input, .modal-field select { width:100%; padding:9px 12px; border:1.5px solid var(--line); border-radius:9px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.88rem; outline:none; transition:border-color .2s; }
+    .modal-field input:focus, .modal-field select:focus { border-color:var(--gold); }
+    .modal-btns { display:flex; gap:8px; margin-top:16px; }
+    .modal-btns button { flex:1; padding:9px; border-radius:9px; font-family:'Cabinet Grotesk',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; border:none; transition:all .2s; }
+    .btn-cancel { background:var(--surface); color:var(--muted); }
+    .btn-save { background:var(--ink); color:var(--white); }
+    .btn-save:hover { background:#333; }
+
+    /* NSC LEVELS GUIDE */
+    .levels-box { background:var(--white); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px 16px; margin-bottom:16px; }
+    .levels-box h3 { font-family:'Fraunces',serif; font-size:1rem; font-weight:400; margin-bottom:12px; }
+    .levels-box h3 em { color:var(--gold); font-style:italic; }
+    .levels-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px; }
+    .level-row { padding:9px 12px; border-radius:10px; }
+    .level-row .lv-num { font-weight:800; font-size:0.9rem; }
+    .level-row .lv-name { font-size:0.75rem; margin-top:1px; }
+    .level-row .lv-range { font-size:0.7rem; opacity:.7; margin-top:1px; }
+
+    .foot { max-width:760px; margin:0 auto; padding:0 16px 44px; text-align:center; font-size:0.74rem; color:var(--muted); line-height:1.6; }
+
+    @media(max-width:500px) {
+      .summary-row { grid-template-columns:1fr 1fr; }
+      .bar-wrap { width:52px; }
+      table { font-size:0.78rem; }
+      .mark-input { width:44px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://scholrza.pages.dev" class="nav-logo"><img src="/icon-64.png" alt="ScholrZA" />Scholr<em>ZA</em></a>
+  <div class="nav-right">
+    <a href="https://scholrza.pages.dev" class="nav-home">← Home</a>
+    <button class="hamburger" id="hamBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="d-head">Scholr<em>ZA</em> <button class="d-close" id="dClose">✕</button></div>
+  <div class="d-sec">
+    <div class="d-lbl">Student Tools</div>
+    <a href="https://scholrza.pages.dev">🏠 Home</a>
+    <a href="pastpapers.html">📄 Past Papers</a>
+    <a href="studyhub.html">📚 Study Hub</a>
+    <a href="progresstracker.html" class="active">📈 Progress Tracker</a>
+    <a href="news.html">📰 SA News</a>
+  </div>
+  <div class="d-sec">
+    <div class="d-lbl">Campus Life</div>
+    <a href="https://scholrza.pages.dev#universities">🏫 26 Universities</a>
+    <a href="https://scholrza.pages.dev#accommodation">🏠 Accommodation</a>
+    <a href="campusjobs.html">💼 Campus Jobs</a>
+    <a href="https://scholrza.pages.dev#aps">📊 APS Calculator</a>
+  </div>
+  <div class="d-sec">
+    <div class="d-lbl">Funding</div>
+    <a href="/index.html#nsfas">💳 NSFAS Guide</a>
+    <a href="https://scholrza.pages.dev#bursaries">🏆 Bursaries</a>
+  </div>
+  <div class="d-sec">
+    <div class="d-lbl">Info</div>
+    <a href="https://scholrza.pages.dev/about.html">ℹ️ About Us</a>
+    <a href="https://scholrza.pages.dev/privacy.html">🔒 Privacy Policy</a>
+  </div>
+</aside>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">📈 Free Mark Tracker</div>
+  <h1>Progress <em>Tracker</em></h1>
+  <p>Enter your marks per subject, set goals, and see exactly where to improve. Your data stays on your device — no account needed.</p>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- Grade & Term selector -->
+  <div class="grade-bar">
+    <label>Grade:</label>
+    <select id="gradeSelect" onchange="render()">
+      <option value="12">Grade 12</option>
+      <option value="11">Grade 11</option>
+      <option value="10">Grade 10</option>
+    </select>
+    <span class="term-lbl">Term:</span>
+    <select id="termSelect" onchange="render()">
+      <option value="1">Term 1</option>
+      <option value="2">Term 2</option>
+      <option value="3">Term 3</option>
+      <option value="4">Term 4 / Exams</option>
+    </select>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-row">
+    <div class="sum-card highlight">
+      <div class="val" id="sumAvg">—</div>
+      <div class="lbl">Average %</div>
+    </div>
+    <div class="sum-card">
+      <div class="val" id="sumLevel">—</div>
+      <div class="lbl">NSC Level</div>
+    </div>
+    <div class="sum-card">
+      <div class="val" id="sumPassing">—</div>
+      <div class="lbl">Subjects Passing</div>
+    </div>
+    <div class="sum-card">
+      <div class="val" id="sumNeeds">—</div>
+      <div class="lbl">Need Attention</div>
+    </div>
+  </div>
+
+  <!-- Subject table -->
+  <div class="table-box">
+    <div class="table-head">
+      <h3>Your <em>Subjects</em></h3>
+      <button class="add-btn" onclick="openModal()">+ Add Subject</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Mark (%)</th>
+            <th>Progress</th>
+            <th>Level</th>
+            <th>Goal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="subjectBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bar chart -->
+  <div class="chart-box">
+    <h3>Marks <em>Chart</em></h3>
+    <div class="bar-chart" id="barChart"></div>
+    <div class="chart-guide">
+      <div class="chart-guide-item"><div class="guide-dot" style="background:#2d7a4f"></div>70%+ (Good)</div>
+      <div class="chart-guide-item"><div class="guide-dot" style="background:#c9a84c"></div>50–69% (Pass)</div>
+      <div class="chart-guide-item"><div class="guide-dot" style="background:#b94040"></div>Below 50%</div>
+      <div class="chart-guide-item"><div class="guide-dot" style="background:#e8e8e3"></div>No mark yet</div>
+    </div>
+  </div>
+
+  <!-- Smart advice -->
+  <div class="advice-box">
+    <h3>📊 Smart <em>Advice</em></h3>
+    <div class="advice-list" id="adviceList">
+      <div class="advice-item" style="background:var(--surface)">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Enter your marks above to get personalised advice.
+      </div>
+    </div>
+  </div>
+
+  <!-- NSC Levels guide -->
+  <div class="levels-box">
+    <h3>NSC Performance <em>Levels</em></h3>
+    <div class="levels-grid">
+      <div class="level-row" style="background:#faeaea"><div class="lv-num" style="color:#b94040">Level 1</div><div class="lv-name">Not Achieved</div><div class="lv-range">0 – 29%</div></div>
+      <div class="level-row" style="background:#fdf0e0"><div class="lv-num" style="color:#c47a20">Level 2</div><div class="lv-name">Elementary Achievement</div><div class="lv-range">30 – 39%</div></div>
+      <div class="level-row" style="background:#fff8e1"><div class="lv-num" style="color:#a08020">Level 3</div><div class="lv-name">Moderate Achievement</div><div class="lv-range">40 – 49%</div></div>
+      <div class="level-row" style="background:#e6f0f8"><div class="lv-num" style="color:#2a5f8f">Level 4</div><div class="lv-name">Adequate Achievement</div><div class="lv-range">50 – 59%</div></div>
+      <div class="level-row" style="background:#e6f4ec"><div class="lv-num" style="color:#2d7a4f">Level 5</div><div class="lv-name">Substantial Achievement</div><div class="lv-range">60 – 69%</div></div>
+      <div class="level-row" style="background:#eef5e0"><div class="lv-num" style="color:#4a7a20">Level 6</div><div class="lv-name">Meritorious Achievement</div><div class="lv-range">70 – 79%</div></div>
+      <div class="level-row" style="background:#f5e9c8"><div class="lv-num" style="color:#7a6020">Level 7</div><div class="lv-name">Outstanding Achievement</div><div class="lv-range">80 – 100%</div></div>
+    </div>
+  </div>
+
+</main>
+
+<div class="foot">© 2025 ScholrZA · Your marks are saved on your device only and never shared. · Not affiliated with DBE or any university.</div>
+
+<!-- ADD SUBJECT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Add <em>Subject</em></h3>
+    <div class="modal-field">
+      <label>Subject name</label>
+      <input type="text" id="mSubject" placeholder="e.g. Mathematics" />
+    </div>
+    <div class="modal-field">
+      <label>Subject type</label>
+      <select id="mType">
+        <option value="HL">Home Language (HL)</option>
+        <option value="FAL">First Additional Language (FAL)</option>
+        <option value="Core">Core Subject</option>
+        <option value="Elective">Elective</option>
+        <option value="LO">Life Orientation</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Current mark (%)</label>
+      <input type="number" id="mMark" min="0" max="100" placeholder="e.g. 65" />
+    </div>
+    <div class="modal-field">
+      <label>Goal (%)</label>
+      <input type="number" id="mGoal" min="0" max="100" placeholder="e.g. 75" />
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="addSubject()">Save Subject</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── State ──────────────────────────────────────
+  let subjects = JSON.parse(localStorage.getItem('scholrza_subjects') || '[]');
+
+  // Default subjects if empty
+  if (subjects.length === 0) {
+    subjects = [
+      { name:'Mathematics', type:'Core', mark:'', goal:'70' },
+      { name:'English HL', type:'HL', mark:'', goal:'60' },
+      { name:'Life Sciences', type:'Core', mark:'', goal:'65' },
+      { name:'Physical Sciences', type:'Core', mark:'', goal:'60' },
+      { name:'Life Orientation', type:'LO', mark:'', goal:'70' },
+      { name:'History', type:'Elective', mark:'', goal:'60' },
+    ];
+    save();
+  }
+
+  function save() { localStorage.setItem('scholrza_subjects', JSON.stringify(subjects)); }
+
+  // ── Helpers ────────────────────────────────────
+  function getLevel(m) {
+    if (m >= 80) return { n:7, label:'Level 7', color:'#7a6020', bg:'#f5e9c8' };
+    if (m >= 70) return { n:6, label:'Level 6', color:'#4a7a20', bg:'#eef5e0' };
+    if (m >= 60) return { n:5, label:'Level 5', color:'#2d7a4f', bg:'#e6f4ec' };
+    if (m >= 50) return { n:4, label:'Level 4', color:'#2a5f8f', bg:'#e6f0f8' };
+    if (m >= 40) return { n:3, label:'Level 3', color:'#a08020', bg:'#fff8e1' };
+    if (m >= 30) return { n:2, label:'Level 2', color:'#c47a20', bg:'#fdf0e0' };
+    return { n:1, label:'Level 1', color:'#b94040', bg:'#faeaea' };
+  }
+
+  function barColor(m) {
+    if (m >= 70) return '#2d7a4f';
+    if (m >= 50) return '#c9a84c';
+    return '#b94040';
+  }
+
+  // ── Render ─────────────────────────────────────
+  function render() {
+    renderTable();
+    renderSummary();
+    renderChart();
+    renderAdvice();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('subjectBody');
+    tbody.innerHTML = '';
+    subjects.forEach((s, i) => {
+      const hasMark = s.mark !== '' && s.mark !== null;
+      const m = hasMark ? parseFloat(s.mark) : null;
+      const lv = hasMark ? getLevel(m) : null;
+      const pct = hasMark ? m : 0;
+      const goalNum = s.goal ? parseFloat(s.goal) : null;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div class="subj-name">${s.name}</div>
+          <div class="subj-type">${s.type}</div>
+        </td>
+        <td>
+          <input class="mark-input" type="number" min="0" max="100"
+            value="${hasMark ? m : ''}"
+            placeholder="—"
+            onchange="updateMark(${i}, this.value)"
+            oninput="updateMark(${i}, this.value)" />
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div class="bar-wrap">
+              <div class="bar-fill" style="width:${pct}%;background:${hasMark ? barColor(m) : 'var(--line)'}"></div>
+            </div>
+            <span class="mark-pct" style="color:${hasMark ? barColor(m) : 'var(--muted)'}">${hasMark ? m + '%' : '—'}</span>
+          </div>
+        </td>
+        <td>
+          ${hasMark
+            ? `<span class="level" style="background:${lv.bg};color:${lv.color}">${lv.label}</span>`
+            : `<span style="color:var(--muted);font-size:0.76rem;">—</span>`}
+        </td>
+        <td>
+          <input class="goal-input" type="number" min="0" max="100"
+            value="${goalNum !== null ? goalNum : ''}"
+            placeholder="—"
+            onchange="updateGoal(${i}, this.value)"
+            title="Set your target mark" />
+        </td>
+        <td>
+          <button class="del-btn" onclick="deleteSubject(${i})" title="Remove subject">✕</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderSummary() {
+    const marked = subjects.filter(s => s.mark !== '' && s.mark !== null);
+    if (marked.length === 0) {
+      document.getElementById('sumAvg').textContent = '—';
+      document.getElementById('sumLevel').textContent = '—';
+      document.getElementById('sumPassing').textContent = '—';
+      document.getElementById('sumNeeds').textContent = '—';
+      return;
+    }
+    const avg = marked.reduce((a, s) => a + parseFloat(s.mark), 0) / marked.length;
+    const lv = getLevel(avg);
+    const passing = marked.filter(s => parseFloat(s.mark) >= 40).length;
+    const needs = marked.filter(s => parseFloat(s.mark) < 50).length;
+
+    document.getElementById('sumAvg').textContent = avg.toFixed(1) + '%';
+    document.getElementById('sumLevel').textContent = lv.label;
+    document.getElementById('sumPassing').textContent = passing + '/' + marked.length;
+    document.getElementById('sumNeeds').textContent = needs;
+  }
+
+  function renderChart() {
+    const chart = document.getElementById('barChart');
+    chart.innerHTML = '';
+    const maxH = 116;
+    subjects.forEach(s => {
+      const hasMark = s.mark !== '' && s.mark !== null;
+      const m = hasMark ? parseFloat(s.mark) : 0;
+      const h = hasMark ? Math.max(4, (m / 100) * maxH) : 6;
+      const col = hasMark ? barColor(m) : 'var(--line)';
+      const shortName = s.name.length > 8 ? s.name.substring(0, 7) + '…' : s.name;
+      const col_div = document.createElement('div');
+      col_div.className = 'bar-chart-col';
+      col_div.style.position = 'relative';
+      col_div.innerHTML = `
+        <div class="bar-chart-bar" style="height:${h}px;background:${col};"
+          data-tip="${s.name}: ${hasMark ? m + '%' : 'No mark'}"></div>
+        <span class="bar-chart-lbl">${shortName}</span>
+      `;
+      chart.appendChild(col_div);
+    });
+  }
+
+  function renderAdvice() {
+    const list = document.getElementById('adviceList');
+    const marked = subjects.filter(s => s.mark !== '' && s.mark !== null);
+    if (marked.length === 0) {
+      list.innerHTML = `<div class="advice-item" style="background:var(--surface)">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Enter your marks above to get personalised advice.
+      </div>`;
+      return;
+    }
+
+    const items = [];
+    const avg = marked.reduce((a, s) => a + parseFloat(s.mark), 0) / marked.length;
+
+    // Failing subjects
+    const failing = marked.filter(s => parseFloat(s.mark) < 40);
+    if (failing.length > 0) {
+      items.push({ bg:var_red_lt, color:var_red, icon:'⚠️',
+        text: `<strong>Urgent:</strong> ${failing.map(s => s.name).join(', ')} ${failing.length === 1 ? 'is' : 'are'} below 40%. You need at least 40% in all subjects to pass. Prioritise these immediately.` });
+    }
+
+    // Below 50
+    const below50 = marked.filter(s => parseFloat(s.mark) >= 40 && parseFloat(s.mark) < 50);
+    if (below50.length > 0) {
+      items.push({ bg:'#fff8e1', color:'#a08020', icon:'📌',
+        text: `<strong>Watch:</strong> ${below50.map(s => s.name).join(', ')} ${below50.length === 1 ? 'is' : 'are'} between 40–49%. A small improvement will push ${below50.length === 1 ? 'it' : 'them'} to Level 4. Focus here next.` });
+    }
+
+    // Close to goal
+    subjects.forEach(s => {
+      if (s.mark === '' || !s.goal) return;
+      const m = parseFloat(s.mark);
+      const g = parseFloat(s.goal);
+      const gap = g - m;
+      if (gap > 0 && gap <= 10) {
+        items.push({ bg:'#e6f0f8', color:'#2a5f8f', icon:'🎯',
+          text: `<strong>${s.name}:</strong> You're only ${gap.toFixed(0)}% away from your goal of ${g}%. One strong past paper session could get you there.` });
+      }
+    });
+
+    // Strong subjects
+    const strong = marked.filter(s => parseFloat(s.mark) >= 70);
+    if (strong.length > 0) {
+      items.push({ bg:'#e6f4ec', color:'#2d7a4f', icon:'✅',
+        text: `<strong>Well done:</strong> ${strong.map(s => s.name).join(', ')} ${strong.length === 1 ? 'is' : 'are'} at 70%+. Keep maintaining ${strong.length === 1 ? 'this' : 'these'} — don't neglect ${strong.length === 1 ? 'it' : 'them'} for weaker subjects.` });
+    }
+
+    // Overall average advice
+    if (avg >= 70) {
+      items.push({ bg:'#f5e9c8', color:'#7a6020', icon:'🏆',
+        text: `<strong>Excellent average of ${avg.toFixed(1)}%!</strong> You're achieving at Level 6+. Aim for 80%+ in your strongest subjects to reach university with a strong APS score.` });
+    } else if (avg >= 50) {
+      items.push({ bg:'#e6f0f8', color:'#2a5f8f', icon:'📈',
+        text: `<strong>Your average is ${avg.toFixed(1)}%.</strong> You're passing — now push towards 60%+ by doing past papers weekly and focusing revision on your weakest 2 subjects.` });
+    } else {
+      items.push({ bg:'#faeaea', color:'#b94040', icon:'📚',
+        text: `<strong>Your average is ${avg.toFixed(1)}%.</strong> There's real work to do. Focus on understanding the basics of each subject before tackling past papers. Consider asking your teacher for extra help.` });
+    }
+
+    if (items.length === 0) {
+      items.push({ bg:'#e6f4ec', color:'#2d7a4f', icon:'✅',
+        text: 'All your subjects look good! Keep doing past papers to maintain your marks.' });
+    }
+
+    list.innerHTML = items.map(item =>
+      `<div class="advice-item" style="background:${item.bg};color:${item.color}">
+        <span style="font-size:1rem;flex-shrink:0">${item.icon}</span>
+        <span style="color:var(--ink)">${item.text}</span>
+      </div>`
+    ).join('');
+  }
+
+  // Hack for template literal color vars
+  const var_red_lt = '#faeaea';
+  const var_red = '#b94040';
+
+  // ── Actions ────────────────────────────────────
+  function updateMark(i, val) {
+    const v = val.trim();
+    if (v === '') { subjects[i].mark = ''; }
+    else {
+      const n = Math.min(100, Math.max(0, parseFloat(v) || 0));
+      subjects[i].mark = n;
+    }
+    save();
+    renderSummary();
+    renderChart();
+    renderAdvice();
+  }
+
+  function updateGoal(i, val) {
+    subjects[i].goal = val.trim();
+    save();
+    renderAdvice();
+  }
+
+  function deleteSubject(i) {
+    subjects.splice(i, 1);
+    save();
+    render();
+  }
+
+  // Modal
+  function openModal() {
+    document.getElementById('mSubject').value = '';
+    document.getElementById('mMark').value = '';
+    document.getElementById('mGoal').value = '';
+    document.getElementById('modalOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('mSubject').focus(), 100);
+  }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+  function addSubject() {
+    const name = document.getElementById('mSubject').value.trim();
+    if (!name) { alert('Please enter a subject name.'); return; }
+    const type = document.getElementById('mType').value;
+    const mark = document.getElementById('mMark').value.trim();
+    const goal = document.getElementById('mGoal').value.trim();
+    subjects.push({ name, type, mark: mark !== '' ? parseFloat(mark) : '', goal });
+    save();
+    closeModal();
+    render();
+  }
+
+  // ── Hamburger ──────────────────────────────────
+  const hamBtn = document.getElementById('hamBtn');
+  const drawer = document.getElementById('drawer');
+  const overlay = document.getElementById('overlay');
+  const dClose = document.getElementById('dClose');
+  const toggleDrawer = () => {
+    const open = drawer.classList.toggle('open');
+    overlay.classList.toggle('open', open);
+    hamBtn.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  hamBtn.addEventListener('click', toggleDrawer);
+  overlay.addEventListener('click', toggleDrawer);
+  dClose.addEventListener('click', toggleDrawer);
+
+  // Close modal on overlay click
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Init
+  render();
+</script>
+</body>
+</html>
