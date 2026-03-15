@@ -2,32 +2,50 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://scholrza.pages.dev/</loc>
-    <lastmod>2026-03-12</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://scholrza.pages.dev/news.html</loc>
-    <lastmod>2026-03-12</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://scholrza.pages.dev/subjects.html</loc>
-    <lastmod>2026-03-12</lastmod>
+    <loc>https://scholrza.pages.dev/campusjobs.html</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://scholrza.pages.dev/studyhub.html</loc>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://scholrza.pages.dev/progress.html</loc>
-    <lastmod>2026-03-12</lastmod>
+    <loc>https://scholrza.pages.dev/progresstracker.html</loc>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://scholrza.pages.dev/pastpapers.html</loc>
-    <lastmod>2026-03-12</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://scholrza.pages.dev/about.html</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://scholrza.pages.dev/privacy.html</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
